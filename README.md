@@ -48,7 +48,7 @@ A review is a *family* of genres, each with its own methodology, reporting stand
 
 | Genre | What it does | Reporting standard |
 |---|---|---|
-| **Book review** (resensi buku) | Critically assess a single book | Genre conventions |
+| **Book review** | Critically assess a single book | Genre conventions |
 | **Narrative review** | Broad expert synthesis of a field | SANRA |
 | **Critical review** | Argue a conceptual thesis across literature | — |
 | **Systematic review** | Reproducible, comprehensive synthesis | PRISMA 2020 |
@@ -66,7 +66,7 @@ A review is a *family* of genres, each with its own methodology, reporting stand
 
 ## Invoking a Skill (Three Ways)
 
-1. **Auto (default).** Just describe what you want — *"Saya mau meta-analysis dari data ini"* — and the skill whose `description` matches loads itself.
+1. **Auto (default).** Just describe what you want — *"I want a meta-analysis of this data"* — and the skill whose `description` matches loads itself.
 2. **`@skill-id` (OpenCode).** Type `@meta-analysis`, `@brainstorm`, `@book-review`, and so on.
 3. **`/command` (Claude Code).** Copy `commands/*.md` into `.claude/commands/`, then use `/review`, `/brainstorm`, `/meta-analysis`, `/systematic-review`, and so on.
 
@@ -103,13 +103,15 @@ One brainstorm + one orchestrator + one shared core + one skill per genre. **Nar
 
 | Capability | Master Academic Review | Academic-Research-Skills (ARS) | AI-Scientist | Spark-to-Paper |
 |---|---|---|---|---|
-| Treats review as a *family of genres* (13 types) | ✅ core | ⚠️ few types | ❌ | ❌ |
+| Treats review as a *family of genres* (13 types) | ✅ | ⚠️ | ❌ | ❌ |
 | Orphan genres (book / narrative / critical / umbrella / meta-synthesis / integrative / mapping / realist) | ✅ | ❌ | ❌ | ❌ |
 | Review-type diagnostic router (ranked) | ✅ | ❌ | ❌ | ❌ |
 | Research-question + keyword brainstorm | ✅ | ⚠️ | ❌ | ❌ |
-| Real meta-analysis statistics (Python) | ✅ | ❌ (explicitly no stats) | ❌ | ❌ |
-| Deterministic reporting-standard gates | ✅ | ⚠️ | ❌ | ✅ (papers) |
+| Real meta-analysis statistics (Python) | ✅ | ❌ | ❌ | ❌ |
+| Deterministic reporting-standard gates | ✅ | ⚠️ | ❌ | ✅ |
 | Focus on *reviews* (not papers) | ✅ | ❌ | ❌ | ❌ |
+
+✅ = yes · ⚠️ = partial · ❌ = no
 
 **Positioning:** Master Academic Review does not generate a paper and does not run your experiments. It is a **human-in-the-loop specialist for the review genre** — the author owns every claim; the tool owns the protocol, the reporting checklist, and the arithmetic.
 
@@ -119,9 +121,9 @@ One brainstorm + one orchestrator + one shared core + one skill per genre. **Nar
 
 1. **[Install](docs/INSTALL.md)** — copy or register the skill directories plus `shared/` in your harness (Claude Code / OpenCode / generic). Python is needed only for `systematic-review`, `scoping-review`, `mapping-review`, `meta-analysis`, and `bibliometric-review`.
 2. **Ask for a review** — in a session, say:
-   - *"Saya mau menulis review tapi belum tahu topiknya."* → `brainstorm` sharpens the question + keywords.
-   - *"Bantu saya menulis review."* → `review-router` interviews you and classifies the type.
-   - *"Saya mau meta-analisis dari data ini."* → `meta-analysis` (runs `shared/scripts/meta/`).
+   - *"I want to write a review but I don't know the topic yet."* → `brainstorm` sharpens the question + keywords.
+   - *"Help me write a review."* → `review-router` interviews you and classifies the type.
+   - *"I want a meta-analysis of this data."* → `meta-analysis` (runs `shared/scripts/meta/`).
    - Or use `@meta-analysis` / `/meta-analysis` to jump straight in.
 3. **See it in action** — [docs/WALKTHROUGH.md](docs/WALKTHROUGH.md) shows a full annotated session.
 
