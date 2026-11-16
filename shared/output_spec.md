@@ -28,10 +28,10 @@ documents.
 ```markdown
 # <Title of the review>
 
-**Review type:** meta-analysis
-**Reporting standard:** PRISMA 2020 + MOOSE
-**Sources:** Scopus (only)
-**Search date:** 2026-11-16
+**Review type:** meta-analysis··
+**Reporting standard:** PRISMA 2020 + MOOSE··
+**Sources:** Scopus (only)··
+**Search date:** 2026-11-16··
 **Gate:** ✓ passed (PRISMA 27/27)
 
 ---
@@ -50,7 +50,9 @@ documents.
 ```
 
 - The **metadata header** (review type, reporting standard, sources, search date,
-  gate) is mandatory for every genre.
+  gate) is mandatory for every genre. End each line with **two spaces** (`··` above)
+  so Markdown treats it as a hard break; otherwise the fields collapse into one
+  paragraph in DOCX/PDF.
 - The **section headings** follow the genre's `Structure` block in its `SKILL.md`.
 - **References** follow the genre's citation practice (a running bibliography, a
   `refs.bib`, or inline citations).

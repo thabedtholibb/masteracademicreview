@@ -42,7 +42,7 @@ def export(md_path, formats=("docx", "pdf")):
     """Convert `md_path` to the given formats. Returns the list of files written."""
     if pandoc_available():
         return _pandoc_export(md_path, formats)
-    print("Pandoc not found — using the built-in converter (python-docx + reportlab).")
+    print("Pandoc not found - using the built-in converter (python-docx + reportlab).")
     from mdconvert import convert
     out_dir = os.path.dirname(os.path.abspath(md_path))
     return convert(md_path, out_dir=out_dir, formats=formats)

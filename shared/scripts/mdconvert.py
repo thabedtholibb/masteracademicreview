@@ -66,16 +66,27 @@ def parse_blocks(text):
                 i += 1
             blocks.append(("ol", items))
             continue
-        buf = [line.strip()]
+        buf = [line]
         i += 1
         while (i < n and lines[i].strip()
                and not lines[i].strip().startswith("|")
                and not re.match(r"(#{1,6})\s", lines[i])
                and not re.match(r"^\s*[-*+]\s+", lines[i])
                and not re.match(r"^\s*\d+[.)]\s+", lines[i])):
-            buf.append(lines[i].strip())
+            buf.append(lines[i])
             i += 1
-        blocks.append(("p", " ".join(buf)))
+        # Join soft line breaks with a space; honour hard breaks (two trailing
+        # spaces or a trailing backslash) with a newline the renderers preserve.
+        para = ""
+        for j, raw in enumerate(buf):
+            piece = raw.strip()
+            if j:
+                prev = buf[j - 1]
+                para += "\n" if prev.endswith("  ") or prev.endswith("\\") else " "
+            if piece.endswith("\\"):
+                piece = piece[:-1].rstrip()
+            para += piece
+        blocks.append(("p", para))
     return blocks
 
 
@@ -133,7 +144,7 @@ def inline_to_rl(text):
             parts.append('<font face="Courier">%s</font>' % t)
         else:
             parts.append(t)
-    return "".join(parts)
+    return "".join(parts).replace("\n", "<br/>")
 
 
 def _parse_table(tbl_lines):
@@ -161,15 +172,7 @@ def to_docx(blocks, out_path):
             doc.add_heading(text, level=min(level, 4))
         elif typ == "p":
             p = doc.add_paragraph()
-            for style, t in inline_runs(payload):
-                run = p.add_run(t)
-                if style == "bold":
-                    run.bold = True
-                elif style == "italic":
-                    run.italic = True
-                elif style == "code":
-                    run.font.name = "Consolas"
-                    run.font.size = Pt(10)
+            _add_runs(p, payload)
         elif typ == "ul":
             for item in payload:
                 p = doc.add_paragraph(style="List Bullet")
@@ -200,14 +203,17 @@ def to_docx(blocks, out_path):
 
 
 def _add_runs(p, text):
-    for style, t in inline_runs(text):
-        run = p.add_run(t)
-        if style == "bold":
-            run.bold = True
-        elif style == "italic":
-            run.italic = True
-        elif style == "code":
-            run.font.name = "Consolas"
+    for k, line in enumerate(text.split("\n")):
+        if k:
+            p.add_run().add_break()
+        for style, t in inline_runs(line):
+            run = p.add_run(t)
+            if style == "bold":
+                run.bold = True
+            elif style == "italic":
+                run.italic = True
+            elif style == "code":
+                run.font.name = "Consolas"
 
 
 # --------------------------------------------------------------------------- #
