@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "masteracademicreview"
-version = "0.1.0"
+version = "0.1.1"
 description = "Deterministic, auditable tools for writing academic reviews: deduplication, PRISMA flow, screening agreement, extraction checks, meta-analysis, reference integrity, review gate, protocols, journal ranking and submission letters."
 readme = "README.md"
 requires-python = ">=3.10"

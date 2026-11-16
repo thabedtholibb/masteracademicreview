@@ -6,4 +6,4 @@ the tools are available as one command: ``mar <tool> [options]``; run
 ``python shared/scripts/<tool>.py``.
 """
 
-__version__ = "0.1.0"
+__version__ = "0.1.1"
