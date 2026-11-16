@@ -41,22 +41,22 @@ peringkat. Penulis yang memutuskan. Protokol lengkapnya ada di
 Butuh Python 3.10 atau lebih baru.
 
 ```bash
-pip install "masteracademicreview @ https://github.com/thabedtholibb/masteracademicreview/archive/refs/heads/master.zip"
+pip install masteracademicreview
 ```
 
 Di Windows PowerShell, bila `pip` tidak dikenali:
 
 ```bash
-py -m pip install "masteracademicreview @ https://github.com/thabedtholibb/masteracademicreview/archive/refs/heads/master.zip"
+py -m pip install masteracademicreview
 ```
 
 Dengan dependensi opsional (meta-analisis, bibliometrik, ekspor Word/PDF):
 
 ```bash
-pip install "masteracademicreview[all] @ https://github.com/thabedtholibb/masteracademicreview/archive/refs/heads/master.zip"
+pip install "masteracademicreview[all]"
 ```
 
-Setelah paket dipublikasikan ke PyPI, cukup `pip install masteracademicreview`.
+Paket tersedia di PyPI: https://pypi.org/project/masteracademicreview/. Perbarui dengan `pip install -U masteracademicreview`.
 
 Lalu jalankan:
 

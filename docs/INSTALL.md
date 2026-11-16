@@ -40,7 +40,7 @@ masteracademicreview/
 If you only need the deterministic tools (deduplication, PRISMA, kappa, reference checks, the gate, protocols, journal ranking, letters), install the package; no clone needed:
 
 ```bash
-pip install "masteracademicreview @ https://github.com/thabedtholibb/masteracademicreview/archive/refs/heads/master.zip"
+pip install masteracademicreview
 mar list
 ```
 

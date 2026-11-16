@@ -5,7 +5,7 @@
 ![License: MIT](https://img.shields.io/badge/license-MIT-blue)
 ![CI](https://github.com/thabedtholibb/masteracademicreview/actions/workflows/ci.yml/badge.svg)
 ![Python 3.10–3.13](https://img.shields.io/badge/python-3.10%E2%80%933.13-blue)
-![pip installable](https://img.shields.io/badge/pip-installable-blue)
+[![PyPI](https://img.shields.io/pypi/v/masteracademicreview)](https://pypi.org/project/masteracademicreview/)
 ![Decisions: JEV](https://img.shields.io/badge/decisions-JEV%20%231%20recommended-orange)
 ![Skills: 16](https://img.shields.io/badge/skills-16-2ea44f)
 ![Review genres: 13](https://img.shields.io/badge/review%20genres-13-2ea44f)
@@ -35,10 +35,10 @@ Community: [Contributing](CONTRIBUTING.md) · [Code of Conduct](CODE_OF_CONDUCT.
 The deterministic tools install as one package with one command, `mar`. No clone needed; Python 3.10–3.13 on Windows, macOS or Linux.
 
 ```bash
-pip install "masteracademicreview @ https://github.com/thabedtholibb/masteracademicreview/archive/refs/heads/master.zip"
+pip install masteracademicreview
 ```
 
-On Windows, if `pip` is not recognised, use `py -m pip install ...`. Add `[all]` after the package name for the meta-analysis, bibliometric and DOCX/PDF extras (`"masteracademicreview[all] @ https://..."`). Once the package is on PyPI this becomes `pip install masteracademicreview`.
+On Windows, if `pip` is not recognised, use `py -m pip install masteracademicreview`. For the meta-analysis, bibliometric and DOCX/PDF extras: `pip install "masteracademicreview[all]"`. Upgrade with `pip install -U masteracademicreview`.
 
 ```bash
 mar list          # every tool, grouped by review step

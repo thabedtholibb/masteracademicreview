@@ -72,6 +72,6 @@ terakhir, alat menyebutkan kandidat bersih berikutnya.
 | `pip` tidak dikenali (Windows) | `py -m pip install ...` |
 | Huruf aneh di konsol Windows | `$env:PYTHONUTF8 = "1"` (PowerShell), atau tulis laporan ke file dengan `--out` |
 | Ekspor Scopus tidak terbaca | `mar bib-validate scopus.csv`; ekspor ulang langsung dari Scopus, jangan disimpan ulang lewat Excel |
-| `ModuleNotFoundError: numpy` | `pip install "masteracademicreview[all] @ ..."` (lihat README) |
+| `ModuleNotFoundError: numpy` | `pip install "masteracademicreview[all]"` |
 
 Lebih lengkap (bahasa Inggris): [docs/TROUBLESHOOTING.md](../TROUBLESHOOTING.md).
