@@ -1,5 +1,11 @@
 # Master Academic Review
 
+![License: MIT](https://img.shields.io/badge/license-MIT-blue)
+![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue)
+![Skills: 15](https://img.shields.io/badge/skills-15-2ea44f)
+![Review genres: 13](https://img.shields.io/badge/review%20genres-13-2ea44f)
+![Reporting: PRISMA 2020](https://img.shields.io/badge/reporting-PRISMA%202020-6f42c1)
+
 > **Every kind of review, one toolkit.** A portable agent skill-suite specialized in *writing reviews* — from a book review to a meta-analysis to a realist review — each with the right protocol, the right reporting standard, and (where it matters) real statistics for its genre.
 
 Most academic-AI tools treat "review" as a side-mode of a paper generator. **Master Academic Review** inverts that: **the review is the product**, and the first job of the tool is to figure out *which* review you actually need.
