@@ -28,4 +28,8 @@ Format: [Keep a Changelog](https://keepachangelog.com). Versioning: SemVer.
 - CI on Ubuntu and Windows with Python 3.10-3.13 (cp1252/encoding regression coverage), plus a build-and-install test of the wheel outside the repository.
 
 ### Fixed
+- `verify_refs.py --online`, found by running it on `shared/method_sources.md`: Crossref subtitles were ignored
+  (false DOI_MISMATCH for titles with a subtitle); a page range such as `2000;283(15):2008-2012` was read as
+  the year (false YEAR_MISMATCH); Crossref titles with HTML tags, entities or line breaks broke the report
+  table. All 54 listed method sources now verify.
 - `verify_refs.py` used a backslash inside an f-string expression, a syntax error before Python 3.12; it crashed (and `check_review.py` with it) on Python 3.10 and 3.11.

@@ -127,6 +127,15 @@ def extract_year(text: str, doi: str = "") -> int | None:
     match = YEAR_PAREN_RE.search(clean)
     if match:
         return int(match.group(1))
+    # Skip numbers inside page ranges or volume:page tails ("283(15):2008-2012"),
+    # which look like years; prefer the Vancouver "2000;283(15)" position.
+    cands = [m for m in re.finditer(r"(?<![\d:\-\u2013/])((?:19|20)\d{2})(?![\d\-\u2013])", clean)
+             if 1800 <= int(m.group(1)) <= CURRENT_YEAR + 1]
+    vancouver = [int(m.group(1)) for m in cands if clean[m.end():m.end() + 1] == ";"]
+    if vancouver:
+        return vancouver[0]
+    if cands:
+        return int(cands[-1].group(1))
     years = [int(y) for y in re.findall(r"\b((?:19|20)\d{2})\b", clean)]
     years = [y for y in years if 1800 <= y <= CURRENT_YEAR + 1]
     return years[-1] if years else None
@@ -608,10 +617,28 @@ def http_json(url: str, timeout: int = 25) -> dict:
     raise RuntimeError(str(last_error))
 
 
+def clean_crossref_text(text: str) -> str:
+    """Crossref titles can carry HTML entities, tags and line breaks."""
+    text = html.unescape(html.unescape(text or ""))
+    text = re.sub(r"<[^>]+>", " ", text)
+    return re.sub(r"\s+", " ", text).strip()
+
+
 def crossref_item_summary(item: dict) -> tuple[str, int | None, str]:
-    title = (item.get("title") or [""])[0]
+    """Clean title (with subtitle, which Crossref stores separately), year, DOI."""
+    title = clean_crossref_text((item.get("title") or [""])[0])
+    subtitle = clean_crossref_text((item.get("subtitle") or [""])[0])
+    if subtitle and subtitle.lower() not in title.lower():
+        title = f"{title}: {subtitle}"
     year = (item.get("issued", {}).get("date-parts") or [[None]])[0][0]
     return title, int(year) if year else None, item.get("DOI", "")
+
+
+def best_similarity(ref_title: str, item: dict) -> float:
+    """Best match against the main title alone or main title + subtitle."""
+    main = clean_crossref_text((item.get("title") or [""])[0])
+    full = crossref_item_summary(item)[0]
+    return max(title_similarity(ref_title, main), title_similarity(ref_title, full))
 
 
 def verify_one(ref: Reference, mailto: str | None) -> dict:
@@ -651,7 +678,7 @@ def verify_one(ref: Reference, mailto: str | None) -> dict:
 
         item = message.get("message", {})
         title, year, doi = crossref_item_summary(item)
-        similarity = title_similarity(ref.title, title) if ref.title and title else 1.0
+        similarity = best_similarity(ref.title, item) if ref.title and title else 1.0
         if similarity < 0.55:
             status = "DOI_MISMATCH"
         elif ref.year and year and abs(ref.year - year) > 1:
@@ -672,7 +699,7 @@ def verify_one(ref: Reference, mailto: str | None) -> dict:
     params = {
         "query.bibliographic": query,
         "rows": 3,
-        "select": "DOI,title,issued",
+        "select": "DOI,title,subtitle,issued",
     }
     if mailto:
         params["mailto"] = mailto
@@ -701,11 +728,9 @@ def verify_one(ref: Reference, mailto: str | None) -> dict:
             "note": "Crossref returned no items",
         }
 
-    best_item = max(
-        items, key=lambda item: title_similarity(ref.title, (item.get("title") or [""])[0])
-    )
+    best_item = max(items, key=lambda item: best_similarity(ref.title, item))
     title, year, doi = crossref_item_summary(best_item)
-    similarity = title_similarity(ref.title, title) if ref.title else 0.0
+    similarity = best_similarity(ref.title, best_item) if ref.title else 0.0
     if similarity >= 0.80:
         status = "YEAR_MISMATCH" if ref.year and year and abs(ref.year - year) > 1 else "VERIFIED"
     elif similarity >= 0.55:
@@ -864,6 +889,24 @@ def selftest() -> None:
 
     # Numeric range expansion.
     assert expand_numeric("1,3-5") == {1, 3, 4, 5}
+
+    # Regressions found by verifying shared/method_sources.md online:
+    # a page range is not the year (MOOSE: "2000;283(15):2008-2012")...
+    moose = ("Stroup DF, Berlin JA. Meta-analysis of observational studies in epidemiology. "
+             "*JAMA*. 2000;283(15):2008-2012. doi:10.1001/jama.283.15.2008")
+    assert build_reference(1, moose).year == 2000, build_reference(1, moose).year
+    # ...Crossref keeps the subtitle separately, and titles may carry markup.
+    item = {"title": ["Summarizing systematic reviews"],
+            "subtitle": ["methodological development, conduct and reporting of an umbrella review approach"],
+            "issued": {"date-parts": [[2015]]}, "DOI": "10.1097/XEB.0000000000000055"}
+    aromataris = ("Summarizing systematic reviews: methodological development, conduct and "
+                  "reporting of an umbrella review approach")
+    assert best_similarity(aromataris, item) >= 0.9, best_similarity(aromataris, item)
+    assert crossref_item_summary(item)[0].startswith("Summarizing systematic reviews: methodological")
+    marked = {"title": ["Conducting Meta-Analyses in\n   <i>R</i>\n with the <b>metafor</b> Package"]}
+    assert crossref_item_summary(marked)[0] == "Conducting Meta-Analyses in R with the metafor Package"
+    escaped = {"title": ["Meta-analysis&lt;SUBTITLE&gt;A Proposal&lt;/SUBTITLE&gt;"]}
+    assert "<" not in crossref_item_summary(escaped)[0] and "&lt;" not in crossref_item_summary(escaped)[0]
 
     # Page numbers after the year do not break the citation.
     page_ref = [build_reference(1, "Smith J. A study of things worth citing. 2020.")]
