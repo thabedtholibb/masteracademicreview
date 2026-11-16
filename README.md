@@ -1,20 +1,22 @@
-# masteracademicreview
+# Master Academic Review
 
-> **Every kind of review, one toolkit.** A portable agent skill-suite specialized in *writing reviews* — from a book review to a meta-analysis to a realist review — with the right protocol, reporting standard, and (where it matters) real statistics for each genre.
+> **Every kind of review, one toolkit.** A portable agent skill-suite specialized in *writing reviews* — from a book review to a meta-analysis to a realist review — each with the right protocol, the right reporting standard, and (where it matters) real statistics for its genre.
 
-Most academic-AI tools treat "review" as a side-mode of a paper generator. masteracademicreview inverts that: **the review is the product**, and the first job of the tool is to figure out *which* review you actually need.
+Most academic-AI tools treat "review" as a side-mode of a paper generator. **Master Academic Review** inverts that: **the review is the product**, and the first job of the tool is to figure out *which* review you actually need.
 
-> **What this is — and is not.** masteracademicreview is **not** a full-paper pipeline: it does not design or run experiments and does not generate new findings (unlike Spark-to-Paper or AI-Scientist). It produces **one kind of deliverable — a review document** — plus the auditable artifacts that back it (a PRISMA flow diagram, pooled estimates, forest/funnel plots). It works interactively, genre by genre, with you as the author. See [docs/USAGE.md](docs/USAGE.md) for the model, [docs/FLOWS.md](docs/FLOWS.md) for skill-by-skill flows, [docs/WALKTHROUGH.md](docs/WALKTHROUGH.md) for a concrete session, and [docs/INSTALL.md](docs/INSTALL.md) for per-platform setup.
+> **What this is — and is not.** Master Academic Review is **not** a full-paper pipeline: it does not design or run experiments, and it does not generate new findings (unlike Spark-to-Paper or AI-Scientist). It produces **one kind of deliverable — a review document** — plus the auditable artifacts that back it (a PRISMA flow diagram, pooled estimates, forest/funnel plots). It works interactively, genre by genre, with you as the author.
+>
+> Deeper reading: [docs/USAGE.md](docs/USAGE.md) for the working model · [docs/FLOWS.md](docs/FLOWS.md) for skill-by-skill flows · [docs/WALKTHROUGH.md](docs/WALKTHROUGH.md) for a concrete session · [docs/INSTALL.md](docs/INSTALL.md) for per-platform setup.
 
 ---
 
-## The flow
+## The Flow
 
 ```
 vague idea
    │
    ▼
-brainstorm ──► focused research question + keyword set (PICO/PICo/PCC/SPIDER)
+brainstorm ──► focused research question + keyword set (PICO / PICo / PCC / SPIDER)
    │
    ▼
 review-router ──► classify + rank the review genre (best fit first)
@@ -26,27 +28,27 @@ genre skill (thirteen genres)
 review document + artifacts (PRISMA flow, forest/funnel plots, pooled estimates)
 ```
 
-The **`brainstorm` skill** sits before classification because most people get stuck choosing keywords and framing their question. It produces a ready-to-search question + Boolean query, then hands off to the router.
+The **`brainstorm` skill** sits before classification because most people get stuck choosing keywords and framing their question. It produces a ready-to-search question plus a Boolean query, then hands off to the router.
 
 ---
 
-## What you get (the output)
+## What You Get (the Output)
 
 Every run ends with **one review document plus supporting artifacts** (see [shared/output_spec.md](shared/output_spec.md)):
 
 1. **`review.md`** — the review itself: a title, a metadata block (review type, reporting standard, sources, search date, gate status), an abstract, the genre's sections, and references.
 2. **Artifacts** (per genre) — e.g. `prisma_flow.svg`, `forest.png`, `funnel.png`, `effects.csv`, `characteristics.csv`.
-3. **`review.docx` / `review.pdf`** — optional, via `python shared/scripts/export.py review.md` (Pandoc), so the review can be submitted to Word-based journals or a supervisor.
+3. **`review.docx` / `review.pdf`** — optional, via `python shared/scripts/export.py review.md` (Pandoc, with an automatic no-Pandoc fallback), so the review can be submitted to Word-based journals or a supervisor.
 
 ---
 
-## The core idea: a review is not one thing
+## The Core Idea: A Review Is Not One Thing
 
-A review is a *family* of genres, each with its own methodology, reporting standard, and reader. masteracademicreview encodes that taxonomy as its organizing principle — **all thirteen implemented**.
+A review is a *family* of genres, each with its own methodology, reporting standard, and reader. Master Academic Review encodes that taxonomy as its organizing principle — **all thirteen implemented**.
 
 | Genre | What it does | Reporting standard |
 |---|---|---|
-| **Book review** (resensi buku) | Critically assess a single book | genre conventions |
+| **Book review** (resensi buku) | Critically assess a single book | Genre conventions |
 | **Narrative review** | Broad expert synthesis of a field | SANRA |
 | **Critical review** | Argue a conceptual thesis across literature | — |
 | **Systematic review** | Reproducible, comprehensive synthesis | PRISMA 2020 |
@@ -62,11 +64,11 @@ A review is a *family* of genres, each with its own methodology, reporting stand
 
 ---
 
-## Invoking a skill (three ways)
+## Invoking a Skill (Three Ways)
 
 1. **Auto (default).** Just describe what you want — *"Saya mau meta-analysis dari data ini"* — and the skill whose `description` matches loads itself.
-2. **`@skill-id` (OpenCode).** Type `@meta-analysis`, `@brainstorm`, `@book-review`, etc.
-3. **`/command` (Claude Code).** Copy `commands/*.md` into `.claude/commands/`, then use `/review`, `/brainstorm`, `/meta-analysis`, `/systematic-review`, etc.
+2. **`@skill-id` (OpenCode).** Type `@meta-analysis`, `@brainstorm`, `@book-review`, and so on.
+3. **`/command` (Claude Code).** Copy `commands/*.md` into `.claude/commands/`, then use `/review`, `/brainstorm`, `/meta-analysis`, `/systematic-review`, and so on.
 
 ---
 
@@ -97,23 +99,23 @@ One brainstorm + one orchestrator + one shared core + one skill per genre. **Nar
 
 ---
 
-## How it differs from the incumbents
+## How It Differs from the Incumbents
 
-| | masteracademicreview | ARS | AI-Scientist | Spark-to-Paper |
+| Capability | Master Academic Review | Academic-Research-Skills (ARS) | AI-Scientist | Spark-to-Paper |
 |---|---|---|---|---|
 | Treats review as a *family of genres* (13 types) | ✅ core | ⚠️ few types | ❌ | ❌ |
-| Orphan genres (book/narrative/critical/umbrella/meta-synthesis/integrative/mapping/realist) | ✅ | ❌ | ❌ | ❌ |
+| Orphan genres (book / narrative / critical / umbrella / meta-synthesis / integrative / mapping / realist) | ✅ | ❌ | ❌ | ❌ |
 | Review-type diagnostic router (ranked) | ✅ | ❌ | ❌ | ❌ |
 | Research-question + keyword brainstorm | ✅ | ⚠️ | ❌ | ❌ |
 | Real meta-analysis statistics (Python) | ✅ | ❌ (explicitly no stats) | ❌ | ❌ |
 | Deterministic reporting-standard gates | ✅ | ⚠️ | ❌ | ✅ (papers) |
 | Focus on *reviews* (not papers) | ✅ | ❌ | ❌ | ❌ |
 
-**Positioning:** masteracademicreview does not generate a paper and does not run your experiments. It is a **human-in-the-loop specialist for the review genre** — the author owns every claim; the tool owns the protocol, the reporting checklist, and the arithmetic.
+**Positioning:** Master Academic Review does not generate a paper and does not run your experiments. It is a **human-in-the-loop specialist for the review genre** — the author owns every claim; the tool owns the protocol, the reporting checklist, and the arithmetic.
 
 ---
 
-## Quick start
+## Quick Start
 
 1. **[Install](docs/INSTALL.md)** — copy or register the skill directories plus `shared/` in your harness (Claude Code / OpenCode / generic). Python is needed only for `systematic-review`, `scoping-review`, `mapping-review`, `meta-analysis`, and `bibliometric-review`.
 2. **Ask for a review** — in a session, say:
@@ -125,16 +127,16 @@ One brainstorm + one orchestrator + one shared core + one skill per genre. **Nar
 
 ---
 
-## Repository layout
+## Repository Layout
 
 ```
-academicskills/
+masteracademicreview/
 ├── README.md
 ├── LICENSE
 ├── .gitignore
 ├── .gitattributes
 ├── brainstorm/SKILL.md             # pre-router: research question + keywords
-├── review-router/SKILL.md          # orchestrator: interview → classify+rank → dispatch
+├── review-router/SKILL.md          # orchestrator: interview → classify + rank → dispatch
 ├── book-review/SKILL.md
 ├── narrative-review/SKILL.md
 ├── critical-review/SKILL.md
@@ -161,6 +163,8 @@ academicskills/
 │   ├── output_spec.md
 │   └── scripts/
 │       ├── prisma_flow.py
+│       ├── export.py               # one-command MD → DOCX/PDF (Pandoc, fallback to mdconvert)
+│       ├── mdconvert.py            # no-Pandoc converter (python-docx + reportlab)
 │       ├── meta/
 │       │   ├── __init__.py
 │       │   ├── effect_sizes.py
@@ -180,6 +184,8 @@ academicskills/
     ├── FLOWS.md
     └── WALKTHROUGH.md
 ```
+
+Skill directories are named in lowercase (e.g. `meta-analysis/`) because that is the skill *ID* your harness loads; "Master Academic Review" is the project name. On GitHub this repository is `masteracademicreview`; a fresh clone creates a folder of the same name.
 
 ---
 
