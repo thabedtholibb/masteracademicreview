@@ -8,3 +8,4 @@ prisma_flow.svg
 # Python
 __pycache__/
 *.pyc
+!tests/fixtures/**/prisma_flow.svg
