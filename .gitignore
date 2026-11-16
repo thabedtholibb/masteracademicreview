@@ -1,0 +1,11 @@
+# Generated artifacts from the engines and PRISMA generator
+shared/scripts/meta/out/
+shared/scripts/bibliometric/out/
+shared/scripts/bibliometric/sample.csv
+dist/
+*.png
+prisma_flow.svg
+
+# Python
+__pycache__/
+*.pyc

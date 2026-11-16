@@ -1,0 +1,52 @@
+---
+name: meta-synthesis
+description: "Conduct a qualitative evidence synthesis (meta-synthesis) — aggregate and interpret findings across qualitative studies into new themes or theory, reported per ENTREQ. Use when the primary studies are qualitative (interviews, ethnography, focus groups) and the goal is thematic synthesis or theory-building, not statistical pooling. Trigger terms: meta-synthesis, qualitative synthesis, meta-ethnography, thematic synthesis, ENTREQ, sintesis kualitatif."
+metadata:
+  version: "0.1.0"
+  genre: meta-synthesis
+  reporting_standard: "ENTREQ (21 items)"
+---
+
+# Meta-Synthesis (Qualitative Evidence Synthesis)
+
+You synthesize **qualitative** studies into higher-order themes or theory. There is no statistics here — the "effect" is interpretive insight.
+
+## Scope
+
+- **In scope:** primary qualitative studies (interviews, focus groups, ethnography, phenomenology) on a shared phenomenon; the goal is new interpretation or theory.
+- **Out of scope:** quantitative studies or pooling (→ `meta-analysis`), mapping breadth (→ `scoping-review`).
+
+## Pre-requisites
+
+1. A phenomenon-focused question (PICo or SPIDER frame).
+2. A body of eligible qualitative studies with extractable findings (themes, categories, participant quotes).
+
+## Method
+
+1. **Frame (PICo/SPIDER)** — Population, phenomenon of Interest, Context.
+2. **Search & screen** — follow `shared/search_strategy.md` and `shared/screening.md`; add qualitative search terms (experience, perception, lived, meaning).
+3. **Appraise** — apply the **CASP Qualitative** checklist (see `shared/risk_of_bias.md`) to judge trustworthiness; it informs interpretation, it does not exclude.
+4. **Extract findings** — extract each study's themes, categories, and supporting quotes (see `shared/data_extraction.md`).
+5. **Synthesize (recommendation-first)** — recommend the method by goal, then state it: **thematic synthesis (#1, default)** for descriptive → analytical themes; **meta-ethnography (#2)** for a new interpretive theory; **meta-aggregation (#3)** for practical recommendations. Build the higher-order themes or theory.
+6. **Report** — write to ENTREQ (`shared/reporting_standards.md`).
+
+## Structure (ENTREQ-aligned)
+
+```
+Title
+Abstract
+1. Introduction — the phenomenon and why synthesis is needed
+2. Methods — search, appraisal (CASP), extraction, synthesis method
+3. Findings — the developed themes, each grounded in the studies' data (with quotes)
+4. Discussion — the new interpretation, trustworthiness, limitations
+```
+
+## Gate (ENTREQ, 21 items)
+
+Walk the ENTREQ checklist in `shared/reporting_standards.md`; flag every missing item. Every developed theme must trace to the included studies' findings or quotes.
+
+## Guardrails
+
+- Analytical themes must be *grounded* in the included studies' data — do not import your own theory and dress it up as findings.
+- Name the synthesis method explicitly; thematic synthesis and meta-ethnography are different and not interchangeable.
+- Do not convert qualitative findings into counts or claim statistical generality.
