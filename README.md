@@ -1,5 +1,7 @@
 # Master Academic Review
 
+<p align="center"><img src="docs/banner.webp" alt="Master Academic Review: input, process, output" width="100%"></p>
+
 ![License: MIT](https://img.shields.io/badge/license-MIT-blue)
 ![CI](https://github.com/thabedtholibb/masteracademicreview/actions/workflows/ci.yml/badge.svg)
 ![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue)
