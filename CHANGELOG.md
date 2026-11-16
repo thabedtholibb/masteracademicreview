@@ -2,7 +2,7 @@
 
 Format: [Keep a Changelog](https://keepachangelog.com). Versioning: SemVer.
 
-## [0.1.1] - 2026-11-16
+## [0.1.1] - 2026-11-17
 ### Changed
 - House style: Title Case headings and table headers across all docs, skills and generated reports, enforced by `tests/check_docs.py`; em-dashes used as sentence joiners replaced (385 to 0 outside tables, code blocks and quoted titles).
 - Code: one formatting idiom (f-strings), unused imports removed, `ruff` lint job in CI.
