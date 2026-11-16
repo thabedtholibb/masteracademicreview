@@ -1,0 +1,38 @@
+name: Verify method sources (Crossref)
+
+# Every DOI cited in shared/method_sources.md is checked online with the suite's
+# own verify_refs.py: DOI resolves, and title and year agree. Runs monthly and on
+# demand (Actions -> "Verify method sources" -> Run workflow), because it needs
+# the network and Crossref data can change.
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 3 1 * *"
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Extract the cited sources
+        run: |
+          grep "^- .*doi:" shared/method_sources.md | sed 's/^- //' | awk '{print NR". "$0}' > sources_refs.txt
+          wc -l sources_refs.txt
+
+      - name: Verify against Crossref
+        run: python shared/scripts/verify_refs.py sources_refs.txt --online --out sources_check.md
+
+      - name: Show the report
+        if: always()
+        run: cat sources_check.md >> "$GITHUB_STEP_SUMMARY"
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: sources-check
+          path: sources_check.md

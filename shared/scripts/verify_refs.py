@@ -820,9 +820,10 @@ def render_online(results: list[dict], refs: list[Reference], source: str) -> st
         short = (ref.raw[:80] + "...") if ref and len(ref.raw) > 80 else (ref.raw if ref else "")
         short = short.replace("|", "\\|")
         crossref = f"{result['crossref_title']} ({result['crossref_year'] or '?'})"
+        crossref = crossref.replace("|", "\\|")  # no backslash inside f-string (Python < 3.12)
         lines.append(
             f"| {result['index']} | {result['status']} | {result['similarity']:.2f} | "
-            f"{crossref.replace('|', '\\|')} | {result['doi']} |"
+            f"{crossref} | {result['doi']} |"
         )
     lines += [
         "",

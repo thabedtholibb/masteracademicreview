@@ -27,6 +27,8 @@ from .plots import (
     forest_plot,
     funnel_plot,
     egger_test,
+    lfk_index,
+    doi_plot,
 )
 
 __all__ = [
@@ -47,4 +49,6 @@ __all__ = [
     "forest_plot",
     "funnel_plot",
     "egger_test",
+    "lfk_index",
+    "doi_plot",
 ]

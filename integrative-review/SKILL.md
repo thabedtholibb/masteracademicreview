@@ -26,7 +26,7 @@ You synthesize **diverse source types** — empirical (quantitative + qualitativ
 1. **Problem identification** — frame the topic clearly.
 2. **Literature search** — follow `shared/search_strategy.md`; deliberately multi-database because the designs are diverse. Recommend the 2 best databases (#1/#2).
 3. **Data evaluation** — appraise quality with the tool matching each study's design (see `shared/risk_of_bias.md`); recommend the design-matched tool (#1), not a one-size score.
-4. **Data analysis (recommendation-first)** — recommend **constant comparison (#1)** to categorize and integrate findings across designs; order, code, compare, and build themes that connect the evidence.
+4. **Data analysis (JEV)** — recommend **constant comparison (#1)** to categorize and integrate findings across designs; order, code, compare, and build themes that connect the evidence.
 5. **Presentation** — present the integrated synthesis (often a model or table of themes) plus a note on limitations from source diversity.
 
 ## Structure
@@ -39,6 +39,14 @@ Abstract
 3. Results — the integrated themes/framework
 4. Discussion — meaning, limitations, implications
 ```
+
+## Decision points (JEV)
+
+Every decision here follows the JEV protocol (`../shared/jev.md`): ranked options, **#1 recommended**, one line of evidence each, what would change the ranking, and the author approves. Approved choices go into `decisions.md`.
+
+- **Framework.** **#1 recommended:** Whittemore & Knafl's five stages. #2: Torraco's guidance when the sources are mostly conceptual.
+- **Appraisal across designs.** **#1 recommended:** the design-matched tool per source, summarised in one table. #2: a mixed-methods appraisal approach (Pluye & Hong 2014) when most sources are empirical.
+- **Presentation.** **#1 recommended:** a model or table of integrated themes, each linked to sources of every design that supports it.
 
 ## Standards & sources
 

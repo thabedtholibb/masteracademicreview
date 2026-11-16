@@ -30,14 +30,14 @@ Recommend **Scopus (#1)** as the sole source and state it in the methods. Restri
 - **Keep (#1):** `Article`, `Review`.
 - **Drop:** `Conference Paper`, `Erratum`, `Note`, `Editorial`, `Letter` — non-indexed venues usually surface as one of these.
 
-## Method (recommendation-first)
+## Method (JEV)
 
 1. **Search & collect (Scopus-only)** — restrict to **Scopus** and document it (PRISMA); export records **including `Document Type`**.
-2. **Choose the analysis (recommendation-first)** — recommend by goal:
+2. **Choose the analysis (JEV)** — recommend by goal:
    - **Science mapping (#1)** — co-word and co-authorship → thematic/intellectual structure.
    - **Performance analysis (#2)** — publication counts, citations, h-index, top authors/sources.
    - **Both (#3)** for a full picture. Recommend #3 for a complete bibliometric review.
-3. **Filter to quality records (recommendation-first)** — keep **Article + Review (#1)**.
+3. **Filter to quality records (JEV)** — keep **Article + Review (#1)**.
 4. **Run the analysis** — use the bundled engine (`shared/scripts/bibliometric/`):
    ```python
    import sys; sys.path.insert(0, "shared/scripts/bibliometric")
@@ -83,6 +83,14 @@ Abstract
 3. Results — performance + science-mapping outputs (trend, top lists, co-occurrence map)
 4. Discussion — intellectual structure, trends, limitations
 ```
+
+## Decision points (JEV)
+
+Every decision here follows the JEV protocol (`../shared/jev.md`): ranked options, **#1 recommended**, one line of evidence each, what would change the ranking, and the author approves. Approved choices go into `decisions.md`.
+
+- **Source.** **#1 recommended:** Scopus only (see Source quality). #2: Scopus plus Web of Science merged with `dedup.py`, only when coverage demands it, with the merge reported.
+- **Record types.** **#1 recommended:** Article + Review.
+- **Thresholds.** **#1 recommended:** report every threshold (minimum keyword frequency, minimum documents per author) and re-run one alternative threshold as a sensitivity check.
 
 ## Standards & sources
 

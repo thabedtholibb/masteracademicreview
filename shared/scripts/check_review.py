@@ -219,11 +219,34 @@ def check_review(text: str, directory: Path, genre: str | None = None,
     return rep
 
 
+# JEV priority of work (shared/jev.md): integrity first, polish last.
+PRIORITY = (("references", 1), ("artifact", 2), ("section", 2), ("gate", 3),
+            ("placeholders", 4), ("metadata", 4))
+
+
+def ranked_steps(rep: Report) -> list[tuple[int, str]]:
+    """Errors and warnings in the order they should be fixed (stable within a priority)."""
+    steps = []
+    for msg in rep.errors:
+        prio = next((p for prefix, p in PRIORITY if msg.startswith(prefix)), 3)
+        steps.append((prio, msg))
+    steps += [(5, "warning: " + w) for w in rep.warnings]
+    return sorted(steps, key=lambda s: s[0])
+
+
 def render(rep: Report, name: str) -> str:
     out = ["# Review check: %s" % name, "",
            "**Genre:** %s  " % rep.genre,
            "**Errors:** %d  " % len(rep.errors),
            "**Warnings:** %d" % len(rep.warnings), ""]
+    steps = ranked_steps(rep)
+    if steps:
+        out += ["## Next steps (JEV, ranked)", "",
+                "Fix in this order: integrity first, polish last (see `shared/jev.md`).", ""]
+        for i, (prio, msg) in enumerate(steps, 1):
+            lead = "**#1 recommended:** " if i == 1 else ""
+            out.append("%d. %s%s _(priority %d)_" % (i, lead, msg, prio))
+        out.append("")
     for title, items in (("Errors", rep.errors), ("Warnings", rep.warnings), ("Info", rep.infos)):
         if items:
             out.append("## %s" % title)

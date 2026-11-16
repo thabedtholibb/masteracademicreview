@@ -7,14 +7,60 @@ on:
   workflow_dispatch:
 
 jobs:
-  engines:
-    name: engines (py${{ matrix.python-version }})
-    runs-on: ubuntu-24.04
+  # Stdlib tools, the end-to-end demo and the docs, on every supported Python, on Linux and Windows.
+  tools:
+    name: tools (${{ matrix.os }}, py${{ matrix.python-version }})
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.10", "3.12"]
+        os: [ubuntu-latest, windows-latest]
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
 
+      - name: Reproducibility tools (stdlib only)
+        run: python tests/run_tool_tests.py
+
+      - name: Documentation integrity (standards, gates, JEV, provenance)
+        run: python tests/check_docs.py
+
+      - name: End-to-end demo (dedup -> screening -> PRISMA -> gate -> cover letter)
+        run: python examples/systematic-review-demo/run_demo.py
+
+      - name: PRISMA variants (structure, not substrings)
+        run: |
+          for v in systematic scoping update; do
+            python shared/scripts/prisma_flow.py --variant $v --out "$RUNNER_TEMP/prisma_$v.svg"
+            python shared/scripts/prisma_flow.py --variant $v --validate "$RUNNER_TEMP/prisma_$v.svg"
+          done
+
+      - name: Console encoding (cp1252 stdout must not crash)
+        env:
+          PYTHONIOENCODING: cp1252
+        run: |
+          python shared/scripts/journal_rank.py tests/fixtures/journals_example.csv > /dev/null
+          python shared/scripts/check_review.py tests/fixtures/review_ok/review.md > /dev/null
+          python shared/scripts/dedup.py --selftest
+
+  # Engines that need numpy/scipy/matplotlib, plus the DOCX/PDF export.
+  engines:
+    name: engines (${{ matrix.os }}, py${{ matrix.python-version }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python-version: ["3.10", "3.13"]
+    defaults:
+      run:
+        shell: bash
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-python@v6
@@ -26,85 +72,78 @@ jobs:
           python -m pip install --upgrade pip
           pip install numpy scipy matplotlib python-docx reportlab
 
-      - name: Meta-analysis engine
+      - name: Meta-analysis engine (estimators checked against independent computations)
         run: |
           python shared/scripts/meta/example.py
           python shared/scripts/meta/selftest.py
 
-      - name: Bibliometric engine
-        run: python shared/scripts/bibliometric/example.py
-
-      - name: Export parser regression (Scopus semicolon + cp1252 + author IDs)
+      - name: Bibliometric engine + export parser regression (Scopus semicolon, cp1252, author IDs)
         run: |
+          python shared/scripts/bibliometric/example.py
           python shared/scripts/bibliometric/validate_export.py tests/fixtures/scopus_mini.csv
           python shared/scripts/bibliometric/validate_export.py shared/scripts/bibliometric/sample.csv
 
-      - name: PRISMA flow (stdlib only)
-        run: |
-          python shared/scripts/prisma_flow.py --selftest
-          python shared/scripts/prisma_flow.py
-          python shared/scripts/prisma_flow.py --validate prisma_flow.svg
-          python shared/scripts/prisma_flow.py --variant scoping --out /tmp/prisma_scr.svg
-          python shared/scripts/prisma_flow.py --variant scoping --validate /tmp/prisma_scr.svg
-          python shared/scripts/prisma_flow.py --variant update --out /tmp/prisma_update.svg
-          python shared/scripts/prisma_flow.py --variant update --validate /tmp/prisma_update.svg
-
-      - name: Journal-fit scorer (stdlib only)
-        run: |
-          python shared/scripts/journal_rank.py --selftest
-          python shared/scripts/journal_rank.py tests/fixtures/journals_example.csv > /tmp/journals.md
-          grep -q "#1 recommended" /tmp/journals.md
-          grep -q "LEGITIMACY RISK" /tmp/journals.md
-          echo "journal scorer OK"
-
-      - name: Reproducibility tools (stdlib only)
-        run: python tests/run_tool_tests.py
-
-      - name: Documentation integrity (standards + provenance)
-        run: python tests/check_docs.py
-
       - name: Markdown export smoke test (no Pandoc)
         run: |
-          mkdir -p /tmp/export-smoke
-          printf '# Test Review\n\nHello **world**.\n' > /tmp/export-smoke/review.md
-          python shared/scripts/export.py /tmp/export-smoke/review.md
-          python -c "import zipfile; assert zipfile.is_zipfile('/tmp/export-smoke/review.docx'), 'bad docx'; assert open('/tmp/export-smoke/review.pdf','rb').read(5)==b'%PDF-', 'bad pdf'; print('DOCX + PDF export OK')"
+          mkdir -p "$RUNNER_TEMP/smoke"
+          printf '# Test Review\n\nHello **world** – é.\n' > "$RUNNER_TEMP/smoke/review.md"
+          python shared/scripts/export.py "$RUNNER_TEMP/smoke/review.md"
+          python -c "import sys,zipfile; d=sys.argv[1]; assert zipfile.is_zipfile(d+'/review.docx'); assert open(d+'/review.pdf','rb').read(5)==b'%PDF-'; print('DOCX + PDF export OK')" "$RUNNER_TEMP/smoke"
 
-  windows:
-    name: windows (stdlib tools + encoding)
-    runs-on: windows-latest
+  # The LFK index must match the reference R implementation (metasens::lfkindex) to 1e-8.
+  lfk-crosscheck:
+    name: LFK index vs R metasens
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
+      - name: Install Python engine dependencies
+        run: pip install numpy scipy matplotlib
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          use-public-rspm: true
+      - name: Install metasens
+        run: Rscript -e 'install.packages("metasens")'
+      - name: Reference values from R
+        run: Rscript tests/lfk_crosscheck.R
+      - name: Compare with the Python implementation
+        run: python tests/lfk_crosscheck.py r_lfk.csv
 
-      - name: Install dependencies
-        run: pip install python-docx reportlab
-
-      - name: Reproducibility tools
-        run: python tests/run_tool_tests.py
-
-      - name: Documentation integrity
-        run: python tests/check_docs.py
-
-      - name: Export parser regression (cp1252 / semicolon)
-        run: python shared/scripts/bibliometric/validate_export.py tests/fixtures/scopus_mini.csv
-
-      - name: PRISMA flow + journal scorer
-        run: |
-          python shared/scripts/prisma_flow.py
-          python shared/scripts/journal_rank.py --selftest
-
-      - name: Console encoding (cp1252 stdout must not crash)
-        env:
-          PYTHONIOENCODING: cp1252
-        run: python shared/scripts/journal_rank.py tests/fixtures/journals_example.csv
-
-      - name: Markdown export smoke test
+  # The pip package: build the wheel, install it in a clean place, run it outside the repository.
+  package:
+    name: package (${{ matrix.os }}, py${{ matrix.python-version }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python-version: ["3.10", "3.13"]
+    defaults:
+      run:
         shell: bash
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Build sdist + wheel
         run: |
-          mkdir -p "$RUNNER_TEMP/smoke"
-          printf '# Test Review\n\nHello **world** – é.\n' > "$RUNNER_TEMP/smoke/review.md"
-          python shared/scripts/export.py "$RUNNER_TEMP/smoke/review.md"
-          python -c "import sys,zipfile; d=sys.argv[1]; assert zipfile.is_zipfile(d+'/review.docx'); assert open(d+'/review.pdf','rb').read(5)==b'%PDF-'; print('export OK')" "$RUNNER_TEMP/smoke"
+          python -m pip install --upgrade pip build
+          python -m build
+
+      - name: Install the wheel and run it outside the repository
+        run: |
+          python -m pip install dist/*.whl
+          DEMO="$GITHUB_WORKSPACE/examples/systematic-review-demo"
+          cd "$RUNNER_TEMP"
+          mar --version
+          mar list
+          mar selftest
+          python -m masteracademicreview --version
+          mar dedup --source Scopus="$DEMO/search/scopus.csv" --source PubMed="$DEMO/search/pubmed.ris" \
+                    --source WoS="$DEMO/search/wos.bib" --out-dir dedup_out | grep "Unique records (to screen):\*\* 8"
+          mar prisma dedup_out/prisma_identification.json "$DEMO/screening_counts.json" --out p.svg
+          mar prisma --validate p.svg

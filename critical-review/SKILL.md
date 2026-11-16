@@ -40,9 +40,13 @@ You write a review whose product is **an argument**, not a summary. The literatu
 5. Implications and limits — what this changes, and what it does not
 ```
 
-## Decision points (recommendation-first)
+## Decision points (JEV)
+
+Every decision here follows the JEV protocol (`../shared/jev.md`): ranked options, **#1 recommended**, one line of evidence each, what would change the ranking, and the author approves. Approved choices go into `decisions.md`.
 
 - **Thesis** — recommend sharpening the author's thesis (#1) over substituting your own; if the author has none, propose 1–2 candidate theses ranked, best first.
+- **Opposing positions** — recommend engaging the strongest version of each position (#1); a convenient selection of weak sources is a reason for rejection.
+- **Alternative** — recommend a framework with its limits (#1); a research agenda (#2) when no alternative is mature yet.
 
 ## Standards & sources
 

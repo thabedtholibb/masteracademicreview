@@ -14,8 +14,8 @@ from scipy.optimize import minimize_scalar  # noqa: E402
 from scipy.stats import t as tdist  # noqa: E402
 
 from meta import (  # noqa: E402
-    egger_test, leave_one_out, meta_regression, prediction_interval,
-    random_effects, subgroup_analysis,
+    doi_plot, egger_test, leave_one_out, lfk_index, meta_regression,
+    prediction_interval, random_effects, subgroup_analysis,
 )
 from meta.pooling import _q_gen  # noqa: E402
 
@@ -85,6 +85,30 @@ def main():
           eg["adequate"] is False and bool(eg["warning"]))
     big_v = [x * (1 + 0.1 * i) for i, x in enumerate(V * 2)]
     check("Egger adequate when k >= 10", egger_test(Y * 2, big_v)["adequate"])
+
+    # LFK index (Furuya-Kanamori 2018); the exact value is cross-checked against
+    # R metasens::lfkindex in CI (tests/lfk_crosscheck.*). Here: invariances.
+    pain_te = [-4.270, -1.710, -0.580, -0.190, 0.000]
+    pain_v = [0.158, 0.076, 0.018, 0.022, 0.040]
+    lfk = lfk_index(pain_te, pain_v)
+    check("LFK finite, interpreted, caveat attached",
+          math.isfinite(lfk["lfk"]) and lfk["interpretation"].endswith("asymmetry")
+          and "Schwarzer" in lfk["caveat"])
+    shifted = lfk_index([t + 3.7 for t in pain_te], pain_v)["lfk"]
+    check("LFK invariant to shifting all effects", abs(shifted - lfk["lfk"]) < 1e-12)
+    scaled = lfk_index([2.5 * t for t in pain_te], [6.25 * v for v in pain_v])["lfk"]
+    check("LFK invariant to rescaling effects and SEs", abs(scaled - lfk["lfk"]) < 1e-12)
+    check("Doi plot y = |z| for every study, most precise near 0",
+          len(lfk["abs_z"]) == 5 and min(lfk["abs_z"]) < 0.5)
+    try:
+        lfk_index([0.1], [0.01])
+        check("LFK rejects k < 2", False)
+    except ValueError:
+        check("LFK rejects k < 2", True)
+    import tempfile
+    with tempfile.TemporaryDirectory() as d:
+        out = doi_plot(pain_te, pain_v, filename=os.path.join(d, "doi.png"))
+        check("Doi plot written", os.path.getsize(out) > 1000)
 
     if FAILS:
         print("%d failed" % len(FAILS))

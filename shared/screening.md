@@ -20,7 +20,7 @@ At full-text stage, **every excluded study must carry an exclusion reason**. Use
 5. Wrong study design
 6. Wrong publication type (e.g. conference abstract, editorial)
 7. Full text unavailable
-8. Duplicate (already resolved at dedup)
+8. Duplicate (already resolved at dedup: `dedup.py`, see `shared/search_strategy.md`)
 9. Language
 10. Other (specify)
 

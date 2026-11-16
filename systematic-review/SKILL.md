@@ -29,7 +29,7 @@ If these are missing, stop and establish them first — do not run an un-protoco
 ## Method (run in order)
 
 1. **Frame & protocol** — write the question, eligibility criteria, and methods; register if possible. Generate the document with `python shared/scripts/protocol.py --template systematic-review > protocol.json`, fill it in, then `protocol.py protocol.json --out protocol.md` (fields you have not decided stay `[TO COMPLETE]`).
-2. **Search** — follow `shared/search_strategy.md`; record per-database queries and raw counts (PRISMA-S).
+2. **Search** — follow `shared/search_strategy.md`; record per-database queries and raw counts (PRISMA-S). Deduplicate the exports with `python shared/scripts/dedup.py --source <Name>=<file> ...`; resolve `possible_duplicates.csv` by hand before screening, and feed `prisma_identification.json` to `prisma_flow.py`.
 3. **Screen** — follow `shared/screening.md`; dual reviewers, ordered exclusion reasons, agreement (κ/PABAK).
 4. **Extract** — follow `shared/data_extraction.md`; build the characteristics table.
 5. **Risk of bias** — follow `shared/risk_of_bias.md`; recommend the tool by design (**#1** = the design-matched tool), naming the runner-up only if ambiguous.
@@ -67,6 +67,17 @@ Abstract (structured)
 4. Discussion — interpretation, evidence limitations, process limitations, implications
 Other — registration, funding, conflicts, data availability
 ```
+
+## Decision points (JEV)
+
+Every decision here follows the JEV protocol (`../shared/jev.md`): ranked options, **#1 recommended**, one line of evidence each, what would change the ranking, and the author approves. Approved choices go into `decisions.md`.
+
+- **Databases.** **#1 recommended:** two or more subject databases plus one multidisciplinary database, each search reported per PRISMA-S. #2: a single database, only for a narrow question with the limitation declared (then consider `rapid-review`).
+- **Screening.** **#1 recommended:** two independent reviewers at title/abstract and full text, agreement reported with `screening_agreement.py`. #2: dual screening of a calibration sample, then single screening with verification (declared).
+- **Risk of bias.** **#1 recommended:** the tool matched to each design (RoB 2 for randomised, ROBINS-I for non-randomised studies). #2: a JBI checklist for other designs. Never one generic score for all designs.
+- **Synthesis.** **#1 recommended:** meta-analysis when at least two studies report comparable effect sizes (hand off to `meta-analysis`). #2: structured narrative synthesis grouped by intervention and outcome. #3: summarise direction of effect only when nothing else is possible; never count p-values.
+- **Certainty.** **#1 recommended:** GRADE for every critical outcome.
+- *What changes the ranking:* no comparable outcome measures moves synthesis from #1 to #2.
 
 ## Standards & sources
 

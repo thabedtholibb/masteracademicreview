@@ -56,3 +56,7 @@ Never hand the author a bare open question when you can offer **ranked options**
 - A recommendation is a default, not a decision — the author approves the final question and keyword set before you hand off.
 - A question answerable with "yes/no" is usually a poor review question; push toward "what / why / how / to what extent".
 - Never state a journal's quartile, APC, or acceptance rate from memory. That is `journal-match`'s job, and it verifies each metric against a primary source with a check date.
+
+## JEV
+
+Every decision here follows the JEV protocol (`../shared/jev.md`): ranked options, **#1 recommended**, one line of evidence each, what would change the ranking, and the author approves. Approved choices go into `decisions.md`.

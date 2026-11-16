@@ -1,0 +1,24 @@
+{
+  "database_records": [
+    [
+      "Scopus",
+      4
+    ],
+    [
+      "PubMed",
+      4
+    ],
+    [
+      "WoS",
+      3
+    ]
+  ],
+  "removed_before_screening": [
+    [
+      "Duplicate records removed",
+      3
+    ]
+  ],
+  "after_dedup": 8,
+  "screened": 8
+}

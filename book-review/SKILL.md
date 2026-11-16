@@ -48,10 +48,13 @@ Ask the author for, or gather:
 - **Resensi (Indonesian):** commonly opens with bibliographic details and a hook, then *ringkasan isi* (summary), *keunggulan dan kelemahan* (strengths/weaknesses), and *rekomendasi* (recommendation). Match the expected style of the outlet or assignment.
 - **Length:** match the venue — a newspaper review is ~500–800 words; a scholarly review is 1,500–3,000 words.
 
-## Decision points (recommendation-first)
+## Decision points (JEV)
+
+Every decision here follows the JEV protocol (`../shared/jev.md`): ranked options, **#1 recommended**, one line of evidence each, what would change the ranking, and the author approves. Approved choices go into `decisions.md`.
 
 - **Audience & length** — recommend by venue: scholarly journal (#1, ~1,500–3,000 words) vs newspaper/class resensi (#2, ~500–800 words); don't ask the author to pick a length blind.
 - **Verdict** — recommend the strongest honest verdict (#1), including a mixed one, rather than forcing praise.
+- **Comparison** — recommend comparing the book with one or two key works in its field (#1) so the verdict has a reference point.
 
 ## Standards & sources
 

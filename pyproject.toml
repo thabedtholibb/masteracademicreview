@@ -1,0 +1,52 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "masteracademicreview"
+version = "0.1.0"
+description = "Deterministic, auditable tools for writing academic reviews: deduplication, PRISMA flow, screening agreement, extraction checks, meta-analysis, reference integrity, review gate, protocols, journal ranking and submission letters."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "thabedtholibb" }]
+keywords = ["systematic review", "meta-analysis", "PRISMA", "deduplication", "evidence synthesis", "scoping review", "bibliometrics"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering",
+]
+dependencies = []
+
+[project.optional-dependencies]
+meta = ["numpy", "scipy", "matplotlib"]
+bibliometric = ["numpy", "matplotlib"]
+export = ["python-docx", "reportlab"]
+all = ["numpy", "scipy", "matplotlib", "python-docx", "reportlab"]
+
+[project.scripts]
+mar = "masteracademicreview.cli:main"
+masteracademicreview = "masteracademicreview.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/thabedtholibb/masteracademicreview"
+Documentation = "https://github.com/thabedtholibb/masteracademicreview/tree/master/docs"
+Issues = "https://github.com/thabedtholibb/masteracademicreview/issues"
+Changelog = "https://github.com/thabedtholibb/masteracademicreview/blob/master/CHANGELOG.md"
+
+# The tools live in shared/scripts/ (where the skills call them with
+# `python shared/scripts/<tool>.py`); the package maps that folder, so the
+# repository layout and the installed package stay one and the same code.
+[tool.setuptools]
+package-dir = { "masteracademicreview" = "shared/scripts" }
+packages = ["masteracademicreview", "masteracademicreview.meta", "masteracademicreview.bibliometric"]
+
+[tool.setuptools.package-data]
+"masteracademicreview.bibliometric" = ["sample.csv"]

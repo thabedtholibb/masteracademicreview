@@ -1,0 +1,2 @@
+record_a,record_b,similarity,recommendation,title_a,title_b,year_a,year_b,source_a,source_b
+R0006,R0007,0.989,"#1 likely duplicate: check DOI/authors, then remove one",Group dance classes and loneliness in later life,Group dance clases and loneliness in later life,2023,2023,PubMed,WoS

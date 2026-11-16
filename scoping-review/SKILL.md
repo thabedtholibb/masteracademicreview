@@ -40,10 +40,15 @@ Abstract (structured)
 4. Discussion — summary, limitations, implications
 ```
 
-## Decision points (recommendation-first)
+## Decision points (JEV)
+
+Every decision here follows the JEV protocol (`../shared/jev.md`): ranked options, **#1 recommended**, one line of evidence each, what would change the ranking, and the author approves. Approved choices go into `decisions.md`.
 
 - **Framing** — recommend **PCC (#1)** for mapping questions.
 - **Quality appraisal** — recommend **skipping it (#1)**; PRISMA-ScR permits it as optional, but it is not the norm for scoping.
+- **Conduct framework** — recommend **JBI scoping guidance reported with PRISMA-ScR (#1)**; Arksey & O'Malley with Levac et al.'s refinements (#2).
+- **Registration** — recommend **OSF Registries (#1)**; PROSPERO does not accept scoping reviews.
+- **PRISMA diagram** — use `prisma_flow.py --variant scoping` (#1) for sources-of-evidence wording.
 
 ## Standards & sources
 

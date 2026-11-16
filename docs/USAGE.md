@@ -105,6 +105,15 @@ masteracademicreview produces **one kind of deliverable: a review document**, pl
 
 ## Running the Python scripts
 
+Every script below is also available as `mar <tool>` after `pip install` (see `mar list`). A complete, runnable chain is in `examples/systematic-review-demo/`.
+
+```bash
+python shared/scripts/dedup.py --source Scopus=scopus.csv --source PubMed=pubmed.ris --source WoS=wos.bib
+python shared/scripts/prisma_flow.py dedup_out/prisma_identification.json screening_counts.json --strict
+python shared/scripts/submission.py cover-letter review.md --shortlist journal_shortlist.json --gate-report review_check.md
+python shared/scripts/submission.py response reviewer_comments.txt --review review.md --lang id
+```
+
 From the repo root:
 
 ```bash

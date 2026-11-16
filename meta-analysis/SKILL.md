@@ -25,7 +25,7 @@ You do everything a `systematic-review` does, **plus** you statistically combine
 
 If there are fewer than 2 studies, pooling is mathematically meaningless — stop and route to `systematic-review`.
 
-## Choosing your inputs (recommendation-first)
+## Choosing your inputs (JEV)
 
 - **Effect-size measure** — continuous → **Hedges' g (#1)**; dichotomous → **log odds ratio (#1)** or log risk ratio; correlation → **Fisher z (#1)**. Recommend by data type; don't ask the author to pick blindly.
 - **Pooling model** — **random effects (#1, default)**, because studies are rarely identical; use fixed effects only when heterogeneity is trivially low *and* the studies are near-identical.
@@ -74,6 +74,18 @@ An end-to-end runnable demo exists: `shared/scripts/meta/example.py`.
 | I² and Cochran's Q | `heterogeneity` |
 | Forest / funnel plot | `forest_plot` / `funnel_plot` |
 | Egger's test | `egger_test` |
+| Doi plot + LFK index (supplementary; same algorithm as R `metasens::lfkindex`, cross-checked in CI) | `doi_plot` / `lfk_index` |
+
+## Decision points (JEV)
+
+Every decision here follows the JEV protocol (`../shared/jev.md`): ranked options, **#1 recommended**, one line of evidence each, what would change the ranking, and the author approves. Approved choices go into `decisions.md`.
+
+- **Model.** **#1 recommended:** random effects with REML and the Hartung-Knapp-Sidik-Jonkman adjustment (`random_effects(method="reml", hksj=True)`). #2: DerSimonian-Laird, as a sensitivity analysis or where the field expects it. #3: fixed effect, only if the studies are functionally identical (justify it).
+- **Effect measure.** **#1 recommended:** SMD (Hedges' g) when scales differ, MD when all studies share one scale; for binary outcomes the risk ratio (easier to read), or the odds ratio for case-control data.
+- **Heterogeneity.** **#1 recommended:** report tau², I² and the 95% prediction interval together. Subgroups and meta-regression only for pre-specified moderators, with at least 10 studies per moderator.
+- **Small-study effects.** **#1 recommended:** funnel plot and Egger's test only when k >= 10; with fewer studies, state that it is not assessable (the engine returns `adequate=False`). #2: Doi plot + LFK index (`doi_plot`, `lfk_index`) as a *supplementary* display only: a simulation study found the LFK index does not reliably detect small-study effects (Schwarzer et al. 2024), so never report it alone.
+- **Sensitivity.** **#1 recommended:** leave-one-out (`leave_one_out`) plus excluding high risk-of-bias studies.
+- *What changes the ranking:* very few studies with high heterogeneity: present the studies without pooling (systematic-review synthesis #2).
 
 ## Standards & sources
 

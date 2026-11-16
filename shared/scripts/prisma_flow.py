@@ -418,6 +418,9 @@ def _selftest():
             f.write(broken)
         assert validate_svg(bad, "update"), "oversized box must be detected"
         assert validate_svg(os.path.join(d, "nope.svg")), "missing file must be reported"
+        assert check_counts(_SAMPLE) == [], check_counts(_SAMPLE)
+        assert check_counts(dict(_SAMPLE, included=9)), "off-by-one must be reported"
+        assert check_counts(dict(_SAMPLE, removed_before_screening=[("Duplicates", 50)]))
         try:
             render_prisma(_SAMPLE, os.path.join(d, "x.svg"), "bogus")
         except ValueError:
@@ -427,9 +430,71 @@ def _selftest():
     print("prisma_flow selftest OK (%s)" % ", ".join(VARIANTS))
 
 
+def check_counts(d):
+    """Arithmetic checks on the flow; returns a list of human-readable problems.
+
+    PRISMA numbers must add up at every box. A mismatch usually means a
+    record was lost between tools, which reviewers notice immediately.
+    """
+    problems = []
+
+    def num(key):
+        value = d.get(key)
+        return int(value) if value is not None else None
+
+    identified = sum(int(c) for _, c in d.get("database_records", [])) \
+        + int(d.get("other_sources", 0) or 0) + int(d.get("registers", 0) or 0)
+    removed = d.get("removed_before_screening")
+    if removed is not None and num("after_dedup") is not None:
+        removed_n = sum(int(c) for _, c in removed)
+        if identified - removed_n != num("after_dedup"):
+            problems.append("identified (%d) - removed before screening (%d) != after_dedup (%d)"
+                            % (identified, removed_n, num("after_dedup")))
+    if num("after_dedup") is not None and num("screened") is not None:
+        expected = num("after_dedup") - int(d.get("automation_removed", 0) or 0) \
+            - int(d.get("other_removed", 0) or 0)
+        if removed is None and num("screened") != expected:
+            problems.append("screened (%d) != after_dedup minus other removals (%d)"
+                            % (num("screened"), expected))
+        if removed is not None and num("screened") != num("after_dedup"):
+            problems.append("screened (%d) != after_dedup (%d)" % (num("screened"), num("after_dedup")))
+    checks = [
+        ("screened", ["excluded_title_abstract", "sought_retrieval"]),
+        ("sought_retrieval", ["not_retrieved", "assessed"]),
+    ]
+    for total, parts in checks:
+        if num(total) is not None and all(num(p) is not None for p in parts):
+            if num(total) != sum(num(p) for p in parts):
+                problems.append("%s (%d) != %s (%d)" % (
+                    total, num(total), " + ".join(parts), sum(num(p) for p in parts)))
+    if num("assessed") is not None and num("included") is not None:
+        excl = sum(int(c) for _, c in d.get("excluded_fulltext", []) or [])
+        if num("assessed") != excl + num("included"):
+            problems.append("assessed (%d) != excluded at full text (%d) + included (%d)"
+                            % (num("assessed"), excl, num("included")))
+    return problems
+
+
+def load_counts(paths):
+    """Merge one or more counts JSON files (later files override earlier ones)."""
+    data = {}
+    for path in paths:
+        with open(path, encoding="utf-8-sig") as f:
+            data.update(json.load(f))
+    for key in ("database_records", "excluded_fulltext", "removed_before_screening"):
+        if data.get(key):
+            data[key] = [tuple(x) for x in data[key]]
+    return data
+
+
 def main(argv=None):
     p = argparse.ArgumentParser(description="PRISMA 2020 flow diagram (SVG).")
-    p.add_argument("input", nargs="?", help="counts JSON (default: built-in demo)")
+    p.add_argument("input", nargs="*",
+                   help="counts JSON file(s), merged in order: e.g. the dedup "
+                        "prisma_identification.json then your screening counts "
+                        "(default: built-in demo)")
+    p.add_argument("--strict", action="store_true",
+                   help="exit 1 if the counts do not add up")
     p.add_argument("--variant", choices=VARIANTS, default="systematic")
     p.add_argument("--out", default="prisma_flow.svg")
     p.add_argument("--validate", metavar="SVG", help="structurally validate an SVG and exit")
@@ -445,16 +510,15 @@ def main(argv=None):
         print("RESULT: %s" % ("FAIL" if problems else "PASS"))
         return 1 if problems else 0
     if a.input:
-        with open(a.input, encoding="utf-8-sig") as f:
-            data = json.load(f)
-        data["database_records"] = [tuple(x) for x in data["database_records"]]
-        if data.get("excluded_fulltext"):
-            data["excluded_fulltext"] = [tuple(x) for x in data["excluded_fulltext"]]
+        data = load_counts(a.input)
     else:
         data = dict(_SAMPLE, previous_studies=7)
+    problems = check_counts(data)
+    for problem in problems:
+        print("WARNING: counts do not add up: " + problem)
     render_prisma(data, a.out, a.variant)
     print("wrote %s" % a.out)
-    return 0
+    return 1 if (a.strict and problems) else 0
 
 
 if __name__ == "__main__":

@@ -1,0 +1,12 @@
+Editor
+The reviewers raise important points. Please address all comments in a point-by-point response.
+
+Reviewer 1
+1. Major: the search covers only three databases. Please justify why trial registers and grey literature were not searched more widely.
+2. The risk-of-bias assessment is described in the protocol but is not reported in the results.
+3. Minor: please check the sample size reported for Santoso 2022 in Table 1.
+
+Reviewer 2
+1. Please describe the deduplication method in more detail, including how possible duplicates were resolved.
+2. The conclusion overstates the evidence given three small trials with different outcome measures.
+3. Consider adding a summary-of-findings table.

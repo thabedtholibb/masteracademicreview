@@ -143,8 +143,25 @@ The file can be exported with `python shared/scripts/export.py journal_shortlist
 - **Metrics expire.** Quartiles and APCs change; date-stamp every check and re-verify before submission.
 - **Do not translate ranking systems.** SINTA 1 is not "Scopus Q1"; a national ranking and an international quartile measure different things.
 
+## From shortlist to submission
+
+Once the author approves the target, generate the letter from the same evidence:
+
+```bash
+python shared/scripts/journal_rank.py journals.csv --json journal_shortlist.json
+python shared/scripts/check_review.py review.md --out review_check.md
+python shared/scripts/submission.py cover-letter review.md --shortlist journal_shortlist.json \
+    --gate-report review_check.md --out cover_letter.md          # --lang id for Indonesian
+```
+
+The letter goes to the **#1** journal (`--rank N` for another). It is refused while the gate is failed or the gate report has errors, and for a journal flagged LEGITIMACY RISK or SCOPE MISMATCH (the tool names the next clean rank). After review, `submission.py response comments.txt --review review.md` turns the reviewers' comments into a ranked revision plan (major first) and a point-by-point response skeleton.
+
 ## Handoff
 
 - From `brainstorm`: accept the brief (question, framing, keywords, genre hint) and return a `journal_fit` block for the brief.
 - From `review-router`: accept the genre + object + rigour level and return the target-journal shortlist alongside the dispatch brief.
 - To the genre skill: the chosen journal's **article type, word limit, and reporting requirements** become constraints on the review.
+
+## JEV
+
+Every decision here follows the JEV protocol (`../shared/jev.md`): ranked options, **#1 recommended**, one line of evidence each, what would change the ranking, and the author approves. Approved choices go into `decisions.md`.

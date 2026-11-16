@@ -21,9 +21,9 @@ You produce a **structured visual map** of the evidence — coding studies into 
 1. A **framework** (or the willingness to build one) — e.g. intervention × outcome, or PICO-derived.
 2. A searchable body of studies.
 
-## Method (recommendation-first)
+## Method (JEV)
 
-1. **Define the framework (recommendation-first)** — propose a framework matrix (#1) based on the topic and show a small example before coding; the author approves it.
+1. **Define the framework (JEV)** — propose a framework matrix (#1) based on the topic and show a small example before coding; the author approves it.
 2. **Search & screen** — follow `shared/search_strategy.md` and `shared/screening.md`; document counts for the flow diagram (`shared/scripts/prisma_flow.py`).
 3. **Code studies into the matrix** — place each study in its framework cell(s); this is the core mapping act.
 4. **Visualize** — render the map (a matrix/heatmap) showing cell densities and gaps. No quality appraisal — mapping shows *where*, not *how good*.
@@ -39,6 +39,14 @@ Abstract
 3. Results — the map, densities, gaps
 4. Discussion — what the gaps mean, implications
 ```
+
+## Decision points (JEV)
+
+Every decision here follows the JEV protocol (`../shared/jev.md`): ranked options, **#1 recommended**, one line of evidence each, what would change the ranking, and the author approves. Approved choices go into `decisions.md`.
+
+- **Framework.** **#1 recommended:** a pre-specified, piloted coding framework approved by the author (see Method). #2: adapt an established framework from the field.
+- **Output.** **#1 recommended:** an evidence-and-gap map (matrix with counts per cell); no claims about effects.
+- **Reporting.** **#1 recommended:** ROSES, with the flow diagram from `prisma_flow.py`.
 
 ## Standards & sources
 

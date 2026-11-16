@@ -4,6 +4,16 @@ Format: [Keep a Changelog](https://keepachangelog.com). Versioning: SemVer.
 
 ## [0.1.0] - 2026-11-16
 ### Added
+- `dedup.py`: deduplicate RIS/CSV/BibTeX exports from several databases (DOI, then title + year; fuzzy near-matches only recommended), with a removal log, PRISMA identification counts and a screening template.
+- `submission.py`: cover letter for the #1 clean journal from the `journal_rank.py` shortlist (refused while the gate fails or the journal is flagged) and a ranked point-by-point response to reviewers; English and Indonesian.
+- pip package `masteracademicreview` with one command, `mar <tool>` (also `python -m masteracademicreview`); extras `[meta]`, `[bibliometric]`, `[export]`, `[all]`.
+- JEV decision protocol (`shared/jev.md`); every genre skill has *Decision points (JEV)*; `check_review.py` prints ranked next steps.
+- `prisma_flow.py` merges several counts files and refuses diagrams whose numbers do not add up (`--strict`).
+- End-to-end example `examples/systematic-review-demo/` (synthetic data), run in CI.
+- Meta-analysis: Doi plot and LFK index (`doi_plot`, `lfk_index`), same algorithm as R `metasens::lfkindex` and cross-checked against it in CI; reported as supplementary only, with the Schwarzer et al. (2024) reliability caveat.
+- All 59 DOIs in `shared/method_sources.md` verified against Crossref (title and year).
+- Bahasa Indonesia: `README.id.md`, `docs/id/PANDUAN.md`, `docs/id/FAQ.md`, Indonesian letter templates.
+- `SECURITY.md`, `CODE_OF_CONDUCT.md`; monthly Crossref verification of every method DOI; manual PyPI publish workflow.
 - 13 review-genre skills, review-router, brainstorm, journal-match.
 - Meta-analysis engine, bibliometric engine, PRISMA 2020 flow generator, DOCX/PDF export.
 - `verify_refs.py`: reference integrity check (DOI/title/year against Crossref; corporate authors, acronym guidelines, running bibliographies).
@@ -15,4 +25,7 @@ Format: [Keep a Changelog](https://keepachangelog.com). Versioning: SemVer.
 - `validate_extraction.py`: extraction CSV schema, duplicate, range and effect-size checks.
 - Meta-analysis engine: REML and Paule-Mandel tau², Hartung-Knapp-Sidik-Jonkman option, prediction interval, leave-one-out, subgroup analysis, meta-regression; Egger test now flags k < 10 as inadequate.
 - journal-match: 5/3/1/0 scoring anchors (`--rubric`), mandatory `scope_quote` for scope_fit >= 3, `--explain` contributions, `--strict-anchors`, evidence worksheet.
-- CI on Ubuntu and Windows (cp1252/encoding regression coverage).
+- CI on Ubuntu and Windows with Python 3.10-3.13 (cp1252/encoding regression coverage), plus a build-and-install test of the wheel outside the repository.
+
+### Fixed
+- `verify_refs.py` used a backslash inside an f-string expression, a syntax error before Python 3.12; it crashed (and `check_review.py` with it) on Python 3.10 and 3.11.

@@ -27,7 +27,7 @@ You synthesize **qualitative** studies into higher-order themes or theory. There
 2. **Search & screen** — follow `shared/search_strategy.md` and `shared/screening.md`; add qualitative search terms (experience, perception, lived, meaning).
 3. **Appraise** — apply the **CASP Qualitative** checklist (see `shared/risk_of_bias.md`) to judge trustworthiness; it informs interpretation, it does not exclude.
 4. **Extract findings** — extract each study's themes, categories, and supporting quotes (see `shared/data_extraction.md`).
-5. **Synthesize (recommendation-first)** — recommend the method by goal, then state it: **thematic synthesis (#1, default)** for descriptive → analytical themes; **meta-ethnography (#2)** for a new interpretive theory; **meta-aggregation (#3)** for practical recommendations. Build the higher-order themes or theory.
+5. **Synthesize (JEV)** — recommend the method by goal, then state it: **thematic synthesis (#1, default)** for descriptive → analytical themes; **meta-ethnography (#2)** for a new interpretive theory; **meta-aggregation (#3)** for practical recommendations. Build the higher-order themes or theory.
 6. **Report** — write to ENTREQ (`shared/reporting_standards.md`).
 
 ## Structure (ENTREQ-aligned)
@@ -40,6 +40,14 @@ Abstract
 3. Findings — the developed themes, each grounded in the studies' data (with quotes)
 4. Discussion — the new interpretation, trustworthiness, limitations
 ```
+
+## Decision points (JEV)
+
+Every decision here follows the JEV protocol (`../shared/jev.md`): ranked options, **#1 recommended**, one line of evidence each, what would change the ranking, and the author approves. Approved choices go into `decisions.md`.
+
+- **Synthesis method.** Ranked in the Method section above (thematic synthesis #1, meta-ethnography #2).
+- **Appraisal use.** **#1 recommended:** CASP Qualitative to describe trustworthiness and in a sensitivity check; do not exclude studies by score alone.
+- **Reporting.** **#1 recommended:** ENTREQ, with every theme traced to its source studies and quotes.
 
 ## Standards & sources
 

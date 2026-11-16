@@ -55,5 +55,6 @@ At minimum, record: databases + platform, date, full query per database, filters
 ## Guardrails
 
 - Do not claim a search is "comprehensive" if you searched one database.
-- Record the *raw* count per database; deduplication happens later in screening, not here.
+- Record the *raw* count per database; deduplication happens next, before screening.
+- Export every database in a format `dedup.py` reads (RIS, CSV or BibTeX) and run `python shared/scripts/dedup.py --source <Name>=<file> ...`. It removes certain duplicates (DOI; title + year), lists near-matches for a human (`possible_duplicates.csv`), and writes `prisma_identification.json` for the flow diagram.
 - If the author cannot access a database, say so — do not fabricate record counts.

@@ -78,6 +78,16 @@ for genre in GENRES:
     front = text.split("---", 2)
     if len(front) >= 3 and "reporting_standard:" not in front[1]:
         fail(f"{genre}: frontmatter has no reporting_standard")
+    # JEV: every genre exposes ranked decision points with a #1 recommendation
+    decisions = text.split("## Decision points (JEV)", 1)
+    if len(decisions) < 2:
+        fail(f"{genre}: missing '## Decision points (JEV)'")
+    else:
+        block = decisions[1].split("\n## ", 1)[0]
+        if "#1" not in block or "shared/jev.md" not in block:
+            fail(f"{genre}: JEV decision points need a #1 option and a pointer to shared/jev.md")
+    if "(recommendation-first)" in text:
+        fail(f"{genre}: use the '(JEV)' label instead of '(recommendation-first)'")
 
 
 standards = ROOT / "shared" / "reporting_standards.md"
@@ -90,8 +100,39 @@ else:
             fail(f"shared/reporting_standards.md: missing {standard}")
 
 for skill in ("journal-match", "brainstorm", "review-router"):
-    if not (ROOT / skill / "SKILL.md").exists():
+    path = ROOT / skill / "SKILL.md"
+    if not path.exists():
         fail(f"{skill}: SKILL.md missing")
+    elif "shared/jev.md" not in path.read_text(encoding="utf-8"):
+        fail(f"{skill}: does not point to the JEV protocol (shared/jev.md)")
+
+jev = ROOT / "shared" / "jev.md"
+if not jev.exists():
+    fail("shared/jev.md (JEV decision protocol) missing")
+elif "#1 recommended" not in jev.read_text(encoding="utf-8"):
+    fail("shared/jev.md: no '#1 recommended' rule")
+
+for doc_page in ("SECURITY.md", "CODE_OF_CONDUCT.md", "CONTRIBUTING.md", "CITATION.cff",
+                 "pyproject.toml", "README.id.md"):
+    if not (ROOT / doc_page).exists():
+        fail(f"{doc_page} missing")
+
+if not (ROOT / "examples" / "systematic-review-demo" / "run_demo.py").exists():
+    fail("examples/systematic-review-demo/run_demo.py missing")
+
+# one version everywhere: package, module, citation and changelog
+versions = {}
+for name, path, pattern in (
+    ("pyproject.toml", ROOT / "pyproject.toml", r'^version\s*=\s*"([^"]+)"'),
+    ("shared/scripts/__init__.py", ROOT / "shared" / "scripts" / "__init__.py", r'__version__\s*=\s*"([^"]+)"'),
+    ("CITATION.cff", ROOT / "CITATION.cff", r"^version:\s*([\w.]+)"),
+    ("CHANGELOG.md", ROOT / "CHANGELOG.md", r"^## \[(\d[\w.]*)\]"),
+):
+    if path.exists():
+        m = re.search(pattern, path.read_text(encoding="utf-8"), re.M)
+        versions[name] = m.group(1) if m else None
+if len(set(versions.values())) > 1:
+    fail("version mismatch: " + ", ".join(f"{k}={v}" for k, v in versions.items()))
 
 if not (ROOT / "shared" / "scripts" / "journal_rank.py").exists():
     fail("shared/scripts/journal_rank.py missing")
@@ -100,7 +141,8 @@ for doc_page in ("DECISION_TREE.md", "FAQ.md", "TROUBLESHOOTING.md"):
     if not (ROOT / "docs" / doc_page).exists():
         fail(f"docs/{doc_page} missing")
 
-for script in ("verify_refs.py", "screening_agreement.py", "validate_extraction.py", "check_review.py", "protocol.py"):
+for script in ("verify_refs.py", "screening_agreement.py", "validate_extraction.py", "check_review.py",
+               "protocol.py", "dedup.py", "submission.py", "cli.py"):
     if not (ROOT / "shared" / "scripts" / script).exists():
         fail(f"shared/scripts/{script} missing")
 
@@ -126,6 +168,6 @@ if errors:
     sys.exit(1)
 
 print(
-    f"documentation checks OK ({len(GENRES)} genres, standards + gates + provenance "
-    "+ journal skill + reproducibility tools)"
+    f"documentation checks OK ({len(GENRES)} genres, standards + gates + JEV decision points "
+    "+ provenance + journal skill + reproducibility tools + community files)"
 )

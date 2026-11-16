@@ -21,7 +21,7 @@ A **systematic review with explicit, declared shortcuts** for when a decision ca
 1. A focused question and a **deadline** — the deadline drives every shortcut.
 2. The author's agreement to the shortcuts (recorded).
 
-## Method (recommendation-first)
+## Method (JEV)
 
 1. **Choose the shortcuts (ranked).** Present the tiers in priority order and recommend the least-damaging set for the deadline:
    - **#1** — 2 databases + grey literature, single reviewer with a 10–20% verification sample, simplified extraction.
@@ -43,6 +43,15 @@ Abstract
 3. Results — included studies, summary per outcome
 4. Discussion — what the shortcuts limit, implications
 ```
+
+## Decision points (JEV)
+
+Every decision here follows the JEV protocol (`../shared/jev.md`): ranked options, **#1 recommended**, one line of evidence each, what would change the ranking, and the author approves. Approved choices go into `decisions.md`.
+
+- **Protocol.** **#1 recommended:** a short registered protocol (PROSPERO or OSF) even under time pressure; generate it with `protocol.py --template rapid-review`.
+- **Risk of bias.** **#1 recommended:** single assessor with verification by a second reviewer, limited to the critical outcomes. Skipping it entirely is not an option.
+- **Synthesis.** **#1 recommended:** narrative summary per outcome; no statistical pooling under rapid-review shortcuts.
+- *What changes the ranking:* a longer deadline moves the review up to `systematic-review`.
 
 ## Standards & sources
 

@@ -15,12 +15,18 @@ forest.png           ← meta-analysis
 funnel.png           ← meta-analysis
 effects.csv          ← meta-analysis (the extracted effect sizes)
 characteristics.csv  ← systematic / scoping / mapping (study table)
+dedup_out/           ← dedup.py: deduplicated.csv, duplicates.csv, possible_duplicates.csv,
+                       screening_template.csv, prisma_identification.json, dedup_report.md
 screening_log.csv    ← systematic / meta / scoping / mapping
 conflicts.csv        ← disagreements for adjudication (screening_agreement.py)
 agreement.md         ← dual-screening κ/PABAK report (screening_agreement.py)
 extraction_check.md  ← extraction validation report (validate_extraction.py)
 ref_check.md         ← reference integrity report (verify_refs.py)
-review_check.md      ← gate validation report (check_review.py)
+review_check.md      ← gate validation report (check_review.py), with ranked next steps
+decisions.md         ← JEV decision log (shared/jev.md)
+journal_shortlist.*  ← journal_rank.py (ranked, #1 recommended)
+cover_letter.md      ← submission.py cover-letter (refused while the gate fails)
+response_to_reviewers.md ← submission.py response (ranked revision plan)
 review.docx          ← optional, via export.py (Word)
 review.pdf           ← optional, via export.py (needs a PDF engine)
 ```

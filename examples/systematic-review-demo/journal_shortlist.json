@@ -1,0 +1,474 @@
+{
+  "weights": {
+    "scope_fit": 30.0,
+    "article_fit": 15.0,
+    "method_fit": 15.0,
+    "indexing": 10.0,
+    "speed": 10.0,
+    "cost": 10.0,
+    "audience": 5.0,
+    "risk": 5.0
+  },
+  "candidates": [
+    {
+      "journal": "Journal of Fictional Evidence Synthesis",
+      "issn": "0000-0001",
+      "publisher": "Example Press",
+      "tier": "target",
+      "scores": {
+        "scope_fit": 5.0,
+        "article_fit": 5.0,
+        "method_fit": 5.0,
+        "indexing": 5.0,
+        "speed": 3.0,
+        "cost": 4.0,
+        "audience": 4.0,
+        "risk": 5.0
+      },
+      "fit": 93.0,
+      "confidence": 75.0,
+      "verified": [
+        "article_fit",
+        "audience",
+        "indexing",
+        "method_fit",
+        "risk",
+        "scope_fit"
+      ],
+      "unknown_verified_fields": [],
+      "gaps": [
+        "speed",
+        "cost"
+      ],
+      "flags": [
+        "OFF_ANCHOR"
+      ],
+      "off_anchor": [
+        "cost",
+        "audience"
+      ],
+      "contributions": {
+        "scope_fit": {
+          "weight_pct": 30.0,
+          "score": 5.0,
+          "points": 30.0,
+          "lost": 0.0
+        },
+        "article_fit": {
+          "weight_pct": 15.0,
+          "score": 5.0,
+          "points": 15.0,
+          "lost": 0.0
+        },
+        "method_fit": {
+          "weight_pct": 15.0,
+          "score": 5.0,
+          "points": 15.0,
+          "lost": 0.0
+        },
+        "indexing": {
+          "weight_pct": 10.0,
+          "score": 5.0,
+          "points": 10.0,
+          "lost": 0.0
+        },
+        "speed": {
+          "weight_pct": 10.0,
+          "score": 3.0,
+          "points": 6.0,
+          "lost": 4.0
+        },
+        "cost": {
+          "weight_pct": 10.0,
+          "score": 4.0,
+          "points": 8.0,
+          "lost": 2.0
+        },
+        "audience": {
+          "weight_pct": 5.0,
+          "score": 4.0,
+          "points": 4.0,
+          "lost": 1.0
+        },
+        "risk": {
+          "weight_pct": 5.0,
+          "score": 5.0,
+          "points": 5.0,
+          "lost": 0.0
+        }
+      },
+      "scope_quote": "Publishes evidence syntheses and methodological reviews",
+      "evidence_url": "https://example.org/jfes",
+      "notes": "Fictional fixture for CI"
+    },
+    {
+      "journal": "Fictional Review Quarterly",
+      "issn": "0000-0002",
+      "publisher": "Example Society",
+      "tier": "reach",
+      "scores": {
+        "scope_fit": 5.0,
+        "article_fit": 4.0,
+        "method_fit": 5.0,
+        "indexing": 5.0,
+        "speed": 2.0,
+        "cost": 2.0,
+        "audience": 5.0,
+        "risk": 5.0
+      },
+      "fit": 85.0,
+      "confidence": 50.0,
+      "verified": [
+        "article_fit",
+        "audience",
+        "indexing",
+        "scope_fit"
+      ],
+      "unknown_verified_fields": [],
+      "gaps": [
+        "method_fit",
+        "speed",
+        "cost",
+        "risk"
+      ],
+      "flags": [
+        "OFF_ANCHOR"
+      ],
+      "off_anchor": [
+        "article_fit",
+        "speed",
+        "cost"
+      ],
+      "contributions": {
+        "scope_fit": {
+          "weight_pct": 30.0,
+          "score": 5.0,
+          "points": 30.0,
+          "lost": 0.0
+        },
+        "article_fit": {
+          "weight_pct": 15.0,
+          "score": 4.0,
+          "points": 12.0,
+          "lost": 3.0
+        },
+        "method_fit": {
+          "weight_pct": 15.0,
+          "score": 5.0,
+          "points": 15.0,
+          "lost": 0.0
+        },
+        "indexing": {
+          "weight_pct": 10.0,
+          "score": 5.0,
+          "points": 10.0,
+          "lost": 0.0
+        },
+        "speed": {
+          "weight_pct": 10.0,
+          "score": 2.0,
+          "points": 4.0,
+          "lost": 6.0
+        },
+        "cost": {
+          "weight_pct": 10.0,
+          "score": 2.0,
+          "points": 4.0,
+          "lost": 6.0
+        },
+        "audience": {
+          "weight_pct": 5.0,
+          "score": 5.0,
+          "points": 5.0,
+          "lost": 0.0
+        },
+        "risk": {
+          "weight_pct": 5.0,
+          "score": 5.0,
+          "points": 5.0,
+          "lost": 0.0
+        }
+      },
+      "scope_quote": "A journal of review articles across disciplines",
+      "evidence_url": "https://example.org/frq",
+      "notes": "Fictional fixture for CI"
+    },
+    {
+      "journal": "Applied Fictional Methods",
+      "issn": "0000-0003",
+      "publisher": "Example Press",
+      "tier": "target",
+      "scores": {
+        "scope_fit": 4.0,
+        "article_fit": 4.0,
+        "method_fit": 4.0,
+        "indexing": 4.0,
+        "speed": 4.0,
+        "cost": 5.0,
+        "audience": 3.0,
+        "risk": 5.0
+      },
+      "fit": 82.0,
+      "confidence": 50.0,
+      "verified": [
+        "cost",
+        "method_fit",
+        "scope_fit",
+        "speed"
+      ],
+      "unknown_verified_fields": [],
+      "gaps": [
+        "article_fit",
+        "indexing",
+        "audience",
+        "risk"
+      ],
+      "flags": [
+        "OFF_ANCHOR"
+      ],
+      "off_anchor": [
+        "scope_fit",
+        "article_fit",
+        "method_fit",
+        "indexing",
+        "speed"
+      ],
+      "contributions": {
+        "scope_fit": {
+          "weight_pct": 30.0,
+          "score": 4.0,
+          "points": 24.0,
+          "lost": 6.0
+        },
+        "article_fit": {
+          "weight_pct": 15.0,
+          "score": 4.0,
+          "points": 12.0,
+          "lost": 3.0
+        },
+        "method_fit": {
+          "weight_pct": 15.0,
+          "score": 4.0,
+          "points": 12.0,
+          "lost": 3.0
+        },
+        "indexing": {
+          "weight_pct": 10.0,
+          "score": 4.0,
+          "points": 8.0,
+          "lost": 2.0
+        },
+        "speed": {
+          "weight_pct": 10.0,
+          "score": 4.0,
+          "points": 8.0,
+          "lost": 2.0
+        },
+        "cost": {
+          "weight_pct": 10.0,
+          "score": 5.0,
+          "points": 10.0,
+          "lost": 0.0
+        },
+        "audience": {
+          "weight_pct": 5.0,
+          "score": 3.0,
+          "points": 3.0,
+          "lost": 2.0
+        },
+        "risk": {
+          "weight_pct": 5.0,
+          "score": 5.0,
+          "points": 5.0,
+          "lost": 0.0
+        }
+      },
+      "scope_quote": "Methodological and applied research syntheses",
+      "evidence_url": "https://example.org/afm",
+      "notes": "Fictional fixture for CI"
+    },
+    {
+      "journal": "Open Fictional Science",
+      "issn": "0000-0004",
+      "publisher": "Example Open",
+      "tier": "target",
+      "scores": {
+        "scope_fit": 4.0,
+        "article_fit": 5.0,
+        "method_fit": 4.0,
+        "indexing": 2.0,
+        "speed": 5.0,
+        "cost": 5.0,
+        "audience": 2.0,
+        "risk": 4.0
+      },
+      "fit": 81.0,
+      "confidence": 62.5,
+      "verified": [
+        "article_fit",
+        "cost",
+        "method_fit",
+        "scope_fit",
+        "speed"
+      ],
+      "unknown_verified_fields": [],
+      "gaps": [
+        "indexing",
+        "audience",
+        "risk"
+      ],
+      "flags": [
+        "OFF_ANCHOR"
+      ],
+      "off_anchor": [
+        "scope_fit",
+        "method_fit",
+        "indexing",
+        "audience",
+        "risk"
+      ],
+      "contributions": {
+        "scope_fit": {
+          "weight_pct": 30.0,
+          "score": 4.0,
+          "points": 24.0,
+          "lost": 6.0
+        },
+        "article_fit": {
+          "weight_pct": 15.0,
+          "score": 5.0,
+          "points": 15.0,
+          "lost": 0.0
+        },
+        "method_fit": {
+          "weight_pct": 15.0,
+          "score": 4.0,
+          "points": 12.0,
+          "lost": 3.0
+        },
+        "indexing": {
+          "weight_pct": 10.0,
+          "score": 2.0,
+          "points": 4.0,
+          "lost": 6.0
+        },
+        "speed": {
+          "weight_pct": 10.0,
+          "score": 5.0,
+          "points": 10.0,
+          "lost": 0.0
+        },
+        "cost": {
+          "weight_pct": 10.0,
+          "score": 5.0,
+          "points": 10.0,
+          "lost": 0.0
+        },
+        "audience": {
+          "weight_pct": 5.0,
+          "score": 2.0,
+          "points": 2.0,
+          "lost": 3.0
+        },
+        "risk": {
+          "weight_pct": 5.0,
+          "score": 4.0,
+          "points": 4.0,
+          "lost": 1.0
+        }
+      },
+      "scope_quote": "Open-access multidisciplinary reviews",
+      "evidence_url": "https://example.org/ofs",
+      "notes": "Fictional fixture for CI"
+    },
+    {
+      "journal": "Example Journal of Unverified Claims",
+      "issn": "0000-0005",
+      "publisher": "Unknown",
+      "tier": "",
+      "scores": {
+        "scope_fit": 3.0,
+        "article_fit": 3.0,
+        "method_fit": 3.0,
+        "indexing": 1.0,
+        "speed": 5.0,
+        "cost": 5.0,
+        "audience": 1.0,
+        "risk": 1.0
+      },
+      "fit": 60.0,
+      "confidence": 0.0,
+      "verified": [],
+      "unknown_verified_fields": [],
+      "gaps": [
+        "scope_fit",
+        "article_fit",
+        "method_fit",
+        "indexing",
+        "speed",
+        "cost",
+        "audience",
+        "risk"
+      ],
+      "flags": [
+        "LEGITIMACY RISK",
+        "NOT INDEXED / UNVERIFIED",
+        "LOW EVIDENCE"
+      ],
+      "off_anchor": [],
+      "contributions": {
+        "scope_fit": {
+          "weight_pct": 30.0,
+          "score": 3.0,
+          "points": 18.0,
+          "lost": 12.0
+        },
+        "article_fit": {
+          "weight_pct": 15.0,
+          "score": 3.0,
+          "points": 9.0,
+          "lost": 6.0
+        },
+        "method_fit": {
+          "weight_pct": 15.0,
+          "score": 3.0,
+          "points": 9.0,
+          "lost": 6.0
+        },
+        "indexing": {
+          "weight_pct": 10.0,
+          "score": 1.0,
+          "points": 2.0,
+          "lost": 8.0
+        },
+        "speed": {
+          "weight_pct": 10.0,
+          "score": 5.0,
+          "points": 10.0,
+          "lost": 0.0
+        },
+        "cost": {
+          "weight_pct": 10.0,
+          "score": 5.0,
+          "points": 10.0,
+          "lost": 0.0
+        },
+        "audience": {
+          "weight_pct": 5.0,
+          "score": 1.0,
+          "points": 1.0,
+          "lost": 4.0
+        },
+        "risk": {
+          "weight_pct": 5.0,
+          "score": 1.0,
+          "points": 1.0,
+          "lost": 4.0
+        }
+      },
+      "scope_quote": "Publishes research in all areas of science",
+      "evidence_url": "",
+      "notes": "Fictional fixture: deliberately low legitimacy and no verified fields"
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+record_id,stage,reviewer1,reviewer2
+R0001,title_abstract,include,include
+R0002,title_abstract,exclude,exclude
+R0003,title_abstract,include,include
+R0004,title_abstract,include,include
+R0005,title_abstract,include,include
+R0006,title_abstract,exclude,include
+R0007,title_abstract,exclude,exclude
+R0001,full_text,include,include
+R0003,full_text,exclude,exclude
+R0004,full_text,include,include
+R0005,full_text,include,include

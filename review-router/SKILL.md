@@ -115,3 +115,7 @@ Present the brief and hand off to the target skill. If the author is unsure, the
 - Never invent effect sizes or study counts. These come from the author's data or the literature, never from you.
 - A handoff is not complete until the target genre's gate can pass. For every genre, `python shared/scripts/verify_refs.py review.md` must report no errors (unresolved citation or duplicate DOI); systematic and meta reviews also run the screening-agreement and extraction checks. A reference that cannot be resolved is fixed or removed, never kept "because it looks plausible".
 - If the author asks "where should I submit?", that is not a genre question — route to `journal-match`. Never answer it with a quartile, APC, or acceptance rate from memory.
+
+## JEV
+
+Every decision here follows the JEV protocol (`../shared/jev.md`): ranked options, **#1 recommended**, one line of evidence each, what would change the ranking, and the author approves. Approved choices go into `decisions.md`.

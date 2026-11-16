@@ -35,6 +35,17 @@ masteracademicreview/
 - `shared/` is the shared library. Skills refer to it as `../shared/…` (one level up). Nothing inside `shared/` is a skill — harnesses ignore it because it has no `SKILL.md`.
 - Python scripts run from the repo root, e.g. `python shared/scripts/meta/example.py`.
 
+## The tools only (pip)
+
+If you only need the deterministic tools (deduplication, PRISMA, kappa, reference checks, the gate, protocols, journal ranking, letters), install the package; no clone needed:
+
+```bash
+pip install "masteracademicreview @ https://github.com/thabedtholibb/masteracademicreview/archive/refs/heads/master.zip"
+mar list
+```
+
+On Windows PowerShell use `py -m pip install ...` if `pip` is not found, and `python -m masteracademicreview` if `mar` is not on PATH. Extras: `masteracademicreview[meta]`, `[bibliometric]`, `[export]`, `[all]`. The skills below still need the repository.
+
 ## Requirements
 
 - A harness that supports `SKILL.md` skills (Claude Code, OpenCode, Cursor, etc.).

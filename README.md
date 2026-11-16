@@ -4,10 +4,14 @@
 
 ![License: MIT](https://img.shields.io/badge/license-MIT-blue)
 ![CI](https://github.com/thabedtholibb/masteracademicreview/actions/workflows/ci.yml/badge.svg)
-![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue)
+![Python 3.10–3.13](https://img.shields.io/badge/python-3.10%E2%80%933.13-blue)
+![pip installable](https://img.shields.io/badge/pip-installable-blue)
+![Decisions: JEV](https://img.shields.io/badge/decisions-JEV%20%231%20recommended-orange)
 ![Skills: 16](https://img.shields.io/badge/skills-16-2ea44f)
 ![Review genres: 13](https://img.shields.io/badge/review%20genres-13-2ea44f)
 ![Reporting: PRISMA 2020](https://img.shields.io/badge/reporting-PRISMA%202020-6f42c1)
+
+**English** · [Bahasa Indonesia](README.id.md)
 
 > **Every kind of review, one toolkit.** A portable agent skill-suite specialized in *writing reviews* — from a book review to a meta-analysis to a realist review — each with the right protocol, the right reporting standard, and (where it matters) real statistics for its genre.
 
@@ -21,7 +25,31 @@ Most academic-AI tools treat "review" as a side-mode of a paper generator. **Mas
 
 ## Documentation
 
-[Decision tree (which skill?)](docs/DECISION_TREE.md) · [FAQ](docs/FAQ.md) · [Troubleshooting (Windows, Pandoc, encoding)](docs/TROUBLESHOOTING.md) · [Usage](docs/USAGE.md) · [Install](docs/INSTALL.md)
+[Decision tree (which skill?)](docs/DECISION_TREE.md) · [FAQ](docs/FAQ.md) · [Troubleshooting (Windows, Pandoc, encoding)](docs/TROUBLESHOOTING.md) · [Usage](docs/USAGE.md) · [Install](docs/INSTALL.md) · [JEV decision protocol](shared/jev.md) · [End-to-end example](examples/systematic-review-demo/) · [Changelog](CHANGELOG.md)
+
+Bahasa Indonesia: [README](README.id.md) · [Panduan](docs/id/PANDUAN.md) · [FAQ](docs/id/FAQ.md)  
+Community: [Contributing](CONTRIBUTING.md) · [Code of Conduct](CODE_OF_CONDUCT.md) · [Security](SECURITY.md) · [Cite](CITATION.cff)
+
+## Install the Tools (pip: terminal or PowerShell)
+
+The deterministic tools install as one package with one command, `mar`. No clone needed; Python 3.10–3.13 on Windows, macOS or Linux.
+
+```bash
+pip install "masteracademicreview @ https://github.com/thabedtholibb/masteracademicreview/archive/refs/heads/master.zip"
+```
+
+On Windows, if `pip` is not recognised, use `py -m pip install ...`. Add `[all]` after the package name for the meta-analysis, bibliometric and DOCX/PDF extras (`"masteracademicreview[all] @ https://..."`). Once the package is on PyPI this becomes `pip install masteracademicreview`.
+
+```bash
+mar list          # every tool, grouped by review step
+mar selftest      # check the installation
+```
+
+If `mar` is not on your PATH, `python -m masteracademicreview list` does the same. The **skills** (`*/SKILL.md`) are installed by cloning the repository: see [docs/INSTALL.md](docs/INSTALL.md).
+
+## JEV: Ranked Decisions, #1 Recommended
+
+Every decision in the suite (which databases, which model, which journal, which reviewer comment first) is presented as **ranked options with a #1 recommendation**, one line of evidence each, and what would change the ranking. The author decides; approved choices go into a decision log. Each genre skill has a *Decision points (JEV)* section, and the tools follow the same rule: `dedup.py` removes only certain duplicates and *recommends* the rest, `check_review.py` ranks fixes integrity-first, `journal_rank.py` marks **#1 recommended**, and `submission.py` writes to the #1 clean journal and ranks reviewer comments major-first. Protocol: [shared/jev.md](shared/jev.md).
 
 ## The Flow
 
@@ -96,17 +124,20 @@ Ask *"Where should I submit this review?"* — `brainstorm` offers it after the 
 
 ## Reproducibility Checks (Built In)
 
-The suite does not ask you to trust arithmetic it cannot show. Stdlib-only tools are part of the gates:
+The suite does not ask you to trust arithmetic it cannot show. Stdlib-only tools are part of the gates (each is also `mar <tool>` after `pip install`):
 
 | Check | Command | What it catches |
 |---|---|---|
+| **Deduplication** | `python shared/scripts/dedup.py --source Scopus=scopus.csv --source PubMed=pubmed.ris --source WoS=wos.bib` | duplicates across RIS/CSV/BibTeX exports by DOI, then title + year; near-matches listed for a human (`possible_duplicates.csv`); writes the PRISMA identification counts and a screening template. |
+| **PRISMA arithmetic** | `python shared/scripts/prisma_flow.py prisma_identification.json screening_counts.json --strict` | refuses a flow diagram whose boxes do not add up; `--variant scoping/update`; `--validate` checks the SVG structure. |
 | **Reference integrity** | `python shared/scripts/verify_refs.py review.md` | duplicate DOIs, citations with no reference, orphan references, missing year/title. Add `--online` for a Crossref DOI/title/year check. |
 | **Screening agreement** | `python shared/scripts/screening_agreement.py screening_log.csv --long --reviewers alice,bob` | Cohen's κ, PABAK, per-stage agreement, and a `conflicts.csv` for adjudication. |
 | **Extraction validation** | `python shared/scripts/validate_extraction.py effects.csv` | non-finite effects, variance ≤ 0, bad sample sizes/years, duplicate study–outcome rows, and k < 2 / k < 10 guards. |
 | **Protocol** | `python shared/scripts/protocol.py protocol.json --out protocol.md` | a registration-ready protocol (PROSPERO/OSF fields) per genre, PRISMA-P based; undecided fields stay `[TO COMPLETE]` and `--strict` fails until they are filled. Start with `--template GENRE`. |
+| **Submission** | `python shared/scripts/submission.py cover-letter review.md --shortlist shortlist.json --gate-report review_check.md` | cover letter for the #1 clean journal (refused while the gate fails); `submission.py response comments.txt` builds a ranked, point-by-point response; `--lang id` for Indonesian. |
 | **Review gate** | `python shared/scripts/check_review.py review.md` | missing metadata fields, missing genre sections, unresolved citations, referenced/required artifacts that do not exist, leftover `TODO`/`[citation needed]`, and a gate line that says "passed" with an incomplete checklist. |
 
-All of these are offline by default and run in CI; only `verify_refs.py --online` needs the network. Reports land in `review_check.md`, `ref_check.md`, `agreement.md`, and `extraction_check.md`.
+All of these are offline by default and run in CI on Linux and Windows with Python 3.10–3.13; only `verify_refs.py --online` needs the network (a monthly workflow re-verifies every DOI in `shared/method_sources.md` against Crossref). The whole chain runs end to end in [examples/systematic-review-demo](examples/systematic-review-demo/). Reports land in `review_check.md`, `ref_check.md`, `agreement.md`, and `extraction_check.md`.
 
 ---
 
@@ -132,12 +163,18 @@ brainstorm ──► research question + keywords ──► review-router ──
       │    ├─ risk_of_bias.md         # RoB 2, ROBINS-I, NOS, CASP, AMSTAR-2, GRADE
       │    ├─ reporting_standards.md  # PRISMA / PRISMA-ScR / SANRA / ENTREQ / PRIOR / RAMESES / ROSES / AMSTAR-2
       │    ├─ method_sources.md       # verified citations + Q1-readiness checklist
+      │    ├─ jev.md                  # JEV decision protocol: ranked options, #1 recommended
       │    └─ scripts/
-      │         ├─ prisma_flow.py     # deterministic PRISMA flow-diagram generator (stdlib SVG)
+      │         ├─ cli.py             # `mar <tool>`: one command for every tool (pip package entry point)
+      │         ├─ dedup.py           # deduplicate RIS/CSV/BibTeX exports -> PRISMA identification (stdlib)
+      │         ├─ prisma_flow.py     # deterministic PRISMA flow-diagram generator + count checks (stdlib SVG)
       │         ├─ journal_rank.py    # deterministic journal-fit scoring (stdlib)
       │         ├─ verify_refs.py     # reference integrity: offline + Crossref (stdlib)
       │         ├─ screening_agreement.py  # Cohen's κ + PABAK for dual screening (stdlib)
       │         ├─ validate_extraction.py  # effects/characteristics validation (stdlib)
+      │         ├─ protocol.py        # protocol.md per genre, PROSPERO/OSF fields (stdlib)
+      │         ├─ check_review.py    # the review gate, ranked next steps (stdlib)
+      │         ├─ submission.py      # cover letter + response to reviewers, EN/ID (stdlib)
       │         ├─ meta/              # real meta-analysis statistics engine (numpy/scipy/matplotlib)
       │         └─ bibliometric/      # bibliometric engine (parse, performance, co-word mapping, plots)
       │
@@ -173,6 +210,7 @@ One brainstorm + one orchestrator + one optional journal matcher + one shared co
 
 ## Quick Start
 
+0. **Just the tools?** `pip install` them (see *Install the Tools* above) and run `python examples/systematic-review-demo/run_demo.py` from a clone to see the whole chain.
 1. **[Install](docs/INSTALL.md)** — copy or register the skill directories plus `shared/` in your harness (Claude Code / OpenCode / generic). Python is needed only for `systematic-review`, `scoping-review`, `mapping-review`, `meta-analysis`, `bibliometric-review`, and the `journal-match` scorer.
 2. **Ask for a review** — in a session, say:
    - *"I want to write a review but I don't know the topic yet."* → `brainstorm` sharpens the question + keywords.
@@ -189,7 +227,10 @@ One brainstorm + one orchestrator + one optional journal matcher + one shared co
 ```
 masteracademicreview/
 ├── README.md
+├── README.id.md                    # Bahasa Indonesia
 ├── LICENSE
+├── pyproject.toml                  # pip package `masteracademicreview` (maps shared/scripts/)
+├── CHANGELOG.md  CITATION.cff  CONTRIBUTING.md  CODE_OF_CONDUCT.md  SECURITY.md
 ├── .gitignore
 ├── .gitattributes
 ├── brainstorm/SKILL.md             # pre-router: research question + keywords (+ optional journal fit)
@@ -220,9 +261,15 @@ masteracademicreview/
 │   ├── risk_of_bias.md
 │   ├── reporting_standards.md
 │   ├── method_sources.md           # Crossref-verified method citations + Q1 checklist
+│   ├── jev.md                      # JEV decision protocol
 │   ├── output_spec.md
 │   └── scripts/
-│       ├── prisma_flow.py
+│       ├── cli.py  __init__.py  __main__.py   # `mar` command / python -m masteracademicreview
+│       ├── dedup.py                # multi-database deduplication (stdlib)
+│       ├── prisma_flow.py          # PRISMA 2020 flow (systematic / scoping / update) + checks
+│       ├── protocol.py             # protocol generator (stdlib)
+│       ├── check_review.py         # review gate (stdlib)
+│       ├── submission.py           # cover letter + response to reviewers (stdlib)
 │       ├── journal_rank.py         # deterministic journal-fit scorer (stdlib)
 │       ├── verify_refs.py          # reference consistency + Crossref verification (stdlib)
 │       ├── screening_agreement.py  # Cohen's κ + PABAK, wide or long logs (stdlib)
@@ -234,7 +281,8 @@ masteracademicreview/
 │       │   ├── effect_sizes.py
 │       │   ├── pooling.py
 │       │   ├── plots.py
-│       │   └── example.py
+│       │   ├── example.py
+│       │   └── selftest.py         # estimators vs independent computations
 │       └── bibliometric/
 │           ├── __init__.py
 │           ├── parsers.py
@@ -252,12 +300,17 @@ masteracademicreview/
 │   ├── fixtures/review_refs_*.md   # clean / broken / running-bibliography reference fixtures
 │   ├── fixtures/screening_*.csv    # wide and long dual-screening fixtures
 │   └── fixtures/effects_*.csv      # valid / invalid meta-analysis extraction fixtures
-├── .github/workflows/ci.yml        # engines + parser + export + journal + reproducibility tools
+├── examples/systematic-review-demo/  # synthetic end-to-end run: exports -> dedup -> PRISMA -> gate -> letter
+├── .github/workflows/ci.yml        # tools x (Linux, Windows) x py3.10-3.13, engines, pip package
+├── .github/workflows/verify-sources.yml  # monthly Crossref check of every method DOI
+├── .github/workflows/publish.yml   # manual PyPI publish (trusted publishing)
 └── docs/
     ├── INSTALL.md
     ├── USAGE.md
     ├── FLOWS.md
-    └── WALKTHROUGH.md
+    ├── WALKTHROUGH.md
+    ├── DECISION_TREE.md  FAQ.md  TROUBLESHOOTING.md
+    └── id/                         # PANDUAN.md, FAQ.md (Bahasa Indonesia)
 ```
 
 Skill directories are named in lowercase (e.g. `meta-analysis/`) because that is the skill *ID* your harness loads; "Master Academic Review" is the project name. On GitHub this repository is `masteracademicreview`; a fresh clone creates a folder of the same name.
@@ -267,7 +320,7 @@ Skill directories are named in lowercase (e.g. `meta-analysis/`) because that is
 ## Principles
 
 - **AI is the copilot, not the author.** Every review type stops for author confirmation at decision points; the author answers for every claim and every inclusion/exclusion.
-- **Recommendation-first.** At every decision point, the skill presents the best options in priority order with a recommended default — never a bare open question.
+- **JEV: recommendation-first.** At every decision point, the skill presents the best options in priority order with **#1 recommended**, the evidence, and what would change the ranking — never a bare open question, never a silent choice ([shared/jev.md](shared/jev.md)).
 - **Deterministic where it matters.** Search counts, screening tallies, PRISMA flow, and meta-analysis arithmetic are computed by code, never by an LLM guessing.
 - **Reporting standards are gates, not suggestions.** A review that skips a PRISMA item is flagged, not silently passed.
 - **Evidence over memory.** Journal quartiles, APCs, and decision times are verified against a primary source and date-stamped; unverified values are labelled, never invented.

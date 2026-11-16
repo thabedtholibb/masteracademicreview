@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import os
 import subprocess
+import tempfile
 import sys
 from dataclasses import dataclass
 from pathlib import Path
@@ -17,6 +18,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPTS = ROOT / "shared" / "scripts"
 FIXTURES = ROOT / "tests" / "fixtures"
+DEMO = ROOT / "examples" / "systematic-review-demo"
+TMP = Path(tempfile.mkdtemp(prefix="mar-tests-"))
 
 
 @dataclass
@@ -69,6 +72,45 @@ CASES = [
         ("TO COMPLETE: title", "Open fields"),
     ),
     Case("prisma_flow selftest", "prisma_flow.py", ("--selftest",), 0, ("prisma_flow selftest OK", "update")),
+    Case("cli list", "cli.py", ("list",), 0, ("1. Plan", "dedup", "check-review", "submission")),
+    Case("cli version", "cli.py", ("--version",), 0, ("masteracademicreview 0.",)),
+    Case("cli dispatch to a tool", "cli.py", ("protocol", "--selftest"), 0, ("protocol selftest OK",)),
+    Case("cli unknown tool suggests", "cli.py", ("chek-review",), 2, ("Did you mean 'check-review'",)),
+    Case("dedup selftest", "dedup.py", ("--selftest",), 0, ("dedup selftest OK",)),
+    Case(
+        "dedup three formats (CSV + RIS + BibTeX)",
+        "dedup.py",
+        ("--source", "Scopus=" + str(DEMO / "search" / "scopus.csv"),
+         "--source", "PubMed=" + str(DEMO / "search" / "pubmed.ris"),
+         "--source", "WoS=" + str(DEMO / "search" / "wos.bib"),
+         "--out-dir", str(TMP / "dedup")),
+        0,
+        ("Records identified:** 11", "Unique records (to screen):** 8",
+         "Possible duplicates to check by hand:** 1", "#1 recommended"),
+    ),
+    Case("dedup missing file", "dedup.py", (str(FIXTURES / "nope.ris"),), 2, ("error: file not found",)),
+    Case("submission selftest", "submission.py", ("--selftest",), 0, ("submission selftest OK",)),
+    Case(
+        "submission refuses a partial gate",
+        "submission.py",
+        ("cover-letter", str(DEMO / "review.md"), "--shortlist", str(FIXTURES / "shortlist.json")),
+        1,
+        ("REFUSED", "partial"),
+    ),
+    Case(
+        "submission response skeleton",
+        "submission.py",
+        ("response", str(DEMO / "reviewer_comments.txt")),
+        0,
+        ("Revision plan (JEV", "| **#1** | R1.1 | major |", "R2.3"),
+    ),
+    Case(
+        "prisma_flow refuses counts that do not add up",
+        "prisma_flow.py",
+        (str(FIXTURES / "prisma_bad_counts.json"), "--strict", "--out", str(TMP / "bad.svg")),
+        1,
+        ("counts do not add up",),
+    ),
     Case("check_review selftest", "check_review.py", ("--selftest",), 0, ("selftest OK",)),
     Case(
         "check_review valid review",

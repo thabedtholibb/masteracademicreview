@@ -40,10 +40,13 @@ You write a **broad, expert synthesis** of a field. Unlike a systematic review, 
 4. Conclusion — what is established, what is open, where the field goes next
 ```
 
-## Decision points (recommendation-first)
+## Decision points (JEV)
+
+Every decision here follows the JEV protocol (`../shared/jev.md`): ranked options, **#1 recommended**, one line of evidence each, what would change the ranking, and the author approves. Approved choices go into `decisions.md`.
 
 - **Organization** — recommend **thematic synthesis (#1)** over chronological; chronological only if the field's history is itself the point.
 - **Tables/figures** — recommend adding one when it would compress many studies (#1), otherwise skip.
+- **Rigour** — recommend a transparent search and selection description (#1), checked against SANRA, even though no protocol is required.
 
 ## Standards & sources
 

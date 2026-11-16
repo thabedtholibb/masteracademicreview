@@ -1,0 +1,11 @@
+{
+  "database_records": [["Scopus", 50], ["PubMed", 40]],
+  "after_dedup": 70,
+  "screened": 70,
+  "excluded_title_abstract": 50,
+  "sought_retrieval": 21,
+  "not_retrieved": 1,
+  "assessed": 20,
+  "excluded_fulltext": [["Wrong population", 9]],
+  "included": 10
+}

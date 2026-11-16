@@ -54,6 +54,8 @@ Every genre skill is built on a published methodological standard plus the peer-
 - Paule RC, Mandel J. Consensus values and weighting factors. *J Res Natl Bur Stand*. 1982;87(5):377-385. doi:10.6028/jres.087.022
 - Viechtbauer W. Bias and efficiency of meta-analytic variance estimators in the random-effects model. *J Educ Behav Stat*. 2005;30(3):261-293. doi:10.3102/10769986030003261
 - Sterne JAC, Sutton AJ, Ioannidis JPA, et al. Recommendations for examining and interpreting funnel plot asymmetry in meta-analyses of randomised controlled trials. *BMJ*. 2011;343:d4002. doi:10.1136/bmj.d4002
+- Furuya-Kanamori L, Barendregt JJ, Doi SAR. A new improved graphical and quantitative method for detecting bias in meta-analysis. *Int J Evid Based Healthc*. 2018;16(4):195-203. doi:10.1097/XEB.0000000000000141
+- Schwarzer G, Rücker G, Semaca C. LFK index does not reliably detect small-study effects in meta-analysis: a simulation study. *Res Synth Methods*. 2024;15(4):603-615. doi:10.1002/jrsm.1714
 - Egger M, Davey Smith G, Schneider M, Minder C. Bias in meta-analysis detected by a simple, graphical test. *BMJ*. 1997;315(7109):629-634. doi:10.1136/bmj.315.7109.629
 - Duval S, Tweedie R. Trim and fill: a simple funnel-plot-based method of testing and adjusting for publication bias in meta-analysis. *Biometrics*. 2000;56(2):455-463. doi:10.1111/j.0006-341X.2000.00455.x
 - Viechtbauer W. Conducting meta-analyses in R with the metafor package. *J Stat Softw*. 2010;36(3):1-48. doi:10.18637/jss.v036.i03
@@ -140,6 +142,7 @@ Every genre skill is built on a published methodological standard plus the peer-
 | Small-k interval adjustment | Hartung & Knapp 2001; Sidik & Jonkman 2002; IntHout et al. 2014 | `hksj=True` |
 | Prediction interval | Higgins et al. 2009 | `prediction_interval` |
 | Small-study test adequacy | Sterne et al. 2011 | Egger guard (k ≥ 10) |
+| Doi plot / LFK index | Furuya-Kanamori et al. 2018; limitation: Schwarzer et al. 2024 | `doi_plot`, `lfk_index` (supplementary only) |
 | Small-study effects | Egger et al. 1997; Duval & Tweedie 2000 | Egger's test, trim-and-fill |
 | Mixed-methods reviews | Pluye & Hong 2014 (doi:10.1146/annurev-publhealth-032013-182440) | integrating qualitative + quantitative evidence |
 | Scoping/mapping conduct | JBI Manual for Evidence Synthesis (2024) | PCC, charting, optional appraisal |

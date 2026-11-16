@@ -1,0 +1,8 @@
+{
+  "excluded_title_abstract": 3,
+  "sought_retrieval": 4,
+  "not_retrieved": 0,
+  "assessed": 4,
+  "excluded_fulltext": [["No comparator (pilot, single arm)", 1]],
+  "included": 3
+}

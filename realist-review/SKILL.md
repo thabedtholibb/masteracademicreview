@@ -21,10 +21,10 @@ You explain **how and why** an intervention works (or not) in context, by buildi
 1. A question of the form "what works, for whom, in what circumstances, and why".
 2. An initial **programme theory** (draft) of candidate mechanisms to refine.
 
-## Method (recommendation-first)
+## Method (JEV)
 
 1. **State the programme theory (draft)** — lay out candidate CMOs as hypotheses to test against evidence.
-2. **Search iteratively (recommendation-first)** — recommend a purposive, theory-driven search (#1) over exhaustive recall; search, then let findings redirect the next search (snowballing, grey literature).
+2. **Search iteratively (JEV)** — recommend a purposive, theory-driven search (#1) over exhaustive recall; search, then let findings redirect the next search (snowballing, grey literature).
 3. **Appraise by relevance & rigour** — realist reviews judge sources by whether they can *test a mechanism* (relevance) and their trustworthiness (rigour), not a standard RoB tool.
 4. **Extract CMOs** — pull context, mechanism, and outcome from each source; refine the programme theory as patterns emerge.
 5. **Synthesize** — build refined CMO configurations that explain the outcome pattern; state the middle-range theory.
@@ -40,6 +40,14 @@ Abstract
 3. Findings — refined CMO configurations (what works for whom, why)
 4. Discussion — the middle-range theory, limitations, implications
 ```
+
+## Decision points (JEV)
+
+Every decision here follows the JEV protocol (`../shared/jev.md`): ranked options, **#1 recommended**, one line of evidence each, what would change the ranking, and the author approves. Approved choices go into `decisions.md`.
+
+- **Initial programme theory.** **#1 recommended:** built from the literature and stakeholder input before the main search. #2: from the literature only (say so).
+- **Appraisal.** **#1 recommended:** relevance and rigour per source (RAMESES), not a design hierarchy.
+- **Output.** **#1 recommended:** refined CMO configurations, each tied to its sources. #2: a narrative middle-range theory, only where CMOs cannot be supported.
 
 ## Standards & sources
 

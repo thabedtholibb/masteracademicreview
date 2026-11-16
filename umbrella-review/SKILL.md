@@ -41,10 +41,14 @@ Abstract (structured)
 4. Discussion — interpretation, limitations, implications
 ```
 
-## Decision points (recommendation-first)
+## Decision points (JEV)
+
+Every decision here follows the JEV protocol (`../shared/jev.md`): ranked options, **#1 recommended**, one line of evidence each, what would change the ranking, and the author approves. Approved choices go into `decisions.md`.
 
 - **Quality tool** — recommend **AMSTAR-2 (#1)** for appraising included reviews.
 - **Overlap** — recommend reporting the **corrected covered area (CCA) (#1)** to show double-counting.
+- **Discordant reviews** — recommend reporting each review's result next to its AMSTAR-2 rating (#1); do not re-pool primary studies unless that is the stated aim.
+- **High overlap** — recommend a pre-stated rule (#1): keep the most recent, highest-confidence review per question.
 
 ## Standards & sources
 
