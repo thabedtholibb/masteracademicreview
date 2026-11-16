@@ -9,6 +9,77 @@
 > meta-analisis dan realist review. Setiap genre punya protokol, standar
 > pelaporan, dan (bila relevan) statistik yang dihitung oleh kode.
 
+## Mulai Dari Sini: Anda Hanya Butuh Tiga Skill Inti
+
+> **TL;DR:** Mulai dari `/mar-review` (Claude Code) atau `@review-router` (OpenCode). Router merekomendasikan satu genre; Anda menjalankan genre itu. `brainstorm` dan `journal-match` opsional.
+
+Repositori ini punya 16 skill, tetapi satu review biasanya memakai **paling banyak tiga skill inti plus satu helper opsional**:
+
+| Lapisan | Skill | Kapan Dipakai |
+|---|---|---|
+| Memutuskan | `brainstorm` | topik atau kata kunci masih kabur |
+| Memutuskan | `review-router` | topik sudah ada, tetapi genre review belum tahu |
+| Menulis | satu skill genre | router sudah merekomendasikan, atau Anda sudah tahu genrenya |
+| Submit (opsional) | `journal-match` | butuh jurnal tujuan sebelum menulis atau sebelum submit |
+
+**16 skill itu terdiri dari 1 brainstorm + 1 router + 1 journal matcher + 13 genre.** Skill adalah pilihan, bukan daftar yang harus dijalankan semua. `shared/` bukan skill tambahan; itu pustaka metode dan skrip yang dipakai skill genre.
+
+### Sesi Pertama Anda
+
+1. Buka repositori di Claude Code atau OpenCode.
+2. Ketik `/mar-review` (Claude Code) atau `@review-router` (OpenCode). Jika sudah tahu genre, langsung ke `/mar-systematic-review`, `/mar-meta-analysis`, dan seterusnya.
+3. Jawab empat pertanyaan router: **objek, tujuan, rigor, data**.
+4. Setujui genre **#1**, pilih #2/#3, atau timpa rekomendasinya.
+5. **Opsional:** jalankan `/mar-journal-match` sebelum menulis jika jurnal tujuan akan menentukan cakupan atau panjang naskah.
+6. Jalankan skill genre yang dipilih. Skill akan meminta protokol, sumber, dan keputusan Anda.
+7. Cek draf dengan `mar check-review review.md`. Jika melewati langkah 5, jalankan `/mar-journal-match` sekarang.
+
+**Jika hanya ingat satu hal:** mulai dari `/mar-review`. Itu pintu masuknya; Anda tidak perlu memilih sendiri dari 13 genre.
+
+### Alur
+
+```
+topik kabur
+   │
+   ▼
+brainstorm? ──► pertanyaan + kata kunci (opsional)
+   │
+   ▼
+review-router ──► genre #1 (+ #2/#3)
+   │
+   ├──► journal-match? ──► shortlist jurnal (opsional, sebelum menulis)
+   │
+   ▼
+satu skill genre ──► review.md + artefak
+   │
+   ▼
+check-review ──► export / submission
+```
+
+`brainstorm` opsional. `journal-match` opsional. Anda hanya menjalankan **satu** skill genre, bukan tiga belas.
+
+### Pilih Titik Masuk
+
+| Situasi Anda | Perintah Pertama | Selanjutnya |
+|---|---|---|
+| "Topik saya masih kabur" | `/mar-brainstorm` | `/mar-review` |
+| "Topik sudah ada, jenis review belum tahu" | `/mar-review` | genre #1 |
+| "Saya sudah tahu butuh systematic review" | `/mar-systematic-review` | protokol, pencarian, gate |
+| "Draf sudah ada, butuh jurnal" | `/mar-journal-match` | cascade submit |
+| "Saya hanya butuh alat" | `mar list` | `mar <tool>` |
+
+### Sebelum Mulai
+
+Siapkan ini, atau biarkan skill yang menanyakannya:
+
+- topik atau pertanyaan penelitian satu kalimat;
+- 2–3 database dan file ekspor untuk genre yang butuh protokol;
+- kriteria inklusi dan eksklusi;
+- tenggat dan budget APC untuk `journal-match`;
+- aturan supervisor, etika, atau institusi.
+
+> **Jangan memilih genre karena namanya terdengar keren.** Meta-analisis tanpa effect size yang sebanding bukan meta-analisis. Mulai dari pertanyaan, lalu biarkan router yang mengklasifikasikan.
+
 **Apa ini, dan apa bukan.** Ini **bukan** pembuat paper otomatis. Alat ini
 tidak menjalankan eksperimen dan tidak menghasilkan temuan baru. Keluarannya
 satu jenis dokumen, yaitu **naskah review**, beserta artefak yang bisa diaudit:
@@ -88,9 +159,11 @@ Skill (`*/SKILL.md`) dipasang dengan meng-*clone* repositori; langkahnya ada di
 [docs/INSTALL.md](docs/INSTALL.md). Paket pip berisi alat-alatnya, sedangkan
 skill memanggil alat yang sama lewat `python shared/scripts/<alat>.py`.
 
-## Memanggil Skill Di Claude Code
+## Cara Memanggil Skill
 
-Semua slash command diawali `mar-`, jadi cukup ketik `/mar` untuk melihat semuanya. Mulai dari `/mar-review` bila belum yakin genre apa yang dibutuhkan; skill akan mewawancarai Anda lalu merekomendasikan genre #1. Langsung ke genre tertentu: `/mar-systematic-review`, `/mar-meta-analysis`, `/mar-scoping-review`, dan seterusnya. Topik masih kabur: `/mar-brainstorm`. Jurnal tujuan: `/mar-journal-match`.
+Di Claude Code, semua slash command diawali `mar-`, jadi cukup ketik `/mar` untuk melihat semuanya. Mulai dari `/mar-review` bila belum yakin genre apa yang dibutuhkan; skill akan mewawancarai Anda lalu merekomendasikan genre #1. Langsung ke genre tertentu: `/mar-systematic-review`, `/mar-meta-analysis`, `/mar-scoping-review`, dan seterusnya. Topik masih kabur: `/mar-brainstorm`. Jurnal tujuan: `/mar-journal-match`.
+
+Di OpenCode, gunakan `@review-router`, `@brainstorm`, `@journal-match`, atau `@<genre>`. Anda juga bisa langsung mendeskripsikan tugasnya dalam kalimat biasa; skill yang cocok akan dimuat otomatis.
 
 ## Contoh Lengkap
 

@@ -4,6 +4,10 @@ The `review-router` skill asks these questions for you. This page is the same
 logic on one screen, so you can pick a genre yourself (or sanity-check the
 router's #1 recommendation).
 
+**New to the suite?** Run `review-router` first (`/mar-review` in Claude Code,
+`@review-router` in OpenCode). Use this tree only to understand or override its
+recommendation.
+
 ## Decision Tree
 
 ```mermaid

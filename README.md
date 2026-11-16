@@ -15,6 +15,55 @@
 
 > **Every kind of review, one toolkit.** A portable agent skill-suite specialized in *writing reviews*, from a book review to a meta-analysis to a realist review, each with the right protocol, the right reporting standard, and (where it matters) real statistics for its genre.
 
+## Start Here: You Only Need Three Core Skills
+
+> **TL;DR:** Start with `/mar-review` (Claude Code) or `@review-router` (OpenCode). It recommends one genre; you run that one. `brainstorm` and `journal-match` are optional.
+
+The repository has 16 skills, but a normal review uses **at most three core skills plus one optional helper**:
+
+| Layer | Skill | Use When |
+|---|---|---|
+| Decide | `brainstorm` | the topic or keywords are still vague |
+| Decide | `review-router` | you have a topic but do not know which review genre fits |
+| Write | one genre skill | the router recommends a genre, or you already know it |
+| Submit (optional) | `journal-match` | you need a target journal before drafting or before submission |
+
+The 16 skills are **1 brainstorm + 1 router + 1 journal matcher + 13 genres**. They are alternatives, not a checklist. Do not run all of them. `shared/` is not another skill; it is the library of methods and scripts the genre skills use.
+
+### Your First Session
+
+1. Open the repository in Claude Code or OpenCode.
+2. Type `/mar-review` (Claude Code) or `@review-router` (OpenCode). If you already know the genre, jump to `/mar-systematic-review`, `/mar-meta-analysis`, and so on.
+3. Answer the router's four questions: **object, purpose, rigor, data**.
+4. Approve the **#1 genre**, choose #2/#3, or override the recommendation.
+5. **Optional:** run `/mar-journal-match` before drafting if the target venue will shape scope or length.
+6. Run the chosen genre skill. It asks for your protocol, sources, and decisions.
+7. Check the draft with `mar check-review review.md`. If you skipped step 5, run `/mar-journal-match` now.
+
+**If you remember only one thing:** start with `/mar-review`. It is the front door; you do not need to choose from 13 genres by yourself.
+
+### Pick Your Entry Point
+
+| Your Situation | First Command | Next |
+|---|---|---|
+| "I have no clear topic" | `/mar-brainstorm` | `/mar-review` |
+| "I have a topic, but I do not know the review type" | `/mar-review` | the #1 genre |
+| "I know I need a systematic review" | `/mar-systematic-review` | protocol, search, gate |
+| "I have a draft and need a journal" | `/mar-journal-match` | submission cascade |
+| "I only need a tool" | `mar list` | `mar <tool>` |
+
+### Before You Start
+
+Have these ready, or let the skill ask for them:
+
+- a topic or a one-sentence research question;
+- 2–3 databases and export files for protocol-driven genres;
+- inclusion and exclusion criteria;
+- deadline and APC budget for `journal-match`;
+- supervisor, ethics, or institutional constraints.
+
+> **Do not choose a genre because it sounds impressive.** A meta-analysis without comparable effect sizes is not a meta-analysis. Start with the question, then let the router classify it.
+
 Most academic-AI tools treat "review" as a side-mode of a paper generator. **Master Academic Review** inverts that: **the review is the product**, and the first job of the tool is to figure out *which* review you actually need.
 
 > **What this is, and is not.** Master Academic Review is **not** a full-paper pipeline: it does not design or run experiments, and it does not generate new findings (unlike Spark-to-Paper or AI-Scientist). It produces **one kind of deliverable, a review document,** plus the auditable artifacts that back it (a PRISMA flow diagram, pooled estimates, forest/funnel plots). It works interactively, genre by genre, with you as the author.
@@ -57,21 +106,21 @@ Every decision in the suite (which databases, which model, which journal, which 
 vague idea
    │
    ▼
-brainstorm ──► focused research question + keyword set (PICO / PICo / PCC / SPIDER)
-   │                │
-   │                └──► journal-match (optional) ──► verified journal shortlist (JEV)
+brainstorm? ──► focused question + keywords (optional)
    │
    ▼
-review-router ──► classify + rank the review genre (best fit first)
+review-router ──► genre #1 (plus #2/#3)
+   │
+   ├──► journal-match? ──► verified shortlist (optional, before drafting)
    │
    ▼
-genre skill (thirteen genres)
+one genre skill
    │  methodology from shared/*.md · scripts from shared/scripts/
    ▼
-review document + artifacts (PRISMA flow, forest/funnel plots, pooled estimates)
+review.md + artifacts ──► check-review ──► export / submission
 ```
 
-The **`brainstorm` skill** sits before classification because most people get stuck choosing keywords and framing their question. It produces a ready-to-search question plus a Boolean query, then hands off to the router.
+`brainstorm` is optional: use it when the topic or keywords are still vague. `journal-match` is optional: use it when the venue will shape scope, length, or framing. You run **one** genre skill, not thirteen.
 
 ---
 
@@ -210,15 +259,13 @@ One brainstorm + one orchestrator + one optional journal matcher + one shared co
 
 ## Quick Start
 
-0. **Just the tools?** `pip install` them (see *Install the Tools* above) and run `python examples/systematic-review-demo/run_demo.py` from a clone to see the whole chain.
-1. **[Install](docs/INSTALL.md):** copy or register the skill directories plus `shared/` in your harness (Claude Code / OpenCode / generic). Python is needed only for `systematic-review`, `scoping-review`, `mapping-review`, `meta-analysis`, `bibliometric-review`, and the `journal-match` scorer.
-2. **Ask for a review:** in a session, say:
-   - *"I want to write a review but I don't know the topic yet."* → `brainstorm` sharpens the question + keywords.
-   - *"Help me write a review."* → `review-router` interviews you and classifies the type.
-   - *"I want a meta-analysis of this data."* → `meta-analysis` (runs `shared/scripts/meta/`).
-   - *"Where should I submit this review?"* → `journal-match` builds a verified, ranked shortlist.
-   - Or use `@meta-analysis` / `/mar-meta-analysis` to jump straight in.
-3. **See it in action:** [docs/WALKTHROUGH.md](docs/WALKTHROUGH.md) shows a full annotated session.
+1. **Install the tools** (needed for gates, meta-analysis, and bibliometrics): `pip install masteracademicreview`. Then run `mar selftest`. For the skills, see [docs/INSTALL.md](docs/INSTALL.md).
+2. **Open a session** and type `/mar-review` (Claude Code) or `@review-router` (OpenCode). If you already know the genre, jump to `/mar-systematic-review`, `/mar-meta-analysis`, and so on.
+3. **Follow the #1 genre recommendation.** The genre skill asks for your protocol, sources, and decisions. Run `/mar-journal-match` before drafting (recommended) or after the draft is ready.
+4. **Check and submit:** `mar check-review review.md`, then `/mar-journal-match` if you still need a venue.
+5. **Only want the tools?** Run `mar list`; the full demo is `python examples/systematic-review-demo/run_demo.py`.
+
+The beginner route is in [Start Here](#start-here-you-only-need-three-core-skills). A complete annotated session is in [docs/WALKTHROUGH.md](docs/WALKTHROUGH.md).
 
 ---
 

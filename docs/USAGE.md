@@ -22,15 +22,15 @@ masteracademicreview produces **one kind of deliverable: a review document**, pl
 ```
  vague idea
    ▼
- brainstorm ──► research question + keywords   (skip if you already have both)
-   │
-   ├──► journal-match ──► verified target-journal shortlist (optional)
+ brainstorm? ──► research question + keywords   (optional)
    ▼
  review-router ──► interviews you ──► classifies the genre
+   │
+   ├──► journal-match? ──► verified target-journal shortlist (optional, before drafting)
    ▼
- genre skill (thirteen genres: book, narrative, critical, systematic,
-              meta-analysis, scoping, umbrella, meta-synthesis, rapid,
-              integrative, mapping, bibliometric, realist)
+ one genre skill (book, narrative, critical, systematic, meta-analysis,
+                  scoping, umbrella, meta-synthesis, rapid, integrative,
+                  mapping, bibliometric, realist)
    │   pulls methodology from shared/*.md
    │   runs shared/scripts/*.py (systematic, scoping, meta)
    ▼
@@ -43,8 +43,8 @@ masteracademicreview produces **one kind of deliverable: a review document**, pl
 - **`/command` (Claude Code):** `/mar-brainstorm`, `/mar-review`, `/mar-meta-analysis`, etc. (after copying `commands/`: see INSTALL.md).
 
 1. If your topic is vague, `brainstorm` sharpens the research question and builds keywords first.
-2. If you want to publish, `journal-match` turns the topic into a ranked, verified target-journal shortlist (optional; it can also run after drafting).
-3. `review-router` interviews you along four axes (**object, purpose, rigor, data**) and classifies the genre (or you jump straight to a genre).
+2. `review-router` interviews you along four axes (**object, purpose, rigor, data**) and classifies the genre (or you jump straight to a genre).
+3. If you want to publish, `journal-match` turns the topic and genre into a ranked, verified target-journal shortlist (optional; it can also run after drafting).
 4. The genre skill runs its protocol, pulling methodology from `shared/` and, for the protocol-driven genres, running the Python scripts.
 5. You make the decisions (inclusion/exclusion, protocol, thesis); the tool does the grunt work and the arithmetic.
 6. You receive a review document and its artifacts.

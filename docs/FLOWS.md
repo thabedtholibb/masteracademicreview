@@ -1,6 +1,6 @@
 # Skill-By-Skill Flows
 
-How each masteracademicreview skill runs, end to end. Sixteen skills: three at the entry (`brainstorm`, `journal-match`, `review-router`) and thirteen review genres.
+How each masteracademicreview skill runs, end to end. Sixteen skills: one optional `brainstorm`, one `review-router`, one optional `journal-match`, and thirteen review genres.
 
 Every run ends with **`review.md` + artifacts** (and optional `review.docx`/`review.pdf`); see `shared/output_spec.md`.
 
@@ -17,6 +17,7 @@ vague idea ──► question +      framed request ──► ranked       chose
 - **Phase A** runs only when the author lacks a research question or keywords.
 - **Phase B** always runs (unless the author jumps straight to a genre).
 - **Phase C** is the genre-specific protocol, which pulls methodology from `shared/*.md` and runs `shared/scripts/*.py` where it matters.
+- **`journal-match`** is optional and sits between B and C when the target venue will shape scope, length, or framing; it can also run after drafting.
 
 ---
 
@@ -25,8 +26,8 @@ vague idea ──► question +      framed request ──► ranked       chose
 | Skill | Use When | You Provide | Output |
 |---|---|---|---|
 | `brainstorm` | vague idea, no question/keywords | raw topic | research question + keyword table + Boolean query |
-| `journal-match` | choosing where to submit | topic/manuscript + constraints | ranked journal shortlist + submission cascade |
 | `review-router` | unsure which review type | the request | ranked genre shortlist + brief |
+| `journal-match` | choosing where to submit | topic/manuscript + constraints | ranked journal shortlist + submission cascade |
 | `book-review` | reviewing a single book | book + its thesis + venue | book review (summary → critique → verdict) |
 | `narrative-review` | broad expert synthesis | topic + scope | narrative review (SANRA) |
 | `critical-review` | arguing a thesis | thesis + literature | critical review (argument) |

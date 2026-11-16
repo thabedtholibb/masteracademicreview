@@ -1,5 +1,17 @@
 # Panduan Singkat
 
+## Sebelum Memilih Genre
+
+Untuk pengguna baru, urutannya:
+
+1. Topik masih kabur? Mulai dari `brainstorm` (`/mar-brainstorm`).
+2. Topik sudah ada, genre belum tahu? Mulai dari `review-router` (`/mar-review`).
+3. Sudah tahu genre? Langsung ke skill genre, misalnya `/mar-systematic-review`.
+4. Butuh jurnal tujuan? Jalankan `journal-match` (`/mar-journal-match`) setelah genre diketahui, sebelum atau sesudah menulis.
+5. Setelah draf ada: `mar check-review review.md`, lalu ekspor atau submit.
+
+Jangan menjalankan semua skill. `brainstorm`, `review-router`, dan `journal-match` adalah pintu masuk; 13 genre adalah pilihan, bukan tahapan.
+
 ## 1. Skill Mana Yang Saya Butuhkan?
 
 Skill `review-router` menanyakan ini untuk Anda. Pohon di bawah memakai logika
