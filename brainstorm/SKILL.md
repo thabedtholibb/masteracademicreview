@@ -44,6 +44,7 @@ Never hand the author a bare open question when you can offer **ranked options**
 2. **Framing used** (PICO/PICo/SPIDER/PCC) with each component filled.
 3. **Keyword table** — one column per concept, terms ranked best-first, top pick marked.
 4. **Boolean query** — ready to paste, with a per-database translation note.
+5. **Genre hint** — the top 1–2 likely review genres, ranked with **#1 recommended**, handed to `review-router` for final classification.
 
 ## Guardrails
 

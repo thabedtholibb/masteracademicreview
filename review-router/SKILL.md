@@ -99,6 +99,7 @@ Default to genre #1 from the ranked shortlist, then produce a brief containing:
 
 - **genre** and **skill to run**
 - **object** (the book / the research question / the reviews / the corpus)
+- **framing** (PICO / PICo / SPIDER / PCC, carried over from `brainstorm` if available, with components filled)
 - **purpose** (one sentence)
 - **rigor level** (protocol required: yes/no; statistical pooling: yes/no)
 - **what the author must provide** before writing starts (e.g. full texts, database exports, the effect-size dataset, the existing reviews, the bibliographic corpus)
