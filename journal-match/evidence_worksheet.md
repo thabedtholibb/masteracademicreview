@@ -1,4 +1,4 @@
-# Journal evidence worksheet
+# Journal Evidence Worksheet
 
 One block per candidate journal. Fill it **from the journal's own pages**, then
 copy the scores into `journals.csv`. Score only against the anchors
@@ -10,7 +10,7 @@ up manually and record where and when.
 **Checked on (date):** __________  **Checked by:** __________
 **Quartile definition used:** CiteScore percentile / SJR / JIF (circle one), year ____
 
-| Criterion | Score (0/1/3/5) | Evidence (what you saw) | Source URL | Verified? |
+| Criterion | Score (0/1/3/5) | Evidence (What You Saw) | Source URL | Verified? |
 |---|---|---|---|---|
 | Scope fit | | **scope_quote** (verbatim sentence from Aims & Scope; required if score >= 3): | | |
 | Article-type fit | | recent reviews of this type (titles + years): | | |
@@ -22,7 +22,7 @@ up manually and record where and when.
 | Legitimacy / ethics | | COPE / Think.Check.Submit / board / fees transparent? | | |
 
 **Hard-constraint check:** indexing [ ]  quartile [ ]  APC budget [ ]  language [ ]  time [ ]
-**Dropped?** yes / no — reason: ______________________
+**Dropped?** yes / no. Reason: ______________________
 **Conflicts of interest with this journal:** ______________________
 
 **CSV columns (copy the row into journals.csv):**

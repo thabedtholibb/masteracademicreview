@@ -1,4 +1,4 @@
-# Protocol: Physical activity interventions for depressive symptoms in older adults: a systematic review (DEMO, synthetic data)
+# Protocol: Physical Activity Interventions For Depressive Symptoms In Older Adults: A Systematic Review (DEMO, Synthetic Data)
 
 **Review type:** systematic review protocol  
 **Reporting standard:** PRISMA-P 2015 / PRISMA 2020  
@@ -8,7 +8,7 @@
 
 ---
 
-## 1. Administrative information
+## 1. Administrative Information
 
 **Authors and affiliations:** Demo Author (Example University)  
 **Corresponding contact:** demo author, via the repository issue tracker  
@@ -21,7 +21,7 @@
 
 **Review question / objectives:** In adults aged 60 or older, do structured physical activity interventions reduce depressive symptoms compared with usual care or attention control?  
 
-## 3. Eligibility criteria
+## 3. Eligibility Criteria
 
 **Population:** Adults aged 60 or older, community-dwelling or in residential care  
 **Intervention / exposure:** Structured physical activity (aerobic, resistance, mind-body, or digitally coached exercise)  
@@ -32,7 +32,7 @@
 **Language limits:** English and Indonesian  
 **Date range:** 2010 to search date  
 
-## 4. Information sources and search
+## 4. Information Sources And Search
 
 **Information sources (databases, registers):** Scopus; PubMed; Web of Science  
 **Grey literature / citation searching:** Reference lists of included studies; trial registers  
@@ -43,21 +43,21 @@ Search string (one database; peer-review it, e.g. PRESS):
 ("older adult*" OR elderly OR "aged 60") AND (exercise OR "physical activity" OR walking OR "tai chi" OR yoga) AND (depress* OR "low mood")
 ```
 
-## 5. Study selection
+## 5. Study Selection
 
 **Screening: number of independent reviewers, pilot, tool:** Two independent reviewers at title/abstract and full text; pilot on 10% of records  
 **Resolving disagreements (third reviewer / consensus):** Discussion, then a third reviewer  
 
 Agreement will be reported with `shared/scripts/screening_agreement.py` (Cohen's kappa / PABAK).
 
-## 6. Data collection
+## 6. Data Collection
 
 **Data items to extract; who extracts; piloting:** Design, country, sample size, intervention, comparator, outcome measure; two extractors, piloted form  
 **Handling missing data / contacting authors:** Contact corresponding authors once; otherwise report as missing  
 
 Extraction tables will be checked with `shared/scripts/validate_extraction.py`.
 
-## 7. Appraisal and synthesis
+## 7. Appraisal And Synthesis
 
 **Risk-of-bias tool (e.g. RoB 2, ROBINS-I, JBI):** RoB 2 (cluster variant for cluster trials)  
 
@@ -68,7 +68,7 @@ Extraction tables will be checked with `shared/scripts/validate_extraction.py`.
 
 **Timeline:** Search month 1, screening months 2-3, synthesis month 4  
 
-## 9. Amendments log
+## 9. Amendments Log
 
 Any change after registration is recorded here with its date and reason, and reported in the final review.
 

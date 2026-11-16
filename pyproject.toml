@@ -50,3 +50,13 @@ packages = ["masteracademicreview", "masteracademicreview.meta", "masteracademic
 
 [tool.setuptools.package-data]
 "masteracademicreview.bibliometric" = ["sample.csv"]
+
+# Lint rules kept clean in CI (job "lint"): pyflakes, pycodestyle, bugbear,
+# pyupgrade (f-strings everywhere), simplify, ruff-specific. Long lines and the
+# two readability-first SIM rules are allowed.
+[tool.ruff]
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "B", "UP", "SIM", "RUF"]
+ignore = ["E501", "UP006", "UP007", "UP035", "RUF001", "RUF002", "RUF003", "SIM102", "SIM108"]

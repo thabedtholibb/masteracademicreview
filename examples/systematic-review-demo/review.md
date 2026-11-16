@@ -1,4 +1,4 @@
-# Physical activity interventions for depressive symptoms in older adults: a systematic review (DEMO)
+# Physical Activity Interventions For Depressive Symptoms In Older Adults: A Systematic Review (DEMO)
 
 **Review type:** systematic review  
 **Reporting standard:** PRISMA 2020  
@@ -42,7 +42,7 @@ The flow of records is shown in `prisma_flow.svg`. Three randomised trials met
 the criteria (Rahman & Wijaya, 2021; Santoso & Lee, 2022; Okafor, 2018). Two
 used the GDS-15 and one the PHQ-9.
 
-| Study | Design | n | Intervention | Comparator |
+| Study | Design | N | Intervention | Comparator |
 |---|---|---:|---|---|
 | Rahman 2021 | RCT | 120 | Walking programme | Usual care |
 | Santoso 2022 | RCT | 86 | App-based exercise coaching | Waitlist |

@@ -1,6 +1,6 @@
 ---
 name: review-router
-description: "Routes a review request to the correct review genre, and optionally to a verified target-journal shortlist. Use when the user wants to write any kind of review (book review, narrative review, literature review, systematic review, meta-analysis, critical review, scoping review, umbrella review, meta-synthesis, rapid review, integrative review, mapping review, bibliometric review, realist review, resensi, tinjauan, kajian) or is unsure which type they need. Interviews the author along four axes — object, purpose, rigor/reproducibility, and available data — then ranks the matching genres (best fit first) and dispatches to the recommended skill. Trigger terms: write a review, review, resensi, tinjauan, kajian, literature review, systematic review, meta-analysis, narrative review, critical review, scoping review, umbrella review, meta-synthesis, rapid review, integrative review, mapping review, bibliometric review, realist review, ulasan, target journal."
+description: "Routes a review request to the correct review genre, and optionally to a verified target-journal shortlist. Use when the user wants to write any kind of review (book review, narrative review, literature review, systematic review, meta-analysis, critical review, scoping review, umbrella review, meta-synthesis, rapid review, integrative review, mapping review, bibliometric review, realist review, resensi, tinjauan, kajian) or is unsure which type they need. Interviews the author along four axes (object, purpose, rigor/reproducibility, and available data) then ranks the matching genres (best fit first) and dispatches to the recommended skill. Trigger terms: write a review, review, resensi, tinjauan, kajian, literature review, systematic review, meta-analysis, narrative review, critical review, scoping review, umbrella review, meta-synthesis, rapid review, integrative review, mapping review, bibliometric review, realist review, ulasan, target journal."
 metadata:
   version: "0.1.0"
   skills:
@@ -25,20 +25,20 @@ You are the entry point for masteracademicreview. You do **not** write the revie
 
 **Pre-step:** if the author's topic is vague, or they do not yet have a focused research question or search keywords, route to `brainstorm` first, then return here to classify the now-framed question.
 
-## Step 1 — Recognize a review request
+## Step 1: Recognize A Review Request
 
 The author wants a review (or something review-shaped) when the task is to:
 - assess or synthesize **existing** published work (not generate new results), or
 - evaluate a **single book/monograph**, or
 - argue a **conceptual position** by engaging a body of literature.
 
-If the task is to produce a *new* empirical paper, an original experiment, or a grant proposal, this is **not** your domain — say so and decline, rather than forcing it into a review.
+If the task is to produce a *new* empirical paper, an original experiment, or a grant proposal, this is **not** your domain: say so and decline, rather than forcing it into a review.
 
-## Step 2 — Interview along four axes
+## Step 2: Interview Along Four Axes
 
 Ask only as many questions as needed to classify. The four axes are:
 
-1. **Object** — What is being reviewed?
+1. **Object:** What is being reviewed?
    - a single book → `book-review`
    - a body of *primary studies* → systematic/narrative/meta/scoping/mapping territory
    - a body of *existing reviews/meta-analyses* → `umbrella-review`
@@ -46,7 +46,7 @@ Ask only as many questions as needed to classify. The four axes are:
    - a large *bibliographic corpus* → `bibliometric-review`
    - a conceptual debate/thesis → `critical-review`
 
-2. **Purpose** — What should the review *do*?
+2. **Purpose:** What should the review *do*?
    - summarize the field broadly → `narrative-review`
    - argue a thesis / challenge assumptions → `critical-review`
    - comprehensively and *reproducibly* answer a focused question → `systematic-review`
@@ -59,23 +59,23 @@ Ask only as many questions as needed to classify. The four axes are:
    - explain *what works for whom and why* (context-dependent) → `realist-review`
    - a *fast, declared-shortcut* synthesis → `rapid-review`
 
-3. **Rigor & reproducibility** — protocol, dual screening, PRISMA flow required?
+3. **Rigor & reproducibility:** protocol, dual screening, PRISMA flow required?
    - yes → `systematic-review`, `meta-analysis`, `scoping-review`, `mapping-review`, or `umbrella-review`
    - yes but with declared shortcuts → `rapid-review`
    - no, flexible synthesis is fine → `narrative-review`, `critical-review`, `integrative-review`, `realist-review`
 
-4. **Data** — What do they have?
+4. **Data:** What do they have?
    - effect sizes (means/SD, 2×2, correlations) from ≥2 studies → `meta-analysis`
    - bibliographic records / full texts → `systematic-review`
    - qualitative themes/quotes → `meta-synthesis`
    - existing systematic reviews → `umbrella-review`
    - a bibliographic export (WoS/Scopus) → `bibliometric-review`
 
-## Step 3 — Classify into a *ranked* shortlist
+## Step 3: Classify Into A *Ranked* Shortlist
 
-Score the request against this table, then present a **ranked shortlist** — top recommendation first — rather than a single verdict.
+Score the request against this table, then present a **ranked shortlist**, top recommendation first, rather than a single verdict.
 
-| Signal | Genre | Dispatch to |
+| Signal | Genre | Dispatch To |
 |---|---|---|
 | Single book/monograph as the object | Book review | `book-review` |
 | *Statistically combine* effect sizes; ≥2 studies with data | Meta-analysis | `meta-analysis` |
@@ -93,7 +93,7 @@ Score the request against this table, then present a **ranked shortlist** — to
 
 Rank the matching genres by fit and present the **top 2–3** in priority order, each with a one-line reason. Recommend #1, but let the author confirm or override. If a request fits none of the thirteen genres, say so and decline rather than forcing a match.
 
-## Step 4 — Dispatch with a recommendation
+## Step 4: Dispatch With A Recommendation
 
 Default to genre #1 from the ranked shortlist, then produce a brief containing:
 
@@ -103,7 +103,7 @@ Default to genre #1 from the ranked shortlist, then produce a brief containing:
 - **purpose** (one sentence)
 - **rigor level** (protocol required: yes/no; statistical pooling: yes/no)
 - **what the author must provide** before writing starts (e.g. full texts, database exports, the effect-size dataset, the existing reviews, the bibliographic corpus)
-- **journal target (optional)** — if the author wants to publish, hand off to `journal-match` with the genre and object; it returns a reach / target / safety shortlist with every metric verified.
+- **journal target (optional):** if the author wants to publish, hand off to `journal-match` with the genre and object; it returns a reach / target / safety shortlist with every metric verified.
 
 Present the brief and hand off to the target skill. If the author is unsure, they can pick a different genre from the ranked shortlist instead of accepting #1.
 
@@ -114,7 +114,7 @@ Present the brief and hand off to the target skill. If the author is unsure, the
 - If the author wants to map a field but has no narrow question, route to `scoping-review` (or `mapping-review` if they want a framework matrix), not `systematic-review`.
 - Never invent effect sizes or study counts. These come from the author's data or the literature, never from you.
 - A handoff is not complete until the target genre's gate can pass. For every genre, `python shared/scripts/verify_refs.py review.md` must report no errors (unresolved citation or duplicate DOI); systematic and meta reviews also run the screening-agreement and extraction checks. A reference that cannot be resolved is fixed or removed, never kept "because it looks plausible".
-- If the author asks "where should I submit?", that is not a genre question — route to `journal-match`. Never answer it with a quartile, APC, or acceptance rate from memory.
+- If the author asks "where should I submit?", that is not a genre question: route to `journal-match`. Never answer it with a quartile, APC, or acceptance rate from memory.
 
 ## JEV
 

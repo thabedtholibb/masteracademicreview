@@ -2,9 +2,9 @@
 
 Dear Editor,
 
-Re: Submission of a systematic review, "Physical activity interventions for depressive symptoms in older adults: a systematic review (DEMO)"
+Re: Submission of a systematic review, "Physical Activity Interventions For Depressive Symptoms In Older Adults: A Systematic Review (DEMO)"
 
-Please consider the enclosed manuscript, "Physical activity interventions for depressive symptoms in older adults: a systematic review (DEMO)", for publication in *Journal of Fictional Evidence Synthesis* as a systematic review.
+Please consider the enclosed manuscript, "Physical Activity Interventions For Depressive Symptoms In Older Adults: A Systematic Review (DEMO)", for publication in *Journal of Fictional Evidence Synthesis* as a systematic review.
 
 **Why Journal of Fictional Evidence Synthesis.** Your aims and scope state: “Publishes evidence syntheses and methodological reviews” [TO COMPLETE: one sentence linking this scope to the review question.]
 
@@ -22,9 +22,9 @@ Sincerely,
 
 ---
 
-## Pre-submission checklist (not part of the letter) — JEV
+## Pre-Submission Checklist (Not Part Of The Letter): JEV
 
-**Target (#1):** Journal of Fictional Evidence Synthesis — tier target, fit 93.0, confidence 75.0%  
+**Target (#1):** Journal of Fictional Evidence Synthesis (tier target, fit 93.0, confidence 75.0%)  
 **Cascade if rejected (clean candidates only):** Fictional Review Quarterly → Applied Fictional Methods
 
 - [ ] Gate: ⚠ partial (PRISMA 24/27) (report errors: 0)

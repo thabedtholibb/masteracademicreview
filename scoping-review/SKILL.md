@@ -1,6 +1,6 @@
 ---
 name: scoping-review
-description: "Conduct a scoping review — map the breadth and volume of evidence on a broad topic, identify gaps, and inform whether a full systematic review is feasible. Reported per PRISMA-ScR. Use when the goal is to map a field, not to answer a narrow question or pool effect sizes. Trigger terms: scoping review, PRISMA-ScR, scoping study, evidence map, mapping review, pemetaan literatur, tinjauan pemetaan."
+description: "Conduct a scoping review: map the breadth and volume of evidence on a broad topic, identify gaps, and inform whether a full systematic review is feasible. Reported per PRISMA-ScR. Use when the goal is to map a field, not to answer a narrow question or pool effect sizes. Trigger terms: scoping review, PRISMA-ScR, scoping study, evidence map, mapping review, pemetaan literatur, tinjauan pemetaan."
 metadata:
   version: "0.1.0"
   genre: scoping-review
@@ -9,52 +9,52 @@ metadata:
 
 # Scoping Review
 
-You map the **breadth and volume** of evidence on a topic — what has been studied, with what methods, and where the gaps are. You do **not** answer a narrow clinical question and do **not** appraise study quality (unlike a systematic review).
+You map the **breadth and volume** of evidence on a topic: what has been studied, with what methods, and where the gaps are. You do **not** answer a narrow clinical question and do **not** appraise study quality (unlike a systematic review).
 
 ## Scope
 
 - **In scope:** broad or emerging topics; mapping concepts, sources, and evidence types; informing whether a systematic review is warranted.
 - **Out of scope:** answering a focused question (→ `systematic-review`), pooling effect sizes (→ `meta-analysis`), synthesizing reviews (→ `umbrella-review`), synthesizing qualitative findings (→ `meta-synthesis`).
 
-## Pre-requisites
+## Pre-Requisites
 
-1. A broad research question with a clear **scope** — the PCC frame (Population, Concept, Context) is the norm.
+1. A broad research question with a clear **scope**: the PCC frame (Population, Concept, Context) is the norm.
 2. A protocol stating the mapping objective and the charting fields in advance.
 
 ## Method
 
-1. **Frame (PCC)** — Population, Concept, Context.
-2. **Search** — follow `shared/search_strategy.md`. Scoping searches are deliberately broad; document databases, full query, and limits.
-3. **Screen** — follow `shared/screening.md` (title/abstract → full text; dual reviewer recommended).
-4. **Chart the data** — extract study characteristics, concept categories, and evidence types into a matrix (see `shared/data_extraction.md`, charting focus rather than outcomes). No risk-of-bias appraisal — PRISMA-ScR permits it as optional, but it is not the norm.
-5. **Map & report** — present the evidence as a descriptive map (tables, matrices, frequency counts) and identify gaps; generate the PRISMA-ScR flow diagram with `shared/scripts/prisma_flow.py --variant scoping`.
+1. **Frame (PCC):** Population, Concept, Context.
+2. **Search:** follow `shared/search_strategy.md`. Scoping searches are deliberately broad; document databases, full query, and limits.
+3. **Screen:** follow `shared/screening.md` (title/abstract → full text; dual reviewer recommended).
+4. **Chart the data:** extract study characteristics, concept categories, and evidence types into a matrix (see `shared/data_extraction.md`, charting focus rather than outcomes). No risk-of-bias appraisal: PRISMA-ScR permits it as optional, but it is not the norm.
+5. **Map & report:** present the evidence as a descriptive map (tables, matrices, frequency counts) and identify gaps; generate the PRISMA-ScR flow diagram with `shared/scripts/prisma_flow.py --variant scoping`.
 
 ## Structure (PRISMA-ScR)
 
 ```
 Title (identifies as a scoping review)
 Abstract (structured)
-1. Introduction — rationale + objectives (PCC) + review question
-2. Methods — protocol, eligibility, search, selection, charting
-3. Results — selection (flow diagram), characteristics of sources, mapping of evidence, gaps
-4. Discussion — summary, limitations, implications
+1. Introduction: rationale + objectives (PCC) + review question
+2. Methods: protocol, eligibility, search, selection, charting
+3. Results: selection (flow diagram), characteristics of sources, mapping of evidence, gaps
+4. Discussion: summary, limitations, implications
 ```
 
-## Decision points (JEV)
+## Decision Points (JEV)
 
 Every decision here follows the JEV protocol (`../shared/jev.md`): ranked options, **#1 recommended**, one line of evidence each, what would change the ranking, and the author approves. Approved choices go into `decisions.md`.
 
-- **Framing** — recommend **PCC (#1)** for mapping questions.
-- **Quality appraisal** — recommend **skipping it (#1)**; PRISMA-ScR permits it as optional, but it is not the norm for scoping.
-- **Conduct framework** — recommend **JBI scoping guidance reported with PRISMA-ScR (#1)**; Arksey & O'Malley with Levac et al.'s refinements (#2).
-- **Registration** — recommend **OSF Registries (#1)**; PROSPERO does not accept scoping reviews.
-- **PRISMA diagram** — use `prisma_flow.py --variant scoping` (#1) for sources-of-evidence wording.
+- **Framing:** recommend **PCC (#1)** for mapping questions.
+- **Quality appraisal:** recommend **skipping it (#1)**; PRISMA-ScR permits it as optional, but it is not the norm for scoping.
+- **Conduct framework:** recommend **JBI scoping guidance reported with PRISMA-ScR (#1)**; Arksey & O'Malley with Levac et al.'s refinements (#2).
+- **Registration:** recommend **OSF Registries (#1)**; PROSPERO does not accept scoping reviews.
+- **PRISMA diagram:** use `prisma_flow.py --variant scoping` (#1) for sources-of-evidence wording.
 
-## Standards & sources
+## Standards & Sources
 
 Governing standard: **PRISMA-ScR** (Tricco et al., 2018, doi:10.7326/M18-0850). Method sources: Arksey & O'Malley 2005 (doi:10.1080/1364557032000119616), Levac et al. 2010 (doi:10.1186/1748-5908-5-69), Peters et al. 2020 (doi:10.11124/JBIES-20-00167), and the JBI Manual for Evidence Synthesis. Full citations and the Q1-readiness checklist: `shared/method_sources.md`.
 
-## Gate (PRISMA-ScR, 22 items)
+## Gate (PRISMA-ScR, 22 Items)
 
 Walk the 22 PRISMA-ScR items in `shared/reporting_standards.md` item by item; mark each **present / partial / missing** and flag every missing item. The flow diagram must exist and match the reported counts.
 

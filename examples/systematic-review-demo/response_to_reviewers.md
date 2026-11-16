@@ -1,14 +1,14 @@
-# Response to reviewers: Physical activity interventions for depressive symptoms in older adults: a systematic review (DEMO)
+# Response To Reviewers: Physical Activity Interventions For Depressive Symptoms In Older Adults: A Systematic Review (DEMO)
 
 **Gate status of the current draft:** ⚠ partial (PRISMA 24/27)
 
 Dear Editor,
 
-Thank you for the opportunity to revise "Physical activity interventions for depressive symptoms in older adults: a systematic review (DEMO)". We thank the reviewers for their constructive comments. Our point-by-point responses follow, with the location of every change in the manuscript.
+Thank you for the opportunity to revise "Physical Activity Interventions For Depressive Symptoms In Older Adults: A Systematic Review (DEMO)". We thank the reviewers for their constructive comments. Our point-by-point responses follow, with the location of every change in the manuscript.
 
-## Revision plan (JEV, ranked by priority)
+## Revision Plan (JEV, Ranked By Priority)
 
-| Rank | ID | Priority | Comment (start) | Status |
+| Rank | ID | Priority | Comment (Start) | Status |
 |---:|---|---|---|---|
 | **#1** | R1.1 | major | Major: the search covers only three databases. Please justify why trial registers and grey... | open |
 | #2 | R1.2 | major | The risk-of-bias assessment is described in the protocol but is not reported in the result... | open |
@@ -20,7 +20,7 @@ Thank you for the opportunity to revise "Physical activity interventions for dep
 
 Major comments first: they decide the editor's verdict. Answer every comment, even when you disagree; disagree with evidence, not tone.
 
-## Point-by-point responses
+## Point-By-Point Responses
 
 ### Editor
 
@@ -77,7 +77,7 @@ Major comments first: they decide the editor's verdict. Answer every comment, ev
 **Response:** [TO COMPLETE: thank, answer, and give the evidence or reason]  
 **Changes in the manuscript:** [TO COMPLETE: section / page / line, or 'no change' with the reason]
 
-## Before resubmission
+## Before Resubmission
 
 - [ ] Every comment has a response and a location (or a reasoned 'no change')
 - [ ] Changes are tracked/highlighted in the revised manuscript as the journal asks

@@ -1,23 +1,23 @@
-# How to Use masteracademicreview
+# How To Use Masteracademicreview
 
 For the step-by-step flow of **each** of the 16 skills, see [FLOWS.md](FLOWS.md).
 
-## The short answer: it is *not* a full-paper pipeline
+## The Short Answer: It Is *Not* A Full-Paper Pipeline
 
 masteracademicreview does **not** turn one sentence into a complete research paper the way Spark-to-Paper or AI-Scientist do. It does **not** design or run experiments, and it does **not** generate new results.
 
 masteracademicreview produces **one kind of deliverable: a review document**, plus the auditable artifacts that back it (search counts, a PRISMA flow diagram, pooled estimates, forest/funnel plots). It is a *specialist for the review genre*, working interactively with you as the author.
 
-| | Full-paper pipeline (Spark / AI-Scientist) | masteracademicreview |
+| | Full-Paper Pipeline (Spark / AI-Scientist) | Masteracademicreview |
 |---|---|---|
 | Starts from | an idea or dataset | a review request |
 | Produces | a full research paper, with experiments | a **review document** |
 | Runs experiments? | yes | no |
-| Generates new findings? | yes | no — it synthesizes existing work |
+| Generates new findings? | yes | no: it synthesizes existing work |
 | Interaction | mostly one-shot | interactive, stops for your decisions |
 | Domain | papers | **reviews** (book, narrative, critical, systematic, meta-analysis) |
 
-## The working model
+## The Working Model
 
 ```
  vague idea
@@ -38,22 +38,22 @@ masteracademicreview produces **one kind of deliverable: a review document**, pl
 ```
 
 **How you start (pick one):**
-- **Auto** — describe what you want (*"Saya mau meta-analysis dari data ini"*); the matching skill loads itself.
-- **`@skill-id` (OpenCode)** — `@brainstorm`, `@meta-analysis`, `@book-review`, etc.
-- **`/command` (Claude Code)** — `/brainstorm`, `/review`, `/meta-analysis`, etc. (after copying `commands/` — see INSTALL.md).
+- **Auto:** describe what you want (*"Saya mau meta-analysis dari data ini"*); the matching skill loads itself.
+- **`@skill-id` (OpenCode):** `@brainstorm`, `@meta-analysis`, `@book-review`, etc.
+- **`/command` (Claude Code):** `/brainstorm`, `/review`, `/meta-analysis`, etc. (after copying `commands/`: see INSTALL.md).
 
 1. If your topic is vague, `brainstorm` sharpens the research question and builds keywords first.
 2. If you want to publish, `journal-match` turns the topic into a ranked, verified target-journal shortlist (optional; it can also run after drafting).
-3. `review-router` interviews you along four axes — **object, purpose, rigor, data** — and classifies the genre (or you jump straight to a genre).
+3. `review-router` interviews you along four axes (**object, purpose, rigor, data**) and classifies the genre (or you jump straight to a genre).
 4. The genre skill runs its protocol, pulling methodology from `shared/` and, for the protocol-driven genres, running the Python scripts.
 5. You make the decisions (inclusion/exclusion, protocol, thesis); the tool does the grunt work and the arithmetic.
 6. You receive a review document and its artifacts.
 
 **Output format:** the review is a **`review.md`** Markdown document plus artifacts; run `python shared/scripts/export.py review.md` to also produce `review.docx` (Word) and `review.pdf`. The full convention is in `shared/output_spec.md`.
 
-## Deliverables by genre
+## Deliverables By Genre
 
-| Genre | Main output | Artifacts |
+| Genre | Main Output | Artifacts |
 |---|---|---|
 | `book-review` | book review / resensi (Markdown) | — |
 | `narrative-review` | narrative review (Markdown) | running bibliography |
@@ -69,7 +69,7 @@ masteracademicreview produces **one kind of deliverable: a review document**, pl
 | `bibliometric-review` | bibliometric review (Markdown) | networks/clusters, performance stats |
 | `realist-review` | realist review (Markdown, RAMESES) | CMO configurations |
 
-## Example 1 — systematic review
+## Example 1: Systematic Review
 
 > **You:** "Bantu saya systematic review tentang efektivitas terapi X pada kondisi Y."
 > **Router:** classifies `systematic-review`; asks for your PICO question and whether you have a protocol (e.g. PROSPERO).
@@ -77,7 +77,7 @@ masteracademicreview produces **one kind of deliverable: a review document**, pl
 > **Skill:** walks search → screening → extraction → risk-of-bias → PRISMA report; generates `prisma_flow.svg` from your screening counts.
 > **You get:** a PRISMA-structured review + the flow diagram.
 
-## Example 2 — meta-analysis
+## Example 2: Meta-Analysis
 
 > **You:** "Saya punya effect size dari 5 studi, mau meta-analysis."
 > **Skill:**
@@ -86,24 +86,24 @@ masteracademicreview produces **one kind of deliverable: a review document**, pl
 > - draws forest and funnel plots and runs Egger's test via `plots.py`.
 > **You get:** the pooled estimate, heterogeneity, plots, and a PRISMA/MOOSE write-up.
 
-## Example 3 — book review
+## Example 3: Book Review
 
 > **You:** "Resensi buku ini."
 > **Skill:** asks for the book's thesis, then produces summary → critique → verdict.
 
-## Journal targeting (optional)
+## Journal Targeting (Optional)
 
 > **You:** "Jurnal mana yang cocok untuk review ini?"
 > **Skill:** collects the topic, genre, and hard constraints (indexing, quartile, APC budget, deadline), builds 8–15 candidates from the review corpus and the reference list, scores eight criteria 0–5, and runs `shared/scripts/journal_rank.py`.
-> **You get:** `journal_shortlist.md` — a ranked table with fit, confidence, evidence gaps, reach/target/safety tiers, a submission cascade, and a cover-letter angle for the top three. Every metric carries a source and a check date; anything unverified is labelled, never guessed.
+> **You get:** `journal_shortlist.md`: a ranked table with fit, confidence, evidence gaps, reach/target/safety tiers, a submission cascade, and a cover-letter angle for the top three. Every metric carries a source and a check date; anything unverified is labelled, never guessed.
 
-## Which skill? FAQ? Something broke?
+## Which Skill? FAQ? Something Broke?
 
 - [docs/DECISION_TREE.md](DECISION_TREE.md): which skill do I need?
 - [docs/FAQ.md](FAQ.md): scope, references, methods, output files
 - [docs/TROUBLESHOOTING.md](TROUBLESHOOTING.md): Windows, encoding, Pandoc, dependencies
 
-## Running the Python scripts
+## Running The Python Scripts
 
 Every script below is also available as `mar <tool>` after `pip install` (see `mar list`). A complete, runnable chain is in `examples/systematic-review-demo/`.
 
@@ -131,8 +131,8 @@ python shared/scripts/screening_agreement.py screening_log.csv --long --reviewer
 python shared/scripts/validate_extraction.py effects.csv  # meta schema + sanity checks
 ```
 
-In real work, the skill guides you to (a) prepare the inputs — a screening-counts dict for `prisma_flow.py`, or an `effects.csv` for the meta engine — then (b) run the relevant functions. Scripts live under `shared/scripts/` and are referenced from skills as `../shared/scripts/…`.
+In real work, the skill guides you to (a) prepare the inputs (a screening-counts dict for `prisma_flow.py`, or an `effects.csv` for the meta engine), then (b) run the relevant functions. Scripts live under `shared/scripts/` and are referenced from skills as `../shared/scripts/…`.
 
-## The one rule that never changes
+## The One Rule That Never Changes
 
 masteracademicreview **never fabricates** study counts, effect sizes, or outcomes. Numbers come from your data or the literature; the code only computes. If a number cannot be produced by the code from real inputs, it does not go in the document. You remain the author and answer for every claim.

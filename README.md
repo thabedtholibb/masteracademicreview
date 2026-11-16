@@ -13,11 +13,11 @@
 
 **English** · [Bahasa Indonesia](README.id.md)
 
-> **Every kind of review, one toolkit.** A portable agent skill-suite specialized in *writing reviews* — from a book review to a meta-analysis to a realist review — each with the right protocol, the right reporting standard, and (where it matters) real statistics for its genre.
+> **Every kind of review, one toolkit.** A portable agent skill-suite specialized in *writing reviews*, from a book review to a meta-analysis to a realist review, each with the right protocol, the right reporting standard, and (where it matters) real statistics for its genre.
 
 Most academic-AI tools treat "review" as a side-mode of a paper generator. **Master Academic Review** inverts that: **the review is the product**, and the first job of the tool is to figure out *which* review you actually need.
 
-> **What this is — and is not.** Master Academic Review is **not** a full-paper pipeline: it does not design or run experiments, and it does not generate new findings (unlike Spark-to-Paper or AI-Scientist). It produces **one kind of deliverable — a review document** — plus the auditable artifacts that back it (a PRISMA flow diagram, pooled estimates, forest/funnel plots). It works interactively, genre by genre, with you as the author.
+> **What this is, and is not.** Master Academic Review is **not** a full-paper pipeline: it does not design or run experiments, and it does not generate new findings (unlike Spark-to-Paper or AI-Scientist). It produces **one kind of deliverable, a review document,** plus the auditable artifacts that back it (a PRISMA flow diagram, pooled estimates, forest/funnel plots). It works interactively, genre by genre, with you as the author.
 >
 > Deeper reading: [docs/USAGE.md](docs/USAGE.md) for the working model · [docs/FLOWS.md](docs/FLOWS.md) for skill-by-skill flows · [docs/WALKTHROUGH.md](docs/WALKTHROUGH.md) for a concrete session · [docs/INSTALL.md](docs/INSTALL.md) for per-platform setup.
 
@@ -30,7 +30,7 @@ Most academic-AI tools treat "review" as a side-mode of a paper generator. **Mas
 Bahasa Indonesia: [README](README.id.md) · [Panduan](docs/id/PANDUAN.md) · [FAQ](docs/id/FAQ.md)  
 Community: [Contributing](CONTRIBUTING.md) · [Code of Conduct](CODE_OF_CONDUCT.md) · [Security](SECURITY.md) · [Cite](CITATION.cff)
 
-## Install the Tools (pip: terminal or PowerShell)
+## Install The Tools (Pip: Terminal Or PowerShell)
 
 The deterministic tools install as one package with one command, `mar`. No clone needed; Python 3.10–3.13 on Windows, macOS or Linux.
 
@@ -75,22 +75,22 @@ The **`brainstorm` skill** sits before classification because most people get st
 
 ---
 
-## What You Get (the Output)
+## What You Get (The Output)
 
 Every run ends with **one review document plus supporting artifacts** (see [shared/output_spec.md](shared/output_spec.md)):
 
-1. **`review.md`** — the review itself: a title, a metadata block (review type, reporting standard, sources, search date, gate status), an abstract, the genre's sections, and references.
-2. **Artifacts** (per genre) — e.g. `prisma_flow.svg`, `forest.png`, `funnel.png`, `effects.csv`, `characteristics.csv`, plus the gate reports `agreement.md`, `extraction_check.md`, and `ref_check.md`.
-3. **`review.docx` / `review.pdf`** — optional, via `python shared/scripts/export.py review.md` (Pandoc, with an automatic no-Pandoc fallback), so the review can be submitted to Word-based journals or a supervisor.
-4. **`journal_shortlist.md`** — optional, from `journal-match`: a ranked target-journal shortlist with verified metrics and a submission cascade.
+1. **`review.md`:** the review itself: a title, a metadata block (review type, reporting standard, sources, search date, gate status), an abstract, the genre's sections, and references.
+2. **Artifacts** (per genre): e.g. `prisma_flow.svg`, `forest.png`, `funnel.png`, `effects.csv`, `characteristics.csv`, plus the gate reports `agreement.md`, `extraction_check.md`, and `ref_check.md`.
+3. **`review.docx` / `review.pdf`:** optional, via `python shared/scripts/export.py review.md` (Pandoc, with an automatic no-Pandoc fallback), so the review can be submitted to Word-based journals or a supervisor.
+4. **`journal_shortlist.md`:** optional, from `journal-match`: a ranked target-journal shortlist with verified metrics and a submission cascade.
 
 ---
 
 ## The Core Idea: A Review Is Not One Thing
 
-A review is a *family* of genres, each with its own methodology, reporting standard, and reader. Master Academic Review encodes that taxonomy as its organizing principle — **all thirteen implemented**.
+A review is a *family* of genres, each with its own methodology, reporting standard, and reader. Master Academic Review encodes that taxonomy as its organizing principle: **all thirteen implemented**.
 
-| Genre | What it does | Reporting standard |
+| Genre | What It Does | Reporting Standard |
 |---|---|---|
 | **Book review** | Critically assess a single book | Genre conventions |
 | **Narrative review** | Broad expert synthesis of a field | SANRA |
@@ -112,13 +112,13 @@ Every standard above is backed by a Crossref-verified citation in [`shared/metho
 
 ## Journal Targeting (Optional)
 
-Writing the review and choosing the venue are two decisions. **`journal-match`** handles the second one — before you write (recommended, because the venue shapes scope and length) or after.
+Writing the review and choosing the venue are two decisions. **`journal-match`** handles the second one: before you write (recommended, because the venue shapes scope and length) or after.
 
-- **Ranked, not guessed.** Eight criteria — scope fit (30%), article type (15%), method acceptance (15%), indexing (10%), speed (10%), cost/APC (10%), audience (5%), legitimacy (5%) — are scored 0–5 and combined by `shared/scripts/journal_rank.py`, so the ranking is reproducible.
+- **Ranked, not guessed.** Eight criteria (scope fit 30%, article type 15%, method acceptance 15%, indexing 10%, speed 10%, cost/APC 10%, audience 5%, legitimacy 5%) are scored 0–5 and combined by `shared/scripts/journal_rank.py`, so the ranking is reproducible.
 - **Evidence-first (JEV).** Every quartile, APC, and decision-time claim carries a source and a check date. Anything unverified is labelled `unverified` and lowers the confidence; it is never filled in with a plausible number.
 - **Submission cascade.** Reach / target / safety with explicit triggers and no simultaneous submissions. The recommended **#1** is the best fit-adjusted target, not the highest quartile.
 
-Ask *"Where should I submit this review?"* — `brainstorm` offers it after the question + keywords, and `review-router` passes the genre and object to it.
+Ask *"Where should I submit this review?"*: `brainstorm` offers it after the question + keywords, and `review-router` passes the genre and object to it.
 
 ---
 
@@ -126,7 +126,7 @@ Ask *"Where should I submit this review?"* — `brainstorm` offers it after the 
 
 The suite does not ask you to trust arithmetic it cannot show. Stdlib-only tools are part of the gates (each is also `mar <tool>` after `pip install`):
 
-| Check | Command | What it catches |
+| Check | Command | What It Catches |
 |---|---|---|
 | **Deduplication** | `python shared/scripts/dedup.py --source Scopus=scopus.csv --source PubMed=pubmed.ris --source WoS=wos.bib` | duplicates across RIS/CSV/BibTeX exports by DOI, then title + year; near-matches listed for a human (`possible_duplicates.csv`); writes the PRISMA identification counts and a screening template. |
 | **PRISMA arithmetic** | `python shared/scripts/prisma_flow.py prisma_identification.json screening_counts.json --strict` | refuses a flow diagram whose boxes do not add up; `--variant scoping/update`; `--validate` checks the SVG structure. |
@@ -141,9 +141,9 @@ All of these are offline by default and run in CI on Linux and Windows with Pyth
 
 ---
 
-## Invoking a Skill (Three Ways)
+## Invoking A Skill (Three Ways)
 
-1. **Auto (default).** Just describe what you want — *"I want a meta-analysis of this data"* — and the skill whose `description` matches loads itself.
+1. **Auto (default).** Just describe what you want (*"I want a meta-analysis of this data"*) and the skill whose `description` matches loads itself.
 2. **`@skill-id` (OpenCode).** Type `@meta-analysis`, `@brainstorm`, `@journal-match`, `@book-review`, and so on.
 3. **`/command` (Claude Code).** Copy `commands/*.md` into `.claude/commands/`, then use `/review`, `/brainstorm`, `/journal-match`, `/meta-analysis`, `/systematic-review`, and so on.
 
@@ -189,9 +189,9 @@ One brainstorm + one orchestrator + one optional journal matcher + one shared co
 
 ---
 
-## How It Differs from the Incumbents
+## How It Differs From The Incumbents
 
-| Capability | Master Academic Review | Academic-Research-Skills (ARS) | AI-Scientist | Spark-to-Paper |
+| Capability | Master Academic Review | Academic-Research-Skills (ARS) | AI-Scientist | Spark-To-Paper |
 |---|---|---|---|---|
 | Treats review as a *family of genres* (13 types) | ✅ | ⚠️ | ❌ | ❌ |
 | Orphan genres (book / narrative / critical / umbrella / meta-synthesis / integrative / mapping / realist) | ✅ | ❌ | ❌ | ❌ |
@@ -204,21 +204,21 @@ One brainstorm + one orchestrator + one optional journal matcher + one shared co
 
 ✅ = yes · ⚠️ = partial · ❌ = no
 
-**Positioning:** Master Academic Review does not generate a paper and does not run your experiments. It is a **human-in-the-loop specialist for the review genre** — the author owns every claim; the tool owns the protocol, the reporting checklist, and the arithmetic.
+**Positioning:** Master Academic Review does not generate a paper and does not run your experiments. It is a **human-in-the-loop specialist for the review genre**: the author owns every claim; the tool owns the protocol, the reporting checklist, and the arithmetic.
 
 ---
 
 ## Quick Start
 
 0. **Just the tools?** `pip install` them (see *Install the Tools* above) and run `python examples/systematic-review-demo/run_demo.py` from a clone to see the whole chain.
-1. **[Install](docs/INSTALL.md)** — copy or register the skill directories plus `shared/` in your harness (Claude Code / OpenCode / generic). Python is needed only for `systematic-review`, `scoping-review`, `mapping-review`, `meta-analysis`, `bibliometric-review`, and the `journal-match` scorer.
-2. **Ask for a review** — in a session, say:
+1. **[Install](docs/INSTALL.md):** copy or register the skill directories plus `shared/` in your harness (Claude Code / OpenCode / generic). Python is needed only for `systematic-review`, `scoping-review`, `mapping-review`, `meta-analysis`, `bibliometric-review`, and the `journal-match` scorer.
+2. **Ask for a review:** in a session, say:
    - *"I want to write a review but I don't know the topic yet."* → `brainstorm` sharpens the question + keywords.
    - *"Help me write a review."* → `review-router` interviews you and classifies the type.
    - *"I want a meta-analysis of this data."* → `meta-analysis` (runs `shared/scripts/meta/`).
    - *"Where should I submit this review?"* → `journal-match` builds a verified, ranked shortlist.
    - Or use `@meta-analysis` / `/meta-analysis` to jump straight in.
-3. **See it in action** — [docs/WALKTHROUGH.md](docs/WALKTHROUGH.md) shows a full annotated session.
+3. **See it in action:** [docs/WALKTHROUGH.md](docs/WALKTHROUGH.md) shows a full annotated session.
 
 ---
 
@@ -320,7 +320,7 @@ Skill directories are named in lowercase (e.g. `meta-analysis/`) because that is
 ## Principles
 
 - **AI is the copilot, not the author.** Every review type stops for author confirmation at decision points; the author answers for every claim and every inclusion/exclusion.
-- **JEV: recommendation-first.** At every decision point, the skill presents the best options in priority order with **#1 recommended**, the evidence, and what would change the ranking — never a bare open question, never a silent choice ([shared/jev.md](shared/jev.md)).
+- **JEV: recommendation-first.** At every decision point, the skill presents the best options in priority order with **#1 recommended**, the evidence, and what would change the ranking: never a bare open question, never a silent choice ([shared/jev.md](shared/jev.md)).
 - **Deterministic where it matters.** Search counts, screening tallies, PRISMA flow, and meta-analysis arithmetic are computed by code, never by an LLM guessing.
 - **Reporting standards are gates, not suggestions.** A review that skips a PRISMA item is flagged, not silently passed.
 - **Evidence over memory.** Journal quartiles, APCs, and decision times are verified against a primary source and date-stamped; unverified values are labelled, never invented.

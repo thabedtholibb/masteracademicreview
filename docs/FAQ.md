@@ -15,7 +15,7 @@ the floor on rigor, they do not decide peer review.
 The skills respond in the language you use. Reporting standards, DOIs and
 database names stay as published.
 
-## Evidence and references
+## Evidence And References
 
 **Can the AI invent references?**
 It can, which is why `verify_refs.py` exists. Run it on every review. Offline it
@@ -57,7 +57,7 @@ meta-synthesis, yes where the venue expects it (PROSPERO or OSF); scoping and
 mapping reviews register on OSF. `protocol.py` produces the document. Narrative,
 critical, book and bibliometric reviews do not have a registration step.
 
-## Files and output
+## Files And Output
 
 **Where do the output files go?**
 Next to `review.md`: `prisma_flow.svg`, `forest.png`, `screening_log.csv` and the

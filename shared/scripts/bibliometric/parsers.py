@@ -51,7 +51,7 @@ def _norm_key(s):
 
 def _field_of(row, aliases):
     for a in aliases:
-        if a in row and row[a]:
+        if row.get(a):
             return row[a].strip()
     return None
 
@@ -175,9 +175,7 @@ def _parse_field(pair):
         return None, None
     name = m.group(1).lower()
     val = m.group(2).strip()
-    if val.startswith("{") and val.endswith("}"):
-        val = val[1:-1]
-    elif val.startswith('"') and val.endswith('"'):
+    if (val.startswith("{") and val.endswith("}")) or (val.startswith('"') and val.endswith('"')):
         val = val[1:-1]
     val = re.sub(r"\s+", " ", val).strip()
     return name, val

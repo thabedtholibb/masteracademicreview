@@ -1,13 +1,13 @@
-# Security policy
+# Security Policy
 
-## Supported versions
+## Supported Versions
 
 | Version | Supported |
 |---|---|
 | 0.1.x | yes |
 | < 0.1 | no |
 
-## What the tools do with your data
+## What The Tools Do With Your Data
 
 - Every tool runs **locally** and reads the files you pass it (CSV, RIS,
   BibTeX, Markdown, JSON). Nothing is uploaded, and there is no telemetry.
@@ -18,7 +18,7 @@
 - No tool needs or stores credentials. The PyPI publish workflow uses trusted
   publishing; no token is kept in the repository.
 
-## Reporting a vulnerability
+## Reporting A Vulnerability
 
 Please **do not** open a public issue for a security problem. Use GitHub's
 private reporting instead: **Security → Report a vulnerability** on the
@@ -29,14 +29,14 @@ You can expect an acknowledgement within 7 days and a fix or a decision within
 30 days for confirmed issues. Credit is given in the changelog unless you ask
 otherwise.
 
-## In scope
+## In Scope
 
 - A crafted input file (CSV, RIS, BibTeX, Markdown, JSON) that makes a tool
   write outside the output directory, execute code, or hang indefinitely.
 - Leaking data to any host other than `api.crossref.org` (online reference check).
 - Problems in the GitHub workflows of this repository.
 
-## Out of scope
+## Out Of Scope
 
 - Wrong scientific output on valid input: please open a normal bug report
   with a reproducible example; those matter just as much, but they are not

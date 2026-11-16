@@ -71,7 +71,7 @@ def run(label: str, script: str, args: list[str], expected: int) -> bool:
     proc = subprocess.run([sys.executable, str(SCRIPTS / script), *args], cwd=DEMO,
                           capture_output=True, text=True, encoding="utf-8", errors="replace")
     ok = proc.returncode == expected
-    print("[%s] %s (exit %d)" % ("PASS" if ok else "FAIL", label, proc.returncode))
+    print(f'[{"PASS" if ok else "FAIL"}] {label} (exit {proc.returncode:d})')
     if not ok:
         print(proc.stdout[-3000:])
         print(proc.stderr[-3000:])

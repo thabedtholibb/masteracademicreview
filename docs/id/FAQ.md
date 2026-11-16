@@ -21,7 +21,7 @@ Untuk alat-alatnya tidak: pasang dengan pip (lihat [README](../../README.id.md))
 lalu pakai perintah `mar`. Untuk skill (`SKILL.md`) di Claude Code dan sejenisnya,
 ya: ikuti [docs/INSTALL.md](../INSTALL.md).
 
-## Referensi dan bukti
+## Referensi Dan Bukti
 
 **Bisakah AI mengarang referensi?**
 Bisa. Karena itu ada `verify_refs.py`. Secara offline ia menangkap DOI ganda,
@@ -71,7 +71,7 @@ Untuk systematic review, meta-analisis, umbrella, rapid, realist, dan
 meta-synthesis: ya, bila jurnal mengharapkannya (PROSPERO atau OSF). Scoping dan
 mapping review diregistrasi di OSF. `protocol.py` membuat dokumennya.
 
-## File dan keluaran
+## File Dan Keluaran
 
 **Di mana file keluaran?**
 Di samping `review.md`: `prisma_flow.svg`, `screening_log.csv`, `agreement.md`,

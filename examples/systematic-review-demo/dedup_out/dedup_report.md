@@ -1,11 +1,11 @@
-# Deduplication report
+# Deduplication Report
 
 **Records identified:** 11  
 **Duplicates removed:** 4  
 **Unique records (to screen):** 7  
 **Possible duplicates to check by hand:** 0
 
-## Records per source
+## Records Per Source
 
 | Source | Records |
 |---|---:|
@@ -13,7 +13,7 @@
 | PubMed | 4 |
 | WoS | 3 |
 
-## Removed by rule
+## Removed By Rule
 
 | Rule | Removed |
 |---|---:|
@@ -21,7 +21,7 @@
 | fuzzy | 1 |
 | title-year | 1 |
 
-## Next steps (JEV, ranked)
+## Next Steps (JEV, Ranked)
 
 1. **#1 recommended:** Screen `deduplicated.csv`; record decisions in `screening_template.csv` (two reviewers) and run `screening_agreement.py`.
 2. Merge `prisma_identification.json` with your screening counts and run `prisma_flow.py prisma_identification.json screening_counts.json`.

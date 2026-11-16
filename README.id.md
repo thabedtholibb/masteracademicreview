@@ -23,7 +23,7 @@ referensi. Penulis tetap pengambil keputusan dan penanggung jawab ilmiah.
 | Ekspor Scopus / PubMed / WoS (CSV, RIS, BibTeX) | Protokol → deduplikasi → skrining → ekstraksi | Diagram PRISMA, forest/funnel plot |
 | Data effect size / tabel karakteristik (CSV) | Cek referensi + *gate* kualitas | Shortlist jurnal berperingkat, surat pengantar, balasan reviewer |
 
-## JEV: prioritas di setiap keputusan
+## JEV: Prioritas Di Setiap Keputusan
 
 Setiap keputusan (database mana, model statistik apa, jurnal mana, komentar
 reviewer mana dulu) disajikan sebagai **opsi berperingkat dengan #1
@@ -36,7 +36,7 @@ peringkat. Penulis yang memutuskan. Protokol lengkapnya ada di
 - `check_review.py` mengurutkan perbaikan: integritas dulu, polesan terakhir.
 - `submission.py` menulis surat untuk jurnal **#1** dan mengurutkan komentar reviewer (mayor dulu).
 
-## Instalasi alat (terminal / PowerShell)
+## Instalasi Alat (Terminal / PowerShell)
 
 Butuh Python 3.10 atau lebih baru.
 
@@ -82,13 +82,13 @@ gunakan `python -m masteracademicreview list`.
 | 7. Submit | `mar submission response komentar.txt --lang id` | kerangka balasan reviewer |
 | 7. Submit | `mar export review.md` | DOCX / PDF |
 
-## Memasang skill (untuk Claude Code dan lainnya)
+## Memasang Skill (Untuk Claude Code Dan Lainnya)
 
 Skill (`*/SKILL.md`) dipasang dengan meng-*clone* repositori; langkahnya ada di
 [docs/INSTALL.md](docs/INSTALL.md). Paket pip berisi alat-alatnya, sedangkan
 skill memanggil alat yang sama lewat `python shared/scripts/<alat>.py`.
 
-## Contoh lengkap
+## Contoh Lengkap
 
 [`examples/systematic-review-demo/`](examples/systematic-review-demo/) berisi
 contoh systematic review sintetis yang menjalankan seluruh rantai dari tiga
@@ -102,9 +102,9 @@ Contoh surat pengantar dan balasan reviewer berbahasa Indonesia ada di
 `cover_letter.id.md` dan `response_to_reviewers.id.md` pada folder yang sama.
 Semua data di contoh ini **fiktif**.
 
-## 13 genre review
+## 13 Genre Review
 
-| Genre | Kapan dipakai | Standar |
+| Genre | Kapan Dipakai | Standar |
 |---|---|---|
 | `book-review` | menilai satu buku | konvensi jurnal |
 | `narrative-review` | ringkasan ahli tanpa protokol ketat | SANRA |
@@ -129,7 +129,7 @@ Bingung memilih? Lihat [docs/id/PANDUAN.md](docs/id/PANDUAN.md) (pohon keputusan
 - [Troubleshooting (bahasa Inggris)](docs/TROUBLESHOOTING.md)
 - [Kontribusi](CONTRIBUTING.md) · [Kode etik](CODE_OF_CONDUCT.md) · [Keamanan](SECURITY.md)
 
-## Catatan jujur
+## Catatan Jujur
 
 - Alat ini **tidak menjamin** naskah diterima jurnal mana pun. Skor jurnal
   adalah ukuran kecocokan, bukan peluang diterima.

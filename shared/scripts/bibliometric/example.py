@@ -6,7 +6,7 @@ Run with:  python shared/scripts/bibliometric/example.py
 import os
 
 from parsers import load_csv
-from performance import summary, publications_per_year, top_authors, top_journals, top_keywords
+from performance import summary, publications_per_year, top_authors, top_journals
 from mapping import co_occurrence
 from plots import plot_pubs_per_year, plot_top, plot_heatmap
 
@@ -49,4 +49,4 @@ plot_top(top_journals(records, 10), filename=os.path.join(out_dir, "top_journals
          xlabel="Papers", title="Top journals")
 plot_heatmap(labels, m, filename=os.path.join(out_dir, "cooccurrence.png"),
              title="Keyword co-occurrence")
-print("wrote %s" % out_dir)
+print(f"wrote {out_dir}")

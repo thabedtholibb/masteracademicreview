@@ -25,6 +25,7 @@ import sys
 import tempfile
 from dataclasses import dataclass, field
 from pathlib import Path
+import contextlib
 
 HERE = Path(__file__).resolve().parent
 
@@ -140,12 +141,12 @@ def check_review(text: str, directory: Path, genre: str | None = None,
     # 1. metadata header
     for f in META_FIELDS:
         if f not in meta or not meta[f]:
-            rep.errors.append("metadata: missing field '%s'" % f)
+            rep.errors.append(f"metadata: missing field '{f}'")
     no_break = [k for k in META_FIELDS[:-1] if k in hard and not hard[k]]
     if no_break:
         rep.warnings.append(
-            "metadata: %s lack a hard line break (two trailing spaces); "
-            "fields will merge in DOCX/PDF" % ", ".join(no_break))
+            "metadata: {} lack a hard line break (two trailing spaces); "
+            "fields will merge in DOCX/PDF".format(", ".join(no_break)))
 
     rep.genre = detect_genre(meta.get("review type", ""), genre)
     if rep.genre == "unknown":
@@ -161,7 +162,7 @@ def check_review(text: str, directory: Path, genre: str | None = None,
     if rep.genre in GENRES:
         for pat in GENRES[rep.genre][1]:
             if not any(re.search(pat, h) for h in headings):
-                rep.errors.append("section: no heading matching '%s'" % pat.replace("|", "' or '"))
+                rep.errors.append("section: no heading matching '{}'".format(pat.replace("|", "' or '")))
 
     # 3. citations <-> references (offline verify_refs)
     ref_errors: list[str] = []
@@ -173,9 +174,9 @@ def check_review(text: str, directory: Path, genre: str | None = None,
             ref_errors = list(res.errors)
             rep.errors.extend("references: " + e for e in res.errors)
             rep.warnings.extend("references: " + w for w in res.warnings)
-            rep.infos.append("references parsed: %d, citation style: %s" % (len(refs), res.style))
+            rep.infos.append(f"references parsed: {len(refs):d}, citation style: {res.style}")
         except vr.ParseError as exc:
-            rep.errors.append("references: %s" % exc)
+            rep.errors.append(f"references: {exc}")
 
     # 4. artifacts
     if check_artifacts:
@@ -190,15 +191,15 @@ def check_review(text: str, directory: Path, genre: str | None = None,
                 referenced.add(m.group(1))
         for target in sorted(referenced):
             if not (directory / target).exists():
-                rep.errors.append("artifact: '%s' is referenced but not found" % target)
+                rep.errors.append(f"artifact: '{target}' is referenced but not found")
         for name in REQUIRED_ARTIFACTS.get(rep.genre, ()):
             if not (directory / name).exists():
-                rep.errors.append("artifact: required file '%s' is missing next to the review" % name)
+                rep.errors.append(f"artifact: required file '{name}' is missing next to the review")
 
     # 5. placeholders and gate consistency
     found = {p.upper() for p in PLACEHOLDER_RE.findall(text)}
     if found:
-        rep.errors.append("placeholders left in text: %s" % ", ".join(sorted(found)))
+        rep.errors.append("placeholders left in text: {}".format(", ".join(sorted(found))))
 
     gate = meta.get("gate", "")
     m = GATE_STATUS_RE.search(gate)
@@ -211,11 +212,11 @@ def check_review(text: str, directory: Path, genre: str | None = None,
             if ref_errors:
                 rep.errors.append("gate: marked passed while reference errors exist")
             if score and score.group(1) != score.group(2):
-                rep.errors.append("gate: marked passed but checklist is %s/%s" % score.groups())
+                rep.errors.append("gate: marked passed but checklist is {}/{}".format(*score.groups()))
             if not score and rep.genre in REQUIRED_ARTIFACTS:
                 rep.errors.append("gate: passed needs a checklist score (e.g. 'PRISMA 27/27')")
         elif not re.search(r"missing|not met|outstanding|waiver|waived", text.lower()):
-            rep.errors.append("gate: '%s' must list what is missing or waived" % status)
+            rep.errors.append(f"gate: '{status}' must list what is missing or waived")
     return rep
 
 
@@ -235,22 +236,22 @@ def ranked_steps(rep: Report) -> list[tuple[int, str]]:
 
 
 def render(rep: Report, name: str) -> str:
-    out = ["# Review check: %s" % name, "",
-           "**Genre:** %s  " % rep.genre,
-           "**Errors:** %d  " % len(rep.errors),
-           "**Warnings:** %d" % len(rep.warnings), ""]
+    out = [f"# Review Check: {name}", "",
+           f"**Genre:** {rep.genre}  ",
+           f"**Errors:** {len(rep.errors):d}  ",
+           f"**Warnings:** {len(rep.warnings):d}", ""]
     steps = ranked_steps(rep)
     if steps:
-        out += ["## Next steps (JEV, ranked)", "",
+        out += ["## Next Steps (JEV, Ranked)", "",
                 "Fix in this order: integrity first, polish last (see `shared/jev.md`).", ""]
         for i, (prio, msg) in enumerate(steps, 1):
             lead = "**#1 recommended:** " if i == 1 else ""
-            out.append("%d. %s%s _(priority %d)_" % (i, lead, msg, prio))
+            out.append(f"{i:d}. {lead}{msg} _(priority {prio:d})_")
         out.append("")
     for title, items in (("Errors", rep.errors), ("Warnings", rep.warnings), ("Info", rep.infos)):
         if items:
-            out.append("## %s" % title)
-            out.extend("- %s" % i for i in items)
+            out.append(f"## {title}")
+            out.extend(f"- {i}" for i in items)
             out.append("")
     return "\n".join(out)
 
@@ -283,10 +284,8 @@ def selftest() -> None:
 
 def main(argv: list[str] | None = None) -> int:
     for stream in (sys.stdout, sys.stderr):
-        try:
+        with contextlib.suppress(AttributeError, ValueError):
             stream.reconfigure(encoding="utf-8", errors="replace")
-        except (AttributeError, ValueError):
-            pass
     p = argparse.ArgumentParser(description="Validate a review.md against the output spec.")
     p.add_argument("input", nargs="?", help="review.md")
     p.add_argument("--genre", choices=sorted(GENRES), help="override genre detection")
@@ -303,19 +302,18 @@ def main(argv: list[str] | None = None) -> int:
         p.error("provide review.md (or --selftest)")
     path = Path(a.input)
     if not path.is_file():
-        print("error: file not found: %s" % path, file=sys.stderr)
+        print(f"error: file not found: {path}", file=sys.stderr)
         return 2
     text = path.read_text(encoding="utf-8-sig")
     rep = check_review(text, a.artifacts_dir or path.parent, a.genre, not a.no_artifacts)
     report = render(rep, path.name)
     if a.out:
         a.out.write_text(report, encoding="utf-8")
-        print("wrote %s" % a.out)
+        print(f"wrote {a.out}")
     else:
         print(report)
     failed = bool(rep.errors) or (a.strict and bool(rep.warnings))
-    print("RESULT: %s (%d errors, %d warnings)" % ("FAIL" if failed else "PASS",
-                                                    len(rep.errors), len(rep.warnings)))
+    print(f'RESULT: {"FAIL" if failed else "PASS"} ({len(rep.errors):d} errors, {len(rep.warnings):d} warnings)')
     return 1 if failed else 0
 
 

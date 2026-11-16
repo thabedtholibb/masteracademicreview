@@ -1,4 +1,4 @@
-# A Concrete Session, End to End
+# A Concrete Session, End To End
 
 This walks through one real usage so you can see *exactly* what happens. The example uses meta-analysis (the most involved path); the other genres follow the same shape, just with fewer scripts.
 
@@ -8,31 +8,31 @@ Assumptions: skills installed (see [INSTALL.md](INSTALL.md)), Python deps presen
 
 ---
 
-## Step 0 — You open the harness in your project
+## Step 0: You Open The Harness In Your Project
 
 ```
 $ claude        # Claude Code, or `opencode`
 ```
 
-## Step 1 — You describe what you want
+## Step 1: You Describe What You Want
 
 > Saya mau meta-analysis efektivitas CBT untuk insomnia. Saya punya 5 studi RCT.
 
-The agent reads your request, notices "meta-analysis", and **loads the `meta-analysis` skill** (its `description` contains that trigger). From here the skill's instructions take over — the agent stops improvising and follows the protocol.
+The agent reads your request, notices "meta-analysis", and **loads the `meta-analysis` skill** (its `description` contains that trigger). From here the skill's instructions take over: the agent stops improvising and follows the protocol.
 
-## Step 2 — The skill checks pre-requisites
+## Step 2: The Skill Checks Pre-Requisites
 
 ```
-Agent: Oke — meta-analysis. Sebelum menghitung, saya perlu:
+Agent: Oke, meta-analysis. Sebelum menghitung, saya perlu:
   1. ≥2 studi dengan effect size pada outcome yang sama.
   2. Data tiap studi: n, mean, SD per kelompok (atau tabel 2×2, atau r).
-  3. Python (numpy/scipy/matplotlib) — sudah terpasang?
+  3. Python (numpy/scipy/matplotlib): sudah terpasang?
   Kalau <2 studi, pooling tidak mungkin; kita turun ke systematic review.
 ```
 
 This fail-closed check comes from the skill, not improvisation.
 
-## Step 3 — You provide the data
+## Step 3: You Provide The Data
 
 ```
 > 5 studi RCT, outcome = keparahan insomnia (makin rendah makin baik), treatment vs control:
@@ -45,7 +45,7 @@ This fail-closed check comes from the skill, not improvisation.
 >  Eka2025   11.2  3.3   45  10.0  3.4   44
 ```
 
-## Step 4 — The agent runs the Python engine
+## Step 4: The Agent Runs The Python Engine
 
 The skill tells the agent where the scripts are and what to run. The agent executes them through its shell:
 
@@ -88,11 +88,11 @@ Egger: {'intercept': -1.532, 'se': ..., 't': ..., 'p': 0.472}
 
 The key point: **the model did not guess these numbers.** The code computed them from your data. That is the whole reason the engine exists.
 
-## Step 5 — The agent writes the report
+## Step 5: The Agent Writes The Report
 
 The skill then drafts a PRISMA/MOOSE-structured write-up in Markdown, embedding the numbers and the two plots, plus a GRADE certainty rating (using I², the CI width, risk of bias, and the Egger result).
 
-## Step 6 — You get the deliverables
+## Step 6: You Get The Deliverables
 
 ```
 forest.png        # forest plot (editable)
@@ -105,9 +105,9 @@ You review, edit, and format for your venue (Word/LaTeX) yourself.
 
 ---
 
-## The same shape, lighter genres
+## The Same Shape, Lighter Genres
 
-| Genre | You provide | Agent does | Scripts? |
+| Genre | You Provide | Agent Does | Scripts? |
 |---|---|---|---|
 | `brainstorm` | a vague topic | research question + keywords (PICO/PICo/PCC/SPIDER) | none |
 | `book-review` | the book + its thesis | summary → critique → verdict | none |
@@ -124,6 +124,6 @@ You review, edit, and format for your venue (Word/LaTeX) yourself.
 | `bibliometric-review` | a bibliographic corpus | citation/co-word map | bundled engine |
 | `realist-review` | a programme theory | CMO configurations | none |
 
-## When you don't know which genre
+## When You Don't Know Which Genre
 
 Type "help me write a review". `review-router` interviews you (object, purpose, rigor, data), classifies, and hands off. The rest is the same.

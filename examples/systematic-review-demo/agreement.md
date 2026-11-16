@@ -1,4 +1,4 @@
-# Screening agreement report
+# Screening Agreement Report
 
 **Source:** `screening_log.csv`  
 **Records:** 11  
@@ -6,7 +6,7 @@
 **Cohen's kappa:** 0.7925 (substantial)  
 **PABAK:** 0.818
 
-| Stage | n | Both include | R1 only | R2 only | Both exclude | Agreement | Kappa | PABAK |
+| Stage | N | Both Include | R1 Only | R2 Only | Both Exclude | Agreement | Kappa | PABAK |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|
 | title_abstract | 7 | 4 | 0 | 1 | 2 | 85.7% | 0.696 | 0.714 |
 | full_text | 4 | 3 | 0 | 0 | 1 | 100.0% | 1.000 | 1.000 |

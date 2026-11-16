@@ -2,9 +2,9 @@
 
 Yth. Editor,
 
-Perihal: Pengajuan naskah systematic review, "Physical activity interventions for depressive symptoms in older adults: a systematic review (DEMO)"
+Perihal: Pengajuan naskah systematic review, "Physical Activity Interventions For Depressive Symptoms In Older Adults: A Systematic Review (DEMO)"
 
-Bersama ini kami mengajukan naskah berjudul "Physical activity interventions for depressive symptoms in older adults: a systematic review (DEMO)" untuk dipertimbangkan terbit di *Journal of Fictional Evidence Synthesis* sebagai artikel systematic review.
+Bersama ini kami mengajukan naskah berjudul "Physical Activity Interventions For Depressive Symptoms In Older Adults: A Systematic Review (DEMO)" untuk dipertimbangkan terbit di *Journal of Fictional Evidence Synthesis* sebagai artikel systematic review.
 
 **Mengapa Journal of Fictional Evidence Synthesis.** Ruang lingkup jurnal menyebutkan: “Publishes evidence syntheses and methodological reviews” [LENGKAPI: satu kalimat yang menghubungkan ruang lingkup ini dengan pertanyaan review.]
 
@@ -22,9 +22,9 @@ Hormat kami,
 
 ---
 
-## Daftar periksa sebelum submit (bukan bagian surat) — JEV
+## Daftar Periksa Sebelum Submit (Bukan Bagian Surat): JEV
 
-**Target (#1):** Journal of Fictional Evidence Synthesis — tier target, fit 93.0, confidence 75.0%  
+**Target (#1):** Journal of Fictional Evidence Synthesis (tier target, fit 93.0, confidence 75.0%)  
 **Urutan cadangan bila ditolak (hanya kandidat bersih):** Fictional Review Quarterly → Applied Fictional Methods
 
 - [ ] Gate: ⚠ partial (PRISMA 24/27) (error di laporan: 0)

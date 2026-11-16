@@ -1,4 +1,4 @@
-# Skill-by-skill flows
+# Skill-By-Skill Flows
 
 How each masteracademicreview skill runs, end to end. Sixteen skills: three at the entry (`brainstorm`, `journal-match`, `review-router`) and thirteen review genres.
 
@@ -6,7 +6,7 @@ Every run ends with **`review.md` + artifacts** (and optional `review.docx`/`rev
 
 ---
 
-## The journey (three phases)
+## The Journey (Three Phases)
 
 ```
 PHASE A — brainstorm          PHASE B — review-router         PHASE C — genre skill
@@ -20,9 +20,9 @@ vague idea ──► question +      framed request ──► ranked       chose
 
 ---
 
-## Cheat sheet
+## Cheat Sheet
 
-| Skill | Use when | You provide | Output |
+| Skill | Use When | You Provide | Output |
 |---|---|---|---|
 | `brainstorm` | vague idea, no question/keywords | raw topic | research question + keyword table + Boolean query |
 | `journal-match` | choosing where to submit | topic/manuscript + constraints | ranked journal shortlist + submission cascade |
@@ -48,8 +48,8 @@ vague idea ──► question +      framed request ──► ranked       chose
 - **Use when:** the author has a rough idea but no focused research question or search keywords.
 - **You provide:** the raw topic (population, intervention/phenomenon, outcome, context as available).
 - **Flow (recommendation-first):**
-  1. Elicit the raw idea — minimally.
-  2. Propose the framing, ranked — **PICO (#1)** for effectiveness, **PICo/SPIDER** for qualitative, **PCC** for mapping.
+  1. Elicit the raw idea: minimally.
+  2. Propose the framing, ranked: **PICO (#1)** for effectiveness, **PICo/SPIDER** for qualitative, **PCC** for mapping.
   3. Draft 2–3 candidate research questions, **#1 recommended**, author picks or edits.
   4. Build a keyword table, terms ranked best-first per concept, top pick marked.
   5. Assemble the Boolean query (`OR` within concept, `AND` across).
@@ -57,9 +57,9 @@ vague idea ──► question +      framed request ──► ranked       chose
   7. If the author wants to publish, offer `journal-match` with the brief.
 - **Output:** research question + framing + keyword table + Boolean query (+ optional journal shortlist).
 
-## `journal-match` (Phase A, optional)
+## `journal-match` (Phase A, Optional)
 
-- **Use when:** the author asks where to submit, which journal fits, or wants a Q1/Q2 shortlist — before writing (recommended) or after drafting.
+- **Use when:** the author asks where to submit, which journal fits, or wants a Q1/Q2 shortlist: before writing (recommended) or after drafting.
 - **You provide:** topic/title + abstract (or key claims), genre, and hard constraints (indexing, quartile, APC budget, deadline, OA).
 - **Flow:**
   1. Collect inputs; mark scope fit provisional if there is no abstract yet.
@@ -77,7 +77,7 @@ vague idea ──► question +      framed request ──► ranked       chose
 - **You provide:** the (framed) request.
 - **Flow:**
   1. Recognize it as a review request (or decline if it's a new-paper/experiment/grant task).
-  2. Interview along four axes — object, purpose, rigor, data.
+  2. Interview along four axes: object, purpose, rigor, data.
   3. Classify into a **ranked shortlist** (top 2–3, **#1 recommended**, each with a reason).
   4. Dispatch #1 with a brief; the author can override.
 - **Output:** ranked genre shortlist + brief + handoff to the genre skill (and an optional `journal-match` handoff).
@@ -147,7 +147,7 @@ vague idea ──► question +      framed request ──► ranked       chose
 - **Use when:** synthesizing qualitative studies into themes or theory.
 - **You provide:** qualitative studies with extractable findings (themes, quotes).
 - **Flow:** frame (PICo/SPIDER) → search & screen → appraise (CASP) → extract findings → synthesize → ENTREQ report.
-- **Decision points:** synthesis method — **thematic synthesis (#1)**, meta-ethnography (#2), meta-aggregation (#3).
+- **Decision points:** synthesis method: **thematic synthesis (#1)**, meta-ethnography (#2), meta-aggregation (#3).
 - **Output:** meta-synthesis + developed themes + quote table; **gate: ENTREQ (21 items)**.
 
 ## `rapid-review`
@@ -192,7 +192,7 @@ vague idea ──► question +      framed request ──► ranked       chose
 
 ---
 
-## Invoking any skill
+## Invoking Any Skill
 
 - **Auto:** describe what you want; the matching skill loads.
 - **`@skill-id` (OpenCode):** `@meta-analysis`, `@brainstorm`, …

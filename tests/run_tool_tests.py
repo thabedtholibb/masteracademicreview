@@ -33,13 +33,14 @@ class Case:
 
 
 CASES = [
-    Case("journal_rank rubric", "journal_rank.py", ("--rubric",), 0, ("Scoring anchors", "OFF_ANCHOR")),
+    Case("journal_rank selftest", "journal_rank.py", ("--selftest",), 0, ("journal_rank selftest OK",)),
+    Case("journal_rank rubric", "journal_rank.py", ("--rubric",), 0, ("Scoring Anchors", "OFF_ANCHOR")),
     Case(
         "journal_rank explain",
         "journal_rank.py",
         (str(FIXTURES / "journals_example.csv"), "--explain"),
         0,
-        ("Largest loss", "#1 recommended"),
+        ("Largest loss", "#1 Recommended"),
     ),
     Case(
         "journal_rank requires scope_quote",
@@ -54,7 +55,7 @@ CASES = [
         "protocol.py",
         (str(FIXTURES / "protocol_complete.json"), "--strict"),
         0,
-        ("# Protocol:", "Amendments log", "PRISMA-P"),
+        ("# Protocol:", "Amendments Log", "PRISMA-P"),
         ("TO COMPLETE",),
     ),
     Case(
@@ -102,7 +103,7 @@ CASES = [
         "submission.py",
         ("response", str(DEMO / "reviewer_comments.txt")),
         0,
-        ("Revision plan (JEV", "| **#1** | R1.1 | major |", "R2.3"),
+        ("Revision Plan (JEV", "| **#1** | R1.1 | major |", "R2.3"),
     ),
     Case(
         "prisma_flow refuses counts that do not add up",

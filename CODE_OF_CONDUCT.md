@@ -1,4 +1,4 @@
-# Code of Conduct
+# Code Of Conduct
 
 This project is used by researchers, students and reviewers from many fields,
 countries and career stages. We want taking part to be respectful and
@@ -10,7 +10,7 @@ sexual identity and orientation.
 This code is adapted from the
 [Contributor Covenant, version 2.1](https://www.contributor-covenant.org/version/2/1/code_of_conduct/).
 
-## Expected behaviour
+## Expected Behaviour
 
 - Be kind and patient, especially with people new to evidence synthesis or to programming.
 - Critique methods, code and evidence, not people.
@@ -19,7 +19,7 @@ This code is adapted from the
 - Respect research integrity: never ask for, or help with, fabricated data,
   invented references, or misrepresented results.
 
-## Unacceptable behaviour
+## Unacceptable Behaviour
 
 - Harassment, insults, or derogatory comments, in public or in private.
 - Sexualised language or imagery, and unwelcome attention.
@@ -32,7 +32,7 @@ This code is adapted from the
 This code applies in all project spaces (issues, pull requests, discussions)
 and when someone represents the project in public.
 
-## Reporting and enforcement
+## Reporting And Enforcement
 
 Report unacceptable behaviour privately to the maintainer through the contact
 details on the maintainer's GitHub profile (the repository owner). Reports are

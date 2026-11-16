@@ -60,14 +60,14 @@ DEFAULT_WEIGHTS = {
 }
 
 LABELS = {
-    "scope_fit": "Scope fit",
-    "article_fit": "Article-type fit",
-    "method_fit": "Method acceptance",
-    "indexing": "Indexing/quartile",
-    "speed": "Decision speed",
+    "scope_fit": "Scope Fit",
+    "article_fit": "Article-Type Fit",
+    "method_fit": "Method Acceptance",
+    "indexing": "Indexing/Quartile",
+    "speed": "Decision Speed",
     "cost": "Cost/APC",
-    "audience": "Audience/reach",
-    "risk": "Legitimacy/ethics",
+    "audience": "Audience/Reach",
+    "risk": "Legitimacy/Ethics",
 }
 
 TIERS = ("", "reach", "target", "safety")
@@ -242,13 +242,13 @@ def _md_cell(text: str) -> str:
 
 
 def rubric_markdown() -> str:
-    lines = ["# Scoring anchors", "",
+    lines = ["# Scoring Anchors", "",
              "Score only 5 / 3 / 1 / 0 against these descriptions; 2 and 4 are "
              "flagged OFF_ANCHOR (use `--strict-anchors` to forbid them).", ""]
     for key in CRITERIA:
         lines.append(f"## {LABELS[key]} (`{key}`)")
         for s in (5, 3, 1, 0):
-            lines.append(f"- **{s}** — {ANCHORS[key][s]}")
+            lines.append(f"- **{s}:** {ANCHORS[key][s]}")
         lines.append("")
     return "\n".join(lines)
 
@@ -260,7 +260,7 @@ def to_markdown(scored: list[dict], weights: dict[str, float], source: str = "",
         f"{LABELS[k]} {weights[k] / total_weight * 100:.0f}%" for k in CRITERIA
     )
     lines = [
-        "# Journal shortlist — ranked (#1 recommended)",
+        "# Journal Shortlist: Ranked (#1 Recommended)",
         "",
         "**Decision record (JEV).** "
         f"{len(scored)} candidate journal(s) scored on eight criteria"
@@ -272,21 +272,21 @@ def to_markdown(scored: list[dict], weights: dict[str, float], source: str = "",
         "**Scoring:** weighted mean of the 0–5 scores, scaled to 0–100. "
         "**Confidence:** share of the eight criteria whose value is marked verified.",
         "",
-        "| # | Journal | Fit | Confidence | Tier | Flags | Evidence gaps |",
+        "| # | Journal | Fit | Confidence | Tier | Flags | Evidence Gaps |",
         "|---|---|---:|---:|---|---|---|",
     ]
     for i, row in enumerate(scored, 1):
-        tier = row["tier"] or "—"
-        flags = ", ".join(row["flags"]) or "—"
-        gaps = ", ".join(row["gaps"]) or "—"
+        tier = row["tier"] or "n/a"
+        flags = ", ".join(row["flags"]) or "none"
+        gaps = ", ".join(row["gaps"]) or "none"
         lines.append(
             f"| {i} | {_md_cell(row['journal'])} | {row['fit']:.1f} | "
             f"{row['confidence']:.0f}% | {tier} | {_md_cell(flags)} | {_md_cell(gaps)} |"
         )
 
-    lines += ["", "## Evidence detail", ""]
+    lines += ["", "## Evidence Detail", ""]
     for i, row in enumerate(scored, 1):
-        head = f"### #{i} {row['journal']} — {row['fit']:.1f}/100, confidence {row['confidence']:.0f}%"
+        head = f"### #{i} {row['journal']}: {row['fit']:.1f}/100, Confidence {row['confidence']:.0f}%"
         lines.append(head)
         meta = []
         if row["tier"]:
@@ -440,7 +440,7 @@ def _selftest() -> None:
 
     # Markdown must render without raising and must contain the recommendation.
     md = to_markdown(ranked, weights, "selftest")
-    assert "#1 recommended" in md and "A" in md
+    assert "#1 Recommended" in md and "A" in md
 
     print("journal_rank selftest OK (weights, scoring, confidence, flags, ranking, validation)")
 

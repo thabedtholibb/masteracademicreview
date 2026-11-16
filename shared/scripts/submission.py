@@ -36,6 +36,7 @@ import re
 import sys
 from datetime import date
 from pathlib import Path
+import contextlib
 
 HERE = Path(__file__).resolve().parent
 BLOCKING_FLAGS = ("LEGITIMACY RISK", "SCOPE MISMATCH")
@@ -131,7 +132,7 @@ TEXT = {
                 "journal requires.]",
         "close": "Thank you for considering our work.",
         "sign": "Sincerely,\n\n[TO COMPLETE: corresponding author, affiliation, email, ORCID]",
-        "check_title": "Pre-submission checklist (not part of the letter) — JEV",
+        "check_title": "Pre-Submission Checklist (Not Part Of The Letter): JEV",
     },
     "id": {
         "salutation": "Yth. Editor,",
@@ -153,7 +154,7 @@ TEXT = {
                 "kebijakan jurnal.]",
         "close": "Atas perhatian dan pertimbangan Bapak/Ibu, kami ucapkan terima kasih.",
         "sign": "Hormat kami,\n\n[LENGKAPI: penulis korespondensi, afiliasi, email, ORCID]",
-        "check_title": "Daftar periksa sebelum submit (bukan bagian surat) — JEV",
+        "check_title": "Daftar Periksa Sebelum Submit (Bukan Bagian Surat): JEV",
     },
 }
 
@@ -218,8 +219,8 @@ def cover_letter(review: dict, cands: list[dict], rank: int = 1, gate_errors: in
     checklist = [
         "---", "",
         f"## {t['check_title']}", "",
-        f"**{c['target']} (#{rank}):** {journal['journal']} — tier {journal.get('tier') or 'n/a'}, "
-        f"fit {journal.get('fit', 'n/a')}, confidence {journal.get('confidence', 'n/a')}%  ",
+        f"**{c['target']} (#{rank}):** {journal['journal']} (tier {journal.get('tier') or 'n/a'}, "
+        f"fit {journal.get('fit', 'n/a')}, confidence {journal.get('confidence', 'n/a')}%)  ",
         f"**{c['cascade']}:** " + (" → ".join(cascade) or c["none"]), "",
         f"- [{'x' if gate_ok else ' '}] Gate: {review['gate_line'] or 'missing'}"
         + ("" if gate_errors is None else f" ({c['errors']}: {gate_errors})"),
@@ -290,7 +291,7 @@ def parse_comments(text: str) -> list[dict]:
             if any(x.strip() for x in lines):
                 blocks.append((who, lines))
             label = m.group(1).strip()
-            who = "Editor" if "editor" in label.lower() else "Reviewer %s" % m.group(2)
+            who = "Editor" if "editor" in label.lower() else f"Reviewer {m.group(2)}"
             lines = []
         else:
             lines.append(line)
@@ -322,7 +323,7 @@ def parse_comments(text: str) -> list[dict]:
 
 
 def comment_id(c: dict) -> str:
-    return ("E.%d" % c["n"]) if c["who"] == "Editor" else "R%s.%d" % (c["who"].split()[-1], c["n"])
+    return (f'E.{c["n"]:d}') if c["who"] == "Editor" else f'R{c["who"].split()[-1]}.{c["n"]:d}'
 
 
 def response(comments: list[dict], review: dict | None, lang: str = "en") -> str:
@@ -337,27 +338,27 @@ def response(comments: list[dict], review: dict | None, lang: str = "en") -> str
     title = review["title"] if review else f"[{todo}: manuscript title]"
     gate = review["gate_line"] if review else "not checked"
     if lang == "id":
-        intro = ("Yth. Editor,\n\nTerima kasih atas kesempatan merevisi naskah \"%s\". Kami berterima "
+        intro = (f"Yth. Editor,\n\nTerima kasih atas kesempatan merevisi naskah \"{title}\". Kami berterima "
                  "kasih kepada para reviewer atas masukan yang membangun. Tanggapan kami untuk setiap "
-                 "komentar disajikan di bawah ini, beserta lokasi perubahannya di naskah." % title)
-        h_plan, h_points, h_before = ("Rencana revisi (JEV, berurutan prioritas)",
-                                      "Tanggapan per poin", "Sebelum submit ulang")
+                 "komentar disajikan di bawah ini, beserta lokasi perubahannya di naskah.")
+        h_plan, h_points, h_before = ("Rencana Revisi (JEV, Berurutan Prioritas)",
+                                      "Tanggapan Per Poin", "Sebelum Submit Ulang")
         resp, chg = "Tanggapan", "Perubahan di naskah"
         advice = ("Komentar mayor didahulukan karena menentukan keputusan editor. Jawab setiap "
                   "komentar, termasuk yang tidak Anda setujui; bantah dengan bukti, bukan nada.")
     else:
-        intro = ("Dear Editor,\n\nThank you for the opportunity to revise \"%s\". We thank the "
+        intro = (f"Dear Editor,\n\nThank you for the opportunity to revise \"{title}\". We thank the "
                  "reviewers for their constructive comments. Our point-by-point responses follow, "
-                 "with the location of every change in the manuscript." % title)
-        h_plan, h_points, h_before = ("Revision plan (JEV, ranked by priority)",
-                                      "Point-by-point responses", "Before resubmission")
+                 "with the location of every change in the manuscript.")
+        h_plan, h_points, h_before = ("Revision Plan (JEV, Ranked By Priority)",
+                                      "Point-By-Point Responses", "Before Resubmission")
         resp, chg = "Response", "Changes in the manuscript"
         advice = ("Major comments first: they decide the editor's verdict. Answer every comment, "
                   "even when you disagree; disagree with evidence, not tone.")
-    out = [f"# Response to reviewers: {title}", "",
+    out = [f"# Response To Reviewers: {title}", "",
            f"**Gate status of the current draft:** {gate}", "",
            intro, "", f"## {h_plan}", "",
-           "| Rank | ID | Priority | Comment (start) | Status |", "|---:|---|---|---|---|"]
+           "| Rank | ID | Priority | Comment (Start) | Status |", "|---:|---|---|---|---|"]
     for rank, c in enumerate(ranked, 1):
         short = c["text"][:90].replace("|", "\\|") + ("..." if len(c["text"]) > 90 else "")
         label = f"**#{rank}**" if rank == 1 else f"#{rank}"
@@ -428,16 +429,14 @@ def selftest() -> None:
     assert cs[2]["text"].endswith("continued line.")
     md = response(cs, review)
     assert md.index("| **#1** | R1.2 | major |") > 0, "major comment must rank first"
-    assert "Tanggapan per poin" in response(parse_comments(text), review, "id")
+    assert "Tanggapan Per Poin" in response(parse_comments(text), review, "id")
     print("submission selftest OK (journal pick, flags, gate guards, languages, comment parsing, ranking)")
 
 
 def main(argv: list[str] | None = None) -> int:
     for stream in (sys.stdout, sys.stderr):
-        try:
+        with contextlib.suppress(AttributeError, ValueError):
             stream.reconfigure(encoding="utf-8", errors="replace")
-        except (AttributeError, ValueError):
-            pass
     p = argparse.ArgumentParser(description="Cover letter and response-to-reviewers documents.")
     p.add_argument("--selftest", action="store_true")
     sub = p.add_subparsers(dest="cmd")

@@ -202,7 +202,7 @@ def validate_generic(rows: list[dict], fieldnames: list[str], required: list[str
 
 def render(report: Report, source: str) -> str:
     lines = [
-        "# Extraction validation report",
+        "# Extraction Validation Report",
         "",
         f"**Source:** `{source}`  ",
         f"**Profile:** {report.profile}  ",

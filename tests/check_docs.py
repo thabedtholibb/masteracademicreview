@@ -45,6 +45,15 @@ def dois_in(text: str) -> set[str]:
     return {d.rstrip(".,;)]").lower() for d in found}
 
 
+def section(text: str, title: str) -> str | None:
+    """Body of the '## <title>' section, matched case-insensitively; None if absent."""
+    m = re.search(r"^## " + re.escape(title) + r"\s*$", text, re.M | re.I)
+    if not m:
+        return None
+    nxt = re.search(r"^## ", text[m.end():], re.M)
+    return text[m.end():m.end() + nxt.start()] if nxt else text[m.end():]
+
+
 source_text = ""
 sources = ROOT / "shared" / "method_sources.md"
 if not sources.exists():
@@ -62,28 +71,28 @@ for genre in GENRES:
         fail(f"{genre}: SKILL.md missing")
         continue
     text = skill.read_text(encoding="utf-8")
-    if "## Standards & sources" not in text:
-        fail(f"{genre}: missing '## Standards & sources'")
+    standards_block = section(text, "Standards & Sources")
+    if standards_block is None:
+        fail(f"{genre}: missing '## Standards & Sources'")
+        standards_block = ""
     if not re.search(r"^## .*gate", text, re.M | re.I):
         fail(f"{genre}: missing a gate section")
     if "shared/method_sources.md" not in text:
         fail(f"{genre}: does not point to shared/method_sources.md")
-    if not re.search(r"\b(19|20)\d{2}\b", text.split("## Standards & sources", 1)[-1]):
+    if not re.search(r"\b(19|20)\d{2}\b", standards_block):
         fail(f"{genre}: standards section carries no publication year")
     if source_text:
-        section = text.split("## Standards & sources", 1)[-1].split("\n## ", 1)[0]
-        for doi in sorted(dois_in(section)):
+        for doi in sorted(dois_in(standards_block)):
             if doi not in source_dois:
                 fail(f"{genre}: DOI not present in method_sources.md: {doi}")
     front = text.split("---", 2)
     if len(front) >= 3 and "reporting_standard:" not in front[1]:
         fail(f"{genre}: frontmatter has no reporting_standard")
     # JEV: every genre exposes ranked decision points with a #1 recommendation
-    decisions = text.split("## Decision points (JEV)", 1)
-    if len(decisions) < 2:
-        fail(f"{genre}: missing '## Decision points (JEV)'")
+    block = section(text, "Decision Points (JEV)")
+    if block is None:
+        fail(f"{genre}: missing '## Decision Points (JEV)'")
     else:
-        block = decisions[1].split("\n## ", 1)[0]
         if "#1" not in block or "shared/jev.md" not in block:
             fail(f"{genre}: JEV decision points need a #1 option and a pointer to shared/jev.md")
     if "(recommendation-first)" in text:
@@ -119,6 +128,18 @@ for doc_page in ("SECURITY.md", "CODE_OF_CONDUCT.md", "CONTRIBUTING.md", "CITATI
 
 if not (ROOT / "examples" / "systematic-review-demo" / "run_demo.py").exists():
     fail("examples/systematic-review-demo/run_demo.py missing")
+
+# house style: Title Case headings and table headers in every hand-written doc
+sys.path.insert(0, str(ROOT / "tests"))
+from md_style import style_problems  # noqa: E402
+
+for md in sorted(ROOT.rglob("*.md")):
+    rel = md.relative_to(ROOT).as_posix()
+    generated = rel.startswith("examples/") and not rel.endswith("README.md")
+    if rel.startswith(("tests/fixtures/", ".git/", "dist/", "build/")) or generated or "/out/" in rel:
+        continue
+    for line in style_problems(md.read_text(encoding="utf-8")):
+        fail(f"{rel}: heading/table header not in Title Case: {line[:80]}")
 
 # one version everywhere: package, module, citation and changelog
 versions = {}

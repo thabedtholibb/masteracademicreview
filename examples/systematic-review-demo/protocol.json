@@ -1,6 +1,6 @@
 {
   "genre": "systematic-review",
-  "title": "Physical activity interventions for depressive symptoms in older adults: a systematic review (DEMO, synthetic data)",
+  "title": "Physical Activity Interventions For Depressive Symptoms In Older Adults: A Systematic Review (DEMO, Synthetic Data)",
   "registration_id": "",
   "authors": "Demo Author (Example University)",
   "contact": "demo author, via the repository issue tracker",
@@ -15,7 +15,11 @@
   "study_designs": "Randomised and cluster-randomised controlled trials",
   "language": "English and Indonesian",
   "date_range": "2010 to search date",
-  "databases": ["Scopus", "PubMed", "Web of Science"],
+  "databases": [
+    "Scopus",
+    "PubMed",
+    "Web of Science"
+  ],
   "grey_literature": "Reference lists of included studies; trial registers",
   "search_string": "(\"older adult*\" OR elderly OR \"aged 60\") AND (exercise OR \"physical activity\" OR walking OR \"tai chi\" OR yoga) AND (depress* OR \"low mood\")",
   "screening_reviewers": "Two independent reviewers at title/abstract and full text; pilot on 10% of records",

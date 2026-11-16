@@ -1,6 +1,6 @@
-# Panduan singkat
+# Panduan Singkat
 
-## 1. Skill mana yang saya butuhkan?
+## 1. Skill Mana Yang Saya Butuhkan?
 
 Skill `review-router` menanyakan ini untuk Anda. Pohon di bawah memakai logika
 yang sama dan diurutkan JEV: pertanyaan yang paling menentukan ada di atas.
@@ -40,7 +40,7 @@ flowchart TD
 - *Rapid vs systematic.* Rapid review adalah systematic review dengan jalan
   pintas yang **dinyatakan** di Metode dan Keterbatasan.
 
-## 2. Alur kerja systematic review (dengan alat)
+## 2. Alur Kerja Systematic Review (Dengan Alat)
 
 | # | Langkah | Perintah | Hasil |
 |---:|---|---|---|
@@ -64,7 +64,7 @@ dengan `--merge-possible`.
 atau jurnal #1 ditandai `LEGITIMACY RISK` / `SCOPE MISMATCH`. Dalam kasus
 terakhir, alat menyebutkan kandidat bersih berikutnya.
 
-## 3. Masalah umum
+## 3. Masalah Umum
 
 | Masalah | Solusi |
 |---|---|

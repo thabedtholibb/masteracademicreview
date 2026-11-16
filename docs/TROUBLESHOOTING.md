@@ -3,7 +3,7 @@
 Run commands from the **repository root**. Most problems below are Windows
 console/encoding or missing optional dependencies.
 
-## Quick self-check
+## Quick Self-Check
 
 ```bash
 python --version                       # needs 3.10 or newer
@@ -15,7 +15,7 @@ python shared/scripts/meta/selftest.py # meta-analysis engine (needs numpy + sci
 If the first two pass, the stdlib tools work. The third needs the packages in
 the next section.
 
-## `python` not found, or the wrong version (Windows)
+## `python` Not Found, Or The Wrong Version (Windows)
 
 - Try the launcher: `py -3 shared/scripts/prisma_flow.py --selftest`.
 - Check that the right interpreter is first on `PATH`: `where python`.
@@ -36,7 +36,7 @@ Only some tools need packages:
 pip install numpy scipy matplotlib python-docx reportlab
 ```
 
-## Garbled characters (mojibake) or `UnicodeEncodeError` in the console
+## Garbled Characters (Mojibake) Or `UnicodeEncodeError` In The Console
 
 Typical on Windows consoles using cp1252.
 
@@ -48,7 +48,7 @@ Typical on Windows consoles using cp1252.
   `$env:PYTHONUTF8 = "1"` (PowerShell).
 - Never save review or CSV files in a legacy code page; use UTF-8.
 
-## Scopus/Web of Science export will not parse
+## Scopus/Web Of Science Export Will Not Parse
 
 - Scopus exports are often **semicolon-separated cp1252 with a BOM**. The
   bibliometric parser detects delimiter and encoding. Check your export with
@@ -58,7 +58,7 @@ Typical on Windows consoles using cp1252.
 - Excel re-saving can break quoting; export directly from the database and do
   not edit the file.
 
-## Word/PDF export problems
+## Word/PDF Export Problems
 
 `python shared/scripts/export.py review.md` uses **Pandoc** when it is installed
 and otherwise falls back to the built-in converter.
@@ -72,14 +72,14 @@ and otherwise falls back to the built-in converter.
 - Metadata lines (`**Review type:** ...`) must end with **two spaces**; without
   them the fields merge into one paragraph. `check_review.py` warns about this.
 
-## Skill not found by the harness (Windows install)
+## Skill Not Found By The Harness (Windows Install)
 
 The installation guide uses symlinks. On Windows, creating symlinks needs
 Developer Mode (or an elevated shell). If you cannot create them, **copy** the
 whole repository folder instead and keep the internal layout (`shared/` must
 sit next to the skill folders).
 
-## `verify_refs.py --online` fails or is slow
+## `verify_refs.py --online` Fails Or Is Slow
 
 - It needs internet access and queries Crossref. Behind a proxy or offline,
   use the offline mode (the default) and verify references manually.
@@ -88,7 +88,7 @@ sit next to the skill folders).
 - `AMBIGUOUS`/`NO_MATCH` for books, reports and acronym guidelines is normal;
   verify them by hand.
 
-## `check_review.py` reports an error I do not understand
+## `check_review.py` Reports An Error I Do Not Understand
 
 | Message | Meaning |
 |---|---|
@@ -103,7 +103,7 @@ sit next to the skill folders).
 Use `--genre` if the genre is not detected from the `Review type` line, and
 `--no-artifacts` for a review whose artifacts live elsewhere.
 
-## Tests pass locally but CI fails
+## Tests Pass Locally But CI Fails
 
 CI runs on Ubuntu and Windows. A Windows-only failure is usually an encoding or
 path issue: open files with `encoding="utf-8"` and avoid hard-coded `/tmp`.

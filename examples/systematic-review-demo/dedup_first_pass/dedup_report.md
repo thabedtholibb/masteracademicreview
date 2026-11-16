@@ -1,11 +1,11 @@
-# Deduplication report
+# Deduplication Report
 
 **Records identified:** 11  
 **Duplicates removed:** 3  
 **Unique records (to screen):** 8  
 **Possible duplicates to check by hand:** 1
 
-## Records per source
+## Records Per Source
 
 | Source | Records |
 |---|---:|
@@ -13,14 +13,14 @@
 | PubMed | 4 |
 | WoS | 3 |
 
-## Removed by rule
+## Removed By Rule
 
 | Rule | Removed |
 |---|---:|
 | doi | 2 |
 | title-year | 1 |
 
-## Next steps (JEV, ranked)
+## Next Steps (JEV, Ranked)
 
 1. **#1 recommended:** Resolve `possible_duplicates.csv` by hand (highest similarity first); re-run with `--merge-possible` only if every pair is a true duplicate.
 2. Screen `deduplicated.csv`; record decisions in `screening_template.csv` (two reviewers) and run `screening_agreement.py`.

@@ -33,15 +33,13 @@ re = random_effects(effects, variances)
 ci = confidence_interval(re["effect"], re["variance"])
 egg = egger_test(effects, variances)
 
-print("Random-effects pooled Hedges' g: %.3f (95%% CI %.3f to %.3f)"
-      % (re["effect"], ci[0], ci[1]))
-print("tau^2 = %.4f | I^2 = %.1f%% | Q = %.2f (p = %.3f)"
-      % (re["tau2"], re["heterogeneity"]["I2"],
+print("Random-effects pooled Hedges' g: {:.3f} (95% CI {:.3f} to {:.3f})".format(re["effect"], ci[0], ci[1]))
+print("tau^2 = {:.4f} | I^2 = {:.1f}% | Q = {:.2f} (p = {:.3f})".format(re["tau2"], re["heterogeneity"]["I2"],
          re["heterogeneity"]["Q"], re["heterogeneity"]["p"]))
-print("Egger's test: intercept = %.3f (p = %.3f)" % (egg["intercept"], egg["p"]))
+print("Egger's test: intercept = {:.3f} (p = {:.3f})".format(egg["intercept"], egg["p"]))
 
 forest_plot(names, effects, variances, re["effect"], re["variance"],
             filename=os.path.join(out_dir, "forest.png"))
 funnel_plot(effects, variances, re["effect"],
             filename=os.path.join(out_dir, "funnel.png"))
-print("wrote %s" % out_dir)
+print(f"wrote {out_dir}")

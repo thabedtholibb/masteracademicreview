@@ -14,4 +14,5 @@
 6. Files must be UTF-8; scripts must not crash on a cp1252 console (Windows).
 7. Decisions follow JEV (`shared/jev.md`): a new decision point in a skill lists ranked options with **#1 recommended**; a new tool prints its next steps in priority order.
 8. Fixtures and examples use **synthetic or fictional data only** (DOIs with the test prefix `10.5555`), released with the code under the MIT licence. Never commit real screening data, unpublished manuscripts or personal data.
-9. Be kind: see the [Code of Conduct](CODE_OF_CONDUCT.md). Security problems go through [SECURITY.md](SECURITY.md), not public issues.
+9. House style, checked in CI: headings and table headers in Title Case (`python tests/md_style.py`, enforced by `tests/check_docs.py`); no em-dash as a sentence joiner (use a colon, a comma or a full stop); f-strings only and no unused imports (`ruff check shared/scripts tests examples`, rules in `pyproject.toml`).
+10. Be kind: see the [Code of Conduct](CODE_OF_CONDUCT.md). Security problems go through [SECURITY.md](SECURITY.md), not public issues.

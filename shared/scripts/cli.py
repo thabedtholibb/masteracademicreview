@@ -112,7 +112,7 @@ def main(argv: list[str] | None = None) -> int:
         return selftest_all()
     name = argv[0]
     if name not in COMMANDS:
-        close = difflib.get_close_matches(name, list(COMMANDS) + ["list", "selftest"], n=1)
+        close = difflib.get_close_matches(name, [*list(COMMANDS), "list", "selftest"], n=1)
         hint = f" Did you mean '{close[0]}'?" if close else " Run 'mar list'."
         print(f"mar: unknown tool '{name}'.{hint}", file=sys.stderr)
         return 2

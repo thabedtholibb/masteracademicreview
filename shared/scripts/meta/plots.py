@@ -97,7 +97,7 @@ def lfk_index(effects, variances):
     """
     from statistics import NormalDist
 
-    pairs = sorted(zip(effects, variances), key=lambda p: p[0])   # stable, like R order()
+    pairs = sorted(zip(effects, variances, strict=True), key=lambda p: p[0])   # stable, like R order()
     te = [float(e) for e, _ in pairs]
     var = [float(v) for _, v in pairs]
     k = len(te)
@@ -116,7 +116,7 @@ def lfk_index(effects, variances):
     if span_d == 0:
         lfk, label = float("nan"), "unclear (all effects equal)"
     else:
-        lfk = 5.0 / (2.0 * k) * sum(zi + span_z / span_d * di for zi, di in zip(z, d))
+        lfk = 5.0 / (2.0 * k) * sum(zi + span_z / span_d * di for zi, di in zip(z, d, strict=True))
         label = ("no asymmetry" if abs(lfk) <= 1 else
                  "minor asymmetry" if abs(lfk) <= 2 else "major asymmetry")
     return {"lfk": lfk, "interpretation": label, "effects": te, "abs_z": abs_z,
@@ -132,7 +132,7 @@ def doi_plot(effects, variances, filename="doi.png", effect_name="Effect size"):
     ax.set_ylim(max(res["abs_z"]) * 1.1 + 0.05, 0)
     ax.set_xlabel(effect_name)
     ax.set_ylabel("|Z-score|")
-    ax.set_title("LFK index %.2f (%s)" % (res["lfk"], res["interpretation"]), fontsize=10)
+    ax.set_title("LFK index {:.2f} ({})".format(res["lfk"], res["interpretation"]), fontsize=10)
     ax.spines[["top", "right"]].set_visible(False)
     fig.tight_layout()
     fig.savefig(filename, dpi=150)
@@ -172,5 +172,4 @@ def egger_test(effects, variances, min_k=10):
     return {"intercept": float(beta[0]), "se": se_intercept,
             "t": float(t_stat), "p": float(p), "adequate": ok,
             "warning": None if ok else
-            "k < %d: low power; do not interpret as evidence for or "
-            "against publication bias" % min_k}
+            f"k < {min_k:d}: low power; do not interpret as evidence for or against publication bias"}

@@ -1,4 +1,4 @@
-"""Convert a Markdown document to Word (.docx) and PDF — no Pandoc needed.
+"""Convert a Markdown document to Word (.docx) and PDF (no Pandoc needed).
 
 Uses python-docx (Word) and reportlab (PDF). Handles the Markdown subset the
 guides use: headings (#..######), paragraphs, bullet/numbered lists, tables,
@@ -137,11 +137,11 @@ def inline_to_rl(text):
     for style, t in inline_runs(text):
         t = _escape_xml(t)
         if style == "bold":
-            parts.append("<b>%s</b>" % t)
+            parts.append(f"<b>{t}</b>")
         elif style == "italic":
-            parts.append("<i>%s</i>" % t)
+            parts.append(f"<i>{t}</i>")
         elif style == "code":
-            parts.append('<font face="Courier">%s</font>' % t)
+            parts.append(f'<font face="Courier">{t}</font>')
         else:
             parts.append(t)
     return "".join(parts).replace("\n", "<br/>")
@@ -163,7 +163,7 @@ def _parse_table(tbl_lines):
 
 def to_docx(blocks, out_path):
     from docx import Document
-    from docx.shared import Pt, RGBColor
+    from docx.shared import Pt
 
     doc = Document()
     for typ, payload in blocks:
@@ -257,11 +257,11 @@ def to_pdf(blocks, out_path):
                 story.append(Paragraph(inline_to_rl(item), bullet, bulletText="\u2022"))
         elif typ == "ol":
             for idx, item in enumerate(payload, 1):
-                story.append(Paragraph(inline_to_rl(item), bullet, bulletText="%d." % idx))
+                story.append(Paragraph(inline_to_rl(item), bullet, bulletText=f"{idx:d}."))
         elif typ == "table":
             header, data = _parse_table(payload)
             if header:
-                tbl = Table([header] + data, repeatRows=1)
+                tbl = Table([header, *data], repeatRows=1)
                 tbl.setStyle(TableStyle([
                     ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#eef3f7")),
                     ("GRID", (0, 0), (-1, -1), 0.5, colors.HexColor("#999999")),

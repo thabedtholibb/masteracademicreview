@@ -1,8 +1,8 @@
 # Installation
 
-masteracademicreview is a portable directory of `SKILL.md` skills plus a shared library (`shared/`) and Python scripts. Install the **whole repo as one unit** and keep the internal layout intact — skills resolve the shared library and scripts relative to the repo root.
+masteracademicreview is a portable directory of `SKILL.md` skills plus a shared library (`shared/`) and Python scripts. Install the **whole repo as one unit** and keep the internal layout intact: skills resolve the shared library and scripts relative to the repo root.
 
-## Layout contract
+## Layout Contract
 
 ```
 masteracademicreview/
@@ -32,10 +32,10 @@ masteracademicreview/
 ```
 
 - Each top-level `*/SKILL.md` is **one skill**; its ID equals its directory name.
-- `shared/` is the shared library. Skills refer to it as `../shared/…` (one level up). Nothing inside `shared/` is a skill — harnesses ignore it because it has no `SKILL.md`.
+- `shared/` is the shared library. Skills refer to it as `../shared/…` (one level up). Nothing inside `shared/` is a skill: harnesses ignore it because it has no `SKILL.md`.
 - Python scripts run from the repo root, e.g. `python shared/scripts/meta/example.py`.
 
-## The tools only (pip)
+## The Tools Only (Pip)
 
 If you only need the deterministic tools (deduplication, PRISMA, kappa, reference checks, the gate, protocols, journal ranking, letters), install the package; no clone needed:
 
@@ -99,7 +99,7 @@ Register the repo root as a skills source. In your project's `opencode.jsonc` (o
 }
 ```
 
-OpenCode recursively discovers each `*/SKILL.md` and assigns the ID from the directory name — `brainstorm`, `journal-match`, `review-router`, and all thirteen genres. `shared/` is skipped (no `SKILL.md`).
+OpenCode recursively discovers each `*/SKILL.md` and assigns the ID from the directory name: `brainstorm`, `journal-match`, `review-router`, and all thirteen genres. `shared/` is skipped (no `SKILL.md`).
 
 **Global alternative:** clone into `~/.config/opencode/skills/masteracademicreview` and it is discovered automatically.
 
@@ -107,19 +107,19 @@ OpenCode recursively discovers each `*/SKILL.md` and assigns the ID from the dir
 
 ---
 
-## Other harnesses / generic
+## Other Harnesses / Generic
 
 Copy or symlink the skill directories and `shared/` into whichever skills directory your harness scans, keeping them as **siblings** so `../shared/` resolves. The skills use only `name` + `description` frontmatter, which is the common denominator across Claude Code, OpenCode, and similar harnesses.
 
 ---
 
-## Invoking a skill
+## Invoking A Skill
 
 Once installed, start a session any of three ways:
 
-1. **Auto (default)** — just describe what you want (*"Saya mau meta-analysis dari data ini"*); the skill whose `description` matches loads itself.
-2. **`@skill-id` (OpenCode)** — `@brainstorm`, `@review-router`, `@journal-match`, `@meta-analysis`, `@book-review`, etc. The ID is the skill's directory name.
-3. **`/command` (Claude Code)** — copy the bundled commands into `.claude/commands/`:
+1. **Auto (default):** just describe what you want (*"Saya mau meta-analysis dari data ini"*); the skill whose `description` matches loads itself.
+2. **`@skill-id` (OpenCode):** `@brainstorm`, `@review-router`, `@journal-match`, `@meta-analysis`, `@book-review`, etc. The ID is the skill's directory name.
+3. **`/command` (Claude Code):** copy the bundled commands into `.claude/commands/`:
 
 ```bash
 mkdir -p .claude/commands

@@ -12,14 +12,26 @@ from scipy.optimize import brentq
 from scipy.stats import chi2, norm, t as tdist
 
 
+def check_inputs(effects, variances):
+    """Fail early with a readable message instead of a silent wrong result."""
+    if len(effects) != len(variances):
+        raise ValueError(f"effects and variances differ in length ({len(effects)} vs {len(variances)})")
+    if not effects:
+        raise ValueError("no studies to pool")
+    bad = [i + 1 for i, v in enumerate(variances) if not v > 0]
+    if bad:
+        raise ValueError(f"variances must be positive; check study {', '.join(map(str, bad))}")
+
+
 def inverse_variance(effects, variances):
     """Fixed-effect (inverse-variance) pooling.
 
     Returns ``(pooled_effect, pooled_variance, weights)``.
     """
+    check_inputs(effects, variances)
     weights = [1 / v for v in variances]
     total = sum(weights)
-    pooled = sum(w * y for w, y in zip(weights, effects)) / total
+    pooled = sum(w * y for w, y in zip(weights, effects, strict=True)) / total
     var = 1 / total
     return pooled, var, weights
 
@@ -35,8 +47,8 @@ def heterogeneity(effects, variances, weights=None):
     if k < 2:
         return {"Q": 0.0, "df": 0, "p": 1.0, "I2": 0.0}
     total = sum(weights)
-    fe = sum(w * y for w, y in zip(weights, effects)) / total
-    q = sum(w * (y - fe) ** 2 for w, y in zip(weights, effects))
+    fe = sum(w * y for w, y in zip(weights, effects, strict=True)) / total
+    q = sum(w * (y - fe) ** 2 for w, y in zip(weights, effects, strict=True))
     df = k - 1
     p = chi2.sf(q, df)
     i2 = max(0.0, (q - df) / q) * 100 if q > 0 else 0.0
@@ -53,8 +65,8 @@ def _tau2_dl(effects, variances):
 
 def _q_gen(tau2, effects, variances):
     w = [1 / (v + tau2) for v in variances]
-    mu = sum(wi * y for wi, y in zip(w, effects)) / sum(w)
-    return sum(wi * (y - mu) ** 2 for wi, y in zip(w, effects))
+    mu = sum(wi * y for wi, y in zip(w, effects, strict=True)) / sum(w)
+    return sum(wi * (y - mu) ** 2 for wi, y in zip(w, effects, strict=True))
 
 
 def _tau2_pm(effects, variances):
@@ -73,9 +85,9 @@ def _tau2_reml(effects, variances, tol=1e-10, max_iter=1000):
     for _ in range(max_iter):
         w = [1 / (v + tau2) for v in variances]
         sw = sum(w)
-        mu = sum(wi * y for wi, y in zip(w, effects)) / sw
+        mu = sum(wi * y for wi, y in zip(w, effects, strict=True)) / sw
         num = sum(wi ** 2 * ((y - mu) ** 2 - v)
-                  for wi, y, v in zip(w, effects, variances))
+                  for wi, y, v in zip(w, effects, variances, strict=True))
         num += sum(wi ** 2 for wi in w) / sw  # REML correction
         new = max(0.0, num / sum(wi ** 2 for wi in w))
         if abs(new - tau2) < tol:
@@ -101,16 +113,17 @@ def random_effects(effects, variances, method="dl", hksj=False,
     heterogeneity stats and ``ci`` (low, high) for the requested level.
     """
     if method not in TAU2_METHODS:
-        raise ValueError("method must be one of %s" % sorted(TAU2_METHODS))
+        raise ValueError(f"method must be one of {sorted(TAU2_METHODS)}")
+    check_inputs(effects, variances)
     k = len(effects)
     het = heterogeneity(effects, variances)
     tau2 = TAU2_METHODS[method](effects, variances)
     w2 = [1 / (v + tau2) for v in variances]
     total_w2 = sum(w2)
-    re = sum(wi * yi for wi, yi in zip(w2, effects)) / total_w2
+    re = sum(wi * yi for wi, yi in zip(w2, effects, strict=True)) / total_w2
     re_var = 1 / total_w2
     if hksj and k > 1:
-        q = sum(wi * (y - re) ** 2 for wi, y in zip(w2, effects)) / (k - 1)
+        q = sum(wi * (y - re) ** 2 for wi, y in zip(w2, effects, strict=True)) / (k - 1)
         re_var = max(1.0, q) * re_var
         crit = tdist.ppf(1 - (1 - level) / 2, k - 1)
     else:
@@ -150,7 +163,7 @@ def leave_one_out(effects, variances, names=None, **kwargs):
     """
     effects, variances = list(effects), list(variances)
     k = len(effects)
-    names = names or ["study %d" % (i + 1) for i in range(k)]
+    names = names or [f"study {i + 1:d}" for i in range(k)]
     out = []
     for i in range(k):
         r = random_effects(effects[:i] + effects[i + 1:],
@@ -179,8 +192,8 @@ def subgroup_analysis(effects, variances, groups, **kwargs):
     if len(labels) > 1:
         est = [res[g]["effect"] for g in labels]
         w = [1 / res[g]["variance"] for g in labels]
-        mu = sum(a * b for a, b in zip(w, est)) / sum(w)
-        qb = sum(a * (b - mu) ** 2 for a, b in zip(w, est))
+        mu = sum(a * b for a, b in zip(w, est, strict=True)) / sum(w)
+        qb = sum(a * (b - mu) ** 2 for a, b in zip(w, est, strict=True))
         df = len(labels) - 1
         between = {"Q": qb, "df": df, "p": float(chi2.sf(qb, df))}
     else:

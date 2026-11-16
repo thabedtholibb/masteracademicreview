@@ -1,15 +1,15 @@
-# Screening (shared core)
+# Screening (Shared Core)
 
 Use for `systematic-review` and `meta-analysis`; adapted for any review with inclusion/exclusion. Screening is the reproducible filter that turns raw search results into the final included set. Every decision must be traceable.
 
-## 1. Freeze eligibility criteria before screening
+## 1. Freeze Eligibility Criteria Before Screening
 
 Write inclusion and exclusion criteria explicitly, tied to the PICO/PICo frame. Each criterion must be a **yes/no** question answerable from the record. Vague criteria ("recent studies") are not allowed; replace with operational ones ("published 2015–2026").
 
-## 2. Two stages
+## 2. Two Stages
 
-1. **Title/abstract screening** — exclude records clearly ineligible on title/abstract alone.
-2. **Full-text screening** — retrieve remaining records and assess against full criteria.
+1. **Title/abstract screening:** exclude records clearly ineligible on title/abstract alone.
+2. **Full-text screening:** retrieve remaining records and assess against full criteria.
 
 At full-text stage, **every excluded study must carry an exclusion reason**. Use an ordered reason list so a study excluded for multiple reasons gets exactly one primary reason:
 
@@ -24,10 +24,10 @@ At full-text stage, **every excluded study must carry an exclusion reason**. Use
 9. Language
 10. Other (specify)
 
-## 3. Dual screening (required for systematic/meta)
+## 3. Dual Screening (Required For Systematic/Meta)
 
 - Two reviewers screen independently; conflicts resolved by discussion or a third reviewer.
-- Do **not** silently default to "include on conflict" — adjudicate each conflict.
+- Do **not** silently default to "include on conflict": adjudicate each conflict.
 - Record inter-rater agreement at every dual-screened stage: Cohen's κ with **PABAK** (κ is unstable when one decision dominates). Compute both from the log:
 
   ```
@@ -37,7 +37,7 @@ At full-text stage, **every excluded study must carry an exclusion reason**. Use
   Use the wide form (`reviewer1,reviewer2` columns) when the log is already pivoted. A κ below the protocol threshold means the criteria need re-calibration and a re-screen, not a lower threshold.
 - Report agreement per stage, not only overall: title/abstract and full-text agreement can differ.
 
-## 4. Track the flow (PRISMA)
+## 4. Track The Flow (PRISMA)
 
 For each stage, record the running counts that feed `shared/scripts/prisma_flow.py`:
 
@@ -58,5 +58,5 @@ Produce a screening log (CSV or table) with one row per record: `record_id | tit
 ## Guardrails
 
 - Never invent records or counts. If a stage's count is unknown, mark it `pending`, do not estimate.
-- A study that fails one criterion is excluded once, with its primary reason — do not double-count.
+- A study that fails one criterion is excluded once, with its primary reason: do not double-count.
 - Screening decisions are the author's (and any second reviewer's), not yours alone; you record and reconcile, you do not unilaterally decide for a systematic review.

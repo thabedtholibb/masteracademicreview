@@ -1,4 +1,4 @@
-# End-to-end demo: a systematic review, from database exports to cover letter
+# End-To-End Demo: A Systematic Review, From Database Exports To Cover Letter
 
 > **All data here are synthetic.** Every study, author, journal and DOI is
 > fictional (DOIs use the test prefix `10.5555`). The demo shows how the tools
@@ -14,7 +14,7 @@ python examples/systematic-review-demo/run_demo.py
 Twelve real tool calls run in order and the demo stops at the first failure.
 CI runs it on every push, so the example cannot silently go stale.
 
-## The pipeline
+## The Pipeline
 
 | Step | Tool | Input | Output |
 |---|---|---|---|
@@ -31,7 +31,7 @@ CI runs it on every push, so the example cannot silently go stale.
 | 11a | `submission.py cover-letter` | `review.md` + shortlist + gate report | `cover_letter.md` for the #1 journal |
 | 11b | `submission.py response` | `reviewer_comments.txt` | `response_to_reviewers.md` (ranked revision plan) |
 
-## What to look at
+## What To Look At
 
 - **JEV in dedup.** Certain duplicates (same DOI; same title and year) are
   removed automatically. The near-identical pair "Group dance *classes*" /

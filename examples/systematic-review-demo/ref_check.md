@@ -1,4 +1,4 @@
-# Reference integrity report
+# Reference Integrity Report
 
 **Source:** `review.md`  
 **Mode:** offline (deterministic, no network)  

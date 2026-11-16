@@ -665,7 +665,7 @@ def verify_one(ref: Reference, mailto: str | None) -> dict:
                 "similarity": 0.0,
                 "note": f"HTTP {exc.code}",
             }
-        except Exception as exc:  # noqa: BLE001
+        except Exception as exc:
             return {
                 "index": ref.index,
                 "status": "ERROR",
@@ -705,7 +705,7 @@ def verify_one(ref: Reference, mailto: str | None) -> dict:
         params["mailto"] = mailto
     try:
         data = http_json("https://api.crossref.org/works?" + urllib.parse.urlencode(params))
-    except Exception as exc:  # noqa: BLE001
+    except Exception as exc:
         return {
             "index": ref.index,
             "status": "ERROR",
@@ -786,7 +786,7 @@ def check_online(
 
 def render_offline(result: OfflineResult, source: str) -> str:
     lines = [
-        "# Reference integrity report",
+        "# Reference Integrity Report",
         "",
         f"**Source:** `{source}`  ",
         "**Mode:** offline (deterministic, no network)  ",
@@ -828,7 +828,7 @@ def render_online(results: list[dict], refs: list[Reference], source: str) -> st
     summary = " - ".join(f"{status}: {count}" for status, count in sorted(counts.items()))
 
     lines = [
-        "# Reference integrity report (Crossref)",
+        "# Reference Integrity Report (Crossref)",
         "",
         f"**Source:** `{source}`  ",
         f"**Mode:** online (Crossref, checked {date.today().isoformat()})  ",
@@ -836,7 +836,7 @@ def render_online(results: list[dict], refs: list[Reference], source: str) -> st
         f"**Summary:** {summary or 'none'}  ",
         f"**Errors:** {errors} · **Warnings:** {warnings}",
         "",
-        "| # | Status | Similarity | Crossref record | DOI |",
+        "| # | Status | Similarity | Crossref Record | DOI |",
         "|---|---|---:|---|---|",
     ]
     by_index = {ref.index: ref for ref in refs}

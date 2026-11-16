@@ -2,6 +2,15 @@
 
 Format: [Keep a Changelog](https://keepachangelog.com). Versioning: SemVer.
 
+## [Unreleased]
+### Changed
+- House style: Title Case headings and table headers across all docs, skills and generated reports, enforced by `tests/check_docs.py`; em-dashes used as sentence joiners replaced (385 to 0 outside tables, code blocks and quoted titles).
+- Code: one formatting idiom (f-strings), unused imports removed, `ruff` lint job in CI.
+- Meta-analysis engine fails early with a readable message when effects and variances differ in length or a variance is not positive (previously `zip` could silently truncate).
+
+### Fixed
+- `journal_rank.py` selftest was no longer run by `tests/run_tool_tests.py`; it is again.
+
 ## [0.1.0] - 2026-11-16
 ### Added
 - `dedup.py`: deduplicate RIS/CSV/BibTeX exports from several databases (DOI, then title + year; fuzzy near-matches only recommended), with a removal log, PRISMA identification counts and a screening template.

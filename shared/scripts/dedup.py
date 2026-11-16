@@ -50,6 +50,7 @@ import sys
 import tempfile
 import unicodedata
 from pathlib import Path
+import contextlib
 
 HERE = Path(__file__).resolve().parent
 FIELDS = ("title", "authors", "year", "journal", "doi", "document_type")
@@ -378,17 +379,17 @@ def prisma_identification(result: dict) -> dict:
 def report(result: dict) -> str:
     removed = result["total_in"] - result["total_out"]
     lines = [
-        "# Deduplication report", "",
-        "**Records identified:** %d  " % result["total_in"],
-        "**Duplicates removed:** %d  " % removed,
-        "**Unique records (to screen):** %d  " % result["total_out"],
-        "**Possible duplicates to check by hand:** %d" % len(result["possible"]), "",
-        "## Records per source", "", "| Source | Records |", "|---|---:|",
+        "# Deduplication Report", "",
+        f'**Records identified:** {result["total_in"]:d}  ',
+        f"**Duplicates removed:** {removed:d}  ",
+        f'**Unique records (to screen):** {result["total_out"]:d}  ',
+        f'**Possible duplicates to check by hand:** {len(result["possible"]):d}', "",
+        "## Records Per Source", "", "| Source | Records |", "|---|---:|",
     ]
-    lines += ["| %s | %d |" % (s, c) for s, c in result["per_source"]]
-    lines += ["", "## Removed by rule", "", "| Rule | Removed |", "|---|---:|"]
-    lines += ["| %s | %d |" % (r, c) for r, c in sorted(result["by_rule"].items())] or ["| — | 0 |"]
-    lines += ["", "## Next steps (JEV, ranked)", ""]
+    lines += [f"| {s} | {c:d} |" for s, c in result["per_source"]]
+    lines += ["", "## Removed By Rule", "", "| Rule | Removed |", "|---|---:|"]
+    lines += [f"| {r} | {c:d} |" for r, c in sorted(result["by_rule"].items())] or ["| none | 0 |"]
+    lines += ["", "## Next Steps (JEV, Ranked)", ""]
     steps = []
     if result["possible"]:
         steps.append("Resolve `possible_duplicates.csv` by hand (highest similarity first); "
@@ -398,7 +399,7 @@ def report(result: dict) -> str:
     steps.append("Merge `prisma_identification.json` with your screening counts and run "
                  "`prisma_flow.py prisma_identification.json screening_counts.json`.")
     steps.append("Report the deduplication method (this tool, rules, threshold) in Methods.")
-    lines += ["%d. %s%s" % (i, "**#1 recommended:** " if i == 1 else "", s)
+    lines += [f'{i:d}. {"**#1 recommended:** " if i == 1 else ""}{s}'
               for i, s in enumerate(steps, 1)]
     lines.append("")
     return "\n".join(lines)
@@ -485,10 +486,8 @@ def _parse_sources(items: list[str], positional: list[str]) -> list[tuple[str, P
 
 def main(argv: list[str] | None = None) -> int:
     for stream in (sys.stdout, sys.stderr):
-        try:
+        with contextlib.suppress(AttributeError, ValueError):
             stream.reconfigure(encoding="utf-8", errors="replace")
-        except (AttributeError, ValueError):
-            pass
     p = argparse.ArgumentParser(description="Deduplicate RIS/CSV/BibTeX exports from several databases.")
     p.add_argument("files", nargs="*", help="export files (source name = file name)")
     p.add_argument("--source", action="append", default=[], metavar="NAME=FILE",

@@ -50,6 +50,7 @@ import json
 import sys
 import textwrap
 import xml.etree.ElementTree as ET
+import itertools
 
 WIDTH = 1120
 PHASE_X, PHASE_W = 10, 112
@@ -167,7 +168,7 @@ def render_prisma(d, out_path, variant="systematic"):
         included         : int
     """
     if variant not in VARIANTS:
-        raise ValueError("variant must be one of %s" % ", ".join(VARIANTS))
+        raise ValueError("variant must be one of {}".format(", ".join(VARIANTS)))
     L = LABELS[variant]
     db = list(d["database_records"])
     n_db = sum(c for _, c in db)
@@ -333,7 +334,7 @@ def validate_svg(path, variant="systematic"):
     try:
         root = ET.parse(path).getroot()
     except (ET.ParseError, OSError) as exc:
-        return ["not a readable SVG: %s" % exc]
+        return [f"not a readable SVG: {exc}"]
     if root.tag != SVG_NS + "svg":
         return ["root element is not <svg>"]
     vb = [float(v) for v in root.get("viewBox", "0 0 0 0").split()]
@@ -348,15 +349,15 @@ def validate_svg(path, variant="systematic"):
         elif r.get("x") is not None:
             bands.append(r)
     if len(bands) != 3:
-        problems.append("expected 3 phase bands, found %d" % len(bands))
+        problems.append(f"expected 3 phase bands, found {len(bands):d}")
     for x, y, bw, bh in boxes:
         if x < 0 or y < 0 or x + bw > w or y + bh > h:
-            problems.append("box at (%g,%g) lies outside the canvas" % (x, y))
+            problems.append(f"box at ({x:g},{y:g}) lies outside the canvas")
     for i, a in enumerate(boxes):
         for b in boxes[i + 1:]:
             if (a[0] < b[0] + b[2] and b[0] < a[0] + a[2]
                     and a[1] < b[1] + b[3] and b[1] < a[1] + a[3]):
-                problems.append("boxes overlap at (%g,%g) and (%g,%g)" % (a[0], a[1], b[0], b[1]))
+                problems.append(f"boxes overlap at ({a[0]:g},{a[1]:g}) and ({b[0]:g},{b[1]:g})")
 
     texts = []
     for t in root.iter(SVG_NS + "text"):
@@ -368,21 +369,20 @@ def validate_svg(path, variant="systematic"):
         texts.append(content)
         host = [b for b in boxes if b[0] <= x <= b[0] + b[2] and b[1] <= y <= b[1] + b[3]]
         if not host:
-            problems.append("text %r is not inside any box" % content[:40])
+            problems.append(f"text {content[:40]!r} is not inside any box")
         elif x + len(content) * size * 0.6 > host[0][0] + host[0][2] + 4:
-            problems.append("text %r overflows its box" % content[:40])
+            problems.append(f"text {content[:40]!r} overflows its box")
 
     main_x = min(b[0] for b in boxes) if boxes else 0
     col = sorted(b[1] for b in boxes if b[0] == main_x)
-    if any(b2 <= b1 for b1, b2 in zip(col, col[1:])):
+    if any(b2 <= b1 for b1, b2 in itertools.pairwise(col)):
         problems.append("main column boxes are not ordered top to bottom")
     arrows = sum(1 for ln in root.iter(SVG_NS + "line") if ln.get("marker-end"))
     if arrows != EXPECTED_ARROWS[variant]:
-        problems.append("expected %d arrows for %s, found %d"
-                        % (EXPECTED_ARROWS[variant], variant, arrows))
+        problems.append(f"expected {EXPECTED_ARROWS[variant]:d} arrows for {variant}, found {arrows:d}")
     for needle in REQUIRED_TEXT[variant]:
         if not any(needle in t for t in texts):
-            problems.append("missing label %r" % needle)
+            problems.append(f"missing label {needle!r}")
     return problems
 
 
@@ -427,7 +427,7 @@ def _selftest():
             pass
         else:
             raise AssertionError("unknown variant must raise")
-    print("prisma_flow selftest OK (%s)" % ", ".join(VARIANTS))
+    print("prisma_flow selftest OK ({})".format(", ".join(VARIANTS)))
 
 
 def check_counts(d):
@@ -448,16 +448,14 @@ def check_counts(d):
     if removed is not None and num("after_dedup") is not None:
         removed_n = sum(int(c) for _, c in removed)
         if identified - removed_n != num("after_dedup"):
-            problems.append("identified (%d) - removed before screening (%d) != after_dedup (%d)"
-                            % (identified, removed_n, num("after_dedup")))
+            problems.append(f'identified ({identified:d}) - removed before screening ({removed_n:d}) != after_dedup ({num("after_dedup"):d})')
     if num("after_dedup") is not None and num("screened") is not None:
         expected = num("after_dedup") - int(d.get("automation_removed", 0) or 0) \
             - int(d.get("other_removed", 0) or 0)
         if removed is None and num("screened") != expected:
-            problems.append("screened (%d) != after_dedup minus other removals (%d)"
-                            % (num("screened"), expected))
+            problems.append(f'screened ({num("screened"):d}) != after_dedup minus other removals ({expected:d})')
         if removed is not None and num("screened") != num("after_dedup"):
-            problems.append("screened (%d) != after_dedup (%d)" % (num("screened"), num("after_dedup")))
+            problems.append(f'screened ({num("screened"):d}) != after_dedup ({num("after_dedup"):d})')
     checks = [
         ("screened", ["excluded_title_abstract", "sought_retrieval"]),
         ("sought_retrieval", ["not_retrieved", "assessed"]),
@@ -465,13 +463,11 @@ def check_counts(d):
     for total, parts in checks:
         if num(total) is not None and all(num(p) is not None for p in parts):
             if num(total) != sum(num(p) for p in parts):
-                problems.append("%s (%d) != %s (%d)" % (
-                    total, num(total), " + ".join(parts), sum(num(p) for p in parts)))
+                problems.append(f'{total} ({num(total):d}) != {" + ".join(parts)} ({sum(num(p) for p in parts):d})')
     if num("assessed") is not None and num("included") is not None:
         excl = sum(int(c) for _, c in d.get("excluded_fulltext", []) or [])
         if num("assessed") != excl + num("included"):
-            problems.append("assessed (%d) != excluded at full text (%d) + included (%d)"
-                            % (num("assessed"), excl, num("included")))
+            problems.append(f'assessed ({num("assessed"):d}) != excluded at full text ({excl:d}) + included ({num("included"):d})')
     return problems
 
 
@@ -507,17 +503,14 @@ def main(argv=None):
         problems = validate_svg(a.validate, a.variant)
         for problem in problems:
             print("FAIL: " + problem)
-        print("RESULT: %s" % ("FAIL" if problems else "PASS"))
+        print(f'RESULT: {"FAIL" if problems else "PASS"}')
         return 1 if problems else 0
-    if a.input:
-        data = load_counts(a.input)
-    else:
-        data = dict(_SAMPLE, previous_studies=7)
+    data = load_counts(a.input) if a.input else dict(_SAMPLE, previous_studies=7)
     problems = check_counts(data)
     for problem in problems:
         print("WARNING: counts do not add up: " + problem)
     render_prisma(data, a.out, a.variant)
-    print("wrote %s" % a.out)
+    print(f"wrote {a.out}")
     return 1 if (a.strict and problems) else 0
 
 

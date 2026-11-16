@@ -7,6 +7,21 @@ on:
   workflow_dispatch:
 
 jobs:
+  # Code style: one formatting idiom (f-strings), no unused imports or dead branches.
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+      - name: Ruff (rules in pyproject.toml)
+        run: |
+          pip install ruff==0.8.6
+          ruff check shared/scripts tests examples
+      - name: Markdown house style (Title Case headings)
+        run: python tests/md_style.py
+
   # Stdlib tools, the end-to-end demo and the docs, on every supported Python, on Linux and Windows.
   tools:
     name: tools (${{ matrix.os }}, py${{ matrix.python-version }})

@@ -23,8 +23,8 @@ from meta import lfk_index  # noqa: E402
 TOL = 1e-8
 
 
-def python_values() -> "OrderedDict[str, float]":
-    data: "OrderedDict[str, tuple[list[float], list[float]]]" = OrderedDict()
+def python_values() -> OrderedDict[str, float]:
+    data: OrderedDict[str, tuple[list[float], list[float]]] = OrderedDict()
     with (ROOT / "tests" / "fixtures" / "lfk_crosscheck.csv").open(encoding="utf-8") as f:
         for row in csv.DictReader(f):
             te, var = data.setdefault(row["dataset"], ([], []))

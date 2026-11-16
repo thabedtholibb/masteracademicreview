@@ -1,10 +1,10 @@
-# Which skill do I need?
+# Which Skill Do I Need?
 
 The `review-router` skill asks these questions for you. This page is the same
 logic on one screen, so you can pick a genre yourself (or sanity-check the
 router's #1 recommendation).
 
-## Decision tree
+## Decision Tree
 
 ```mermaid
 flowchart TD
@@ -31,9 +31,9 @@ flowchart TD
     I -- what works for whom, and why --> RE[realist-review]
 ```
 
-## Same logic as a table
+## Same Logic As A Table
 
-| If you need to… | Use |
+| If You Need To… | Use |
 |---|---|
 | evaluate one book | `book-review` |
 | map a field from a Scopus/WoS export (trends, co-occurrence) | `bibliometric-review` |
@@ -51,7 +51,7 @@ flowchart TD
 | find the right journal (before or after drafting) | `journal-match` |
 | turn a vague topic into a question + keywords | `brainstorm` |
 
-## Common confusions
+## Common Confusions
 
 - **Systematic review vs meta-analysis.** A meta-analysis *is* a systematic
   review plus statistical pooling. If you cannot extract comparable effect
@@ -72,7 +72,7 @@ flowchart TD
 If your request fits none of the thirteen genres (a new experiment, a grant
 proposal, a full paper), this suite is not the right tool.
 
-## What to run next
+## What To Run Next
 
 1. `review-router` (or this tree) picks the genre.
 2. For registrable genres, write the protocol: `python shared/scripts/protocol.py --template <genre>`.

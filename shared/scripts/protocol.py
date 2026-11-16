@@ -22,6 +22,7 @@ import json
 import sys
 from datetime import date
 from pathlib import Path
+import contextlib
 
 PICO = [("population", "Population"), ("intervention", "Intervention / exposure"),
         ("comparator", "Comparator"), ("outcomes", "Outcomes (primary / secondary)")]
@@ -121,15 +122,14 @@ def _val(data: dict, key: str, missing: list[str]) -> str:
     v = str(v).strip()
     if not v:
         missing.append(key)
-        return "[TO COMPLETE: %s]" % key
+        return f"[TO COMPLETE: {key}]"
     return v
 
 
 def render(data: dict) -> tuple[str, list[str]]:
     genre = data.get("genre", "")
     if genre not in GENRES:
-        raise ValueError("unknown or non-registrable genre %r; choose from: %s"
-                         % (genre, ", ".join(GENRES)))
+        raise ValueError("unknown or non-registrable genre {!r}; choose from: {}".format(genre, ", ".join(GENRES)))
     spec = GENRES[genre]
     missing: list[str] = []
     labels = dict(COMMON)
@@ -137,38 +137,38 @@ def render(data: dict) -> tuple[str, list[str]]:
     labels.update(dict(spec["extra"]))
 
     def row(key: str) -> str:
-        return "**%s:** %s  " % (labels[key], _val(data, key, missing))
+        return f"**{labels[key]}:** {_val(data, key, missing)}  "
 
     title = _val(data, "title", missing)
     reg = str(data.get("registration_id", "")).strip() or "[not yet registered]"
     out = [
-        "# Protocol: %s" % title, "",
-        "**Review type:** %s protocol  " % genre.replace("-", " "),
-        "**Reporting standard:** %s  " % spec["standard"],
-        "**Planned registry:** %s  " % spec["registry"],
-        "**Registration ID:** %s  " % reg,
-        "**Protocol date:** %s" % date.today().isoformat(), "",
+        f"# Protocol: {title}", "",
+        "**Review type:** {} protocol  ".format(genre.replace("-", " ")),
+        "**Reporting standard:** {}  ".format(spec["standard"]),
+        "**Planned registry:** {}  ".format(spec["registry"]),
+        f"**Registration ID:** {reg}  ",
+        f"**Protocol date:** {date.today().isoformat()}", "",
         "---", "",
-        "## 1. Administrative information", "",
+        "## 1. Administrative Information", "",
         row("authors"), row("contact"), row("funding"), row("coi"), "",
         "## 2. Introduction", "", row("rationale"), "", row("question"), "",
-        "## 3. Eligibility criteria", "",
+        "## 3. Eligibility Criteria", "",
     ]
     out += [row(k) for k, _ in spec["framework"]]
     out += ["", row("study_designs"), row("language"), row("date_range"), "",
-            "## 4. Information sources and search", "",
+            "## 4. Information Sources And Search", "",
             row("databases"), row("grey_literature"), "",
             "Search string (one database; peer-review it, e.g. PRESS):", "",
             "```", _val(data, "search_string", missing), "```", "",
-            "## 5. Study selection", "", row("screening_reviewers"), row("disagreement"), "",
+            "## 5. Study Selection", "", row("screening_reviewers"), row("disagreement"), "",
             "Agreement will be reported with `shared/scripts/screening_agreement.py` (Cohen's kappa / PABAK).", "",
-            "## 6. Data collection", "", row("extraction_items"), row("missing_data"), "",
+            "## 6. Data Collection", "", row("extraction_items"), row("missing_data"), "",
             "Extraction tables will be checked with `shared/scripts/validate_extraction.py`.", "",
-            "## 7. Appraisal and synthesis", ""]
+            "## 7. Appraisal And Synthesis", ""]
     out += [row(k) for k, _ in spec["extra"]]
     out += ["", row("synthesis_plan"), row("certainty_plan"), "",
             "## 8. Timeline", "", row("timeline"), "",
-            "## 9. Amendments log", "",
+            "## 9. Amendments Log", "",
             "Any change after registration is recorded here with its date and reason, "
             "and reported in the final review.", "",
             "| Date | Section | Change | Reason |", "|---|---|---|---|",
@@ -178,7 +178,7 @@ def render(data: dict) -> tuple[str, list[str]]:
             "review and meta-analysis protocols (PRISMA-P) 2015 statement. *Syst Rev*. 2015;4:1. "
             "doi:10.1186/2046-4053-4-1", ""]
     if missing:
-        out += ["---", "", "**Open fields (%d):** %s" % (len(set(missing)), ", ".join(dict.fromkeys(missing))), ""]
+        out += ["---", "", f'**Open fields ({len(set(missing)):d}):** {", ".join(dict.fromkeys(missing))}', ""]
     return "\n".join(out), list(dict.fromkeys(missing))
 
 
@@ -188,7 +188,7 @@ def selftest() -> None:
         text, miss = render(t)
         assert "[TO COMPLETE: title]" in text and "title" in miss, g
         assert "Open fields" in text
-        assert "**Review type:**" in text and "## 9. Amendments log" in text
+        assert "**Review type:**" in text and "## 9. Amendments Log" in text
     t = template("meta-analysis")
     assert "effect_measure" in t and "model" in t
     t.update({"title": "X", "question": "Does A improve B?", "databases": ["Scopus", "PubMed"]})
@@ -200,15 +200,13 @@ def selftest() -> None:
         pass
     else:
         raise AssertionError("non-registrable genre must be rejected")
-    print("protocol selftest OK (%d genres)" % len(GENRES))
+    print(f"protocol selftest OK ({len(GENRES):d} genres)")
 
 
 def main(argv: list[str] | None = None) -> int:
     for stream in (sys.stdout, sys.stderr):
-        try:
+        with contextlib.suppress(AttributeError, ValueError):
             stream.reconfigure(encoding="utf-8", errors="replace")
-        except (AttributeError, ValueError):
-            pass
     p = argparse.ArgumentParser(description="Generate protocol.md for a review genre.")
     p.add_argument("input", nargs="?", help="protocol.json")
     p.add_argument("--template", choices=sorted(GENRES), help="print an empty JSON for this genre")
@@ -228,11 +226,11 @@ def main(argv: list[str] | None = None) -> int:
         data = json.loads(Path(a.input).read_text(encoding="utf-8-sig"))
         text, missing = render(data)
     except (OSError, ValueError) as exc:
-        print("error: %s" % exc, file=sys.stderr)
+        print(f"error: {exc}", file=sys.stderr)
         return 2
     if a.out:
         a.out.write_text(text, encoding="utf-8")
-        print("wrote %s (%d open fields)" % (a.out, len(missing)))
+        print(f"wrote {a.out} ({len(missing):d} open fields)")
     else:
         print(text)
     return 1 if (a.strict and missing) else 0

@@ -280,7 +280,7 @@ def read_long_pairs(
 
 def render(stats: Stats, per_stage: list[Stats], pairs: list[Pair], source: str) -> str:
     lines = [
-        "# Screening agreement report",
+        "# Screening Agreement Report",
         "",
         f"**Source:** `{source}`  ",
         f"**Records:** {stats.n}  ",
@@ -289,7 +289,7 @@ def render(stats: Stats, per_stage: list[Stats], pairs: list[Pair], source: str)
         f"({stats.interpretation})  ",
         f"**PABAK:** {stats.pabak:.3f}",
         "",
-        "| Stage | n | Both include | R1 only | R2 only | Both exclude | Agreement | Kappa | PABAK |",
+        "| Stage | N | Both Include | R1 Only | R2 Only | Both Exclude | Agreement | Kappa | PABAK |",
         "|---|---:|---:|---:|---:|---:|---:|---:|---:|",
     ]
     for item in per_stage:
@@ -371,7 +371,7 @@ def selftest() -> None:
     assert normalize_decision("0", 1) is False
 
     overall, per_stage = summarize(
-        pairs + [Pair("full_text", "E1", True, True), Pair("full_text", "E2", False, False)]
+        [*pairs, Pair("full_text", "E1", True, True), Pair("full_text", "E2", False, False)]
     )
     assert overall.n == 22
     assert len(per_stage) == 2 and per_stage[1].stage == "full_text"

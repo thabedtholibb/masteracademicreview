@@ -1,4 +1,4 @@
-# Extraction validation report
+# Extraction Validation Report
 
 **Source:** `characteristics.csv`  
 **Profile:** generic  

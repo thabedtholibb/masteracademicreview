@@ -1,9 +1,9 @@
-# Output specification
+# Output Specification
 
 The deliverable of a masteracademicreview run. Every genre follows this convention, so
 the user always knows what they will receive.
 
-## The deliverable
+## The Deliverable
 
 One review document + supporting artifacts + optional export:
 
@@ -35,7 +35,7 @@ review.pdf           ← optional, via export.py (needs a PDF engine)
 back its numbers and flow; they are referenced from the review, not separate
 documents.
 
-## `review.md` — standard layout
+## `review.md`: Standard Layout
 
 ```markdown
 # <Title of the review>
@@ -69,13 +69,13 @@ documents.
 - **References** follow the genre's citation practice (a running bibliography, a
   `refs.bib`, or inline citations).
 
-## Gate status
+## Gate Status
 
 Every review ends with a gate check. The status line is one of:
 
-- `✓ passed` — every checklist item present.
-- `⚠ partial` — some items partial; the missing ones are listed at the end.
-- `✗ failed` — not done; missing items are listed with what is needed.
+- `✓ passed`: every checklist item present.
+- `⚠ partial`: some items partial; the missing ones are listed at the end.
+- `✗ failed`, not done; missing items are listed with what is needed.
 
 `python shared/scripts/check_review.py review.md` automates this gate: header fields, genre sections, citations, artifacts and gate-line consistency. A review is not "done" unless the gate line says `✓ passed` (or a waiver is
 recorded with a reason).
@@ -86,7 +86,7 @@ For **every** genre, the gate cannot pass while `verify_refs.py` reports an erro
 artifacts listed above. A reference that cannot be resolved is fixed or removed,
 never left in the list.
 
-## Export to Word / PDF
+## Export To Word / PDF
 
 ```
 python shared/scripts/export.py review.md                 # → review.docx + review.pdf
@@ -97,4 +97,4 @@ One command, works everywhere:
 
 - If **Pandoc** is installed, it is used (best fidelity).
 - If not, `export.py` falls back to the built-in converter (`mdconvert.py`:
-  `python-docx` for Word, `reportlab` for PDF) — no extra tools required.
+  `python-docx` for Word, `reportlab` for PDF): no extra tools required.

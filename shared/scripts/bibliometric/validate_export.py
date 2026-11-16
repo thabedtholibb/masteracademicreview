@@ -81,7 +81,7 @@ def main(argv=None):
 
     try:
         records = load(path)
-    except Exception as exc:  # noqa: BLE001 - report any parse failure
+    except Exception as exc:
         rep.check(False, "parses without error", f"{type(exc).__name__}: {exc}")
         rep.render(path)
         return 1
@@ -104,7 +104,7 @@ def main(argv=None):
 
     with_kw = sum(1 for r in records if r["keywords"])
     rep.warn(with_kw / len(records) >= args.min_keyword_coverage,
-             "keywords parsed for >= {:.0%} of records".format(args.min_keyword_coverage),
+             f"keywords parsed for >= {args.min_keyword_coverage:.0%} of records",
              f"{with_kw}/{len(records)}")
 
     with_cites = sum(1 for r in records if r["citations"] is not None)
