@@ -16,6 +16,7 @@ from .performance import (
     summary,
     document_type_counts,
     filter_document_type,
+    KEYWORD_NOISE,
 )
 from .mapping import co_occurrence, co_authorship
 from .plots import (
@@ -37,6 +38,7 @@ __all__ = [
     "summary",
     "document_type_counts",
     "filter_document_type",
+    "KEYWORD_NOISE",
     "co_occurrence",
     "co_authorship",
     "plot_pubs_per_year",

@@ -20,7 +20,7 @@ You analyze a literature corpus **quantitatively** — through citation, co-word
 ## Pre-requisites
 
 1. A searchable corpus large enough for bibliometrics (typically hundreds+ of records).
-2. A **Scopus CSV export** (recommended) — or a WoS/BibTeX export — with the `Document Type` column.
+2. A **Scopus CSV export** (recommended) — or a WoS/BibTeX export — with the `Document Type` column. The loader auto-detects the delimiter (`;` for Scopus, tab for WoS) and the encoding (`UTF-8` or `cp1252`), so the raw export can be used as-is.
 3. Python 3.10+ with `numpy` and `matplotlib` (no other dependencies).
 
 ## Source quality — Scopus-only
@@ -65,7 +65,7 @@ Recommend **Scopus (#1)** as the sole source and state it in the methods. Restri
 | Load corpus (CSV or BibTeX) | `load`, `load_csv`, `load_bibtex` |
 | Corpus overview | `summary` |
 | Publications per year | `publications_per_year` |
-| Top authors / journals / keywords | `top_authors` / `top_journals` / `top_keywords` |
+| Top authors / journals / keywords | `top_authors` / `top_journals` / `top_keywords` (index-keyword noise filtered via `KEYWORD_NOISE`; pass `exclude=None` to keep all) |
 | h-index (corpus or per author) | `h_index` / `author_h_index` |
 | Document-type counts / quality filter | `document_type_counts` / `filter_document_type` |
 | Co-word / co-authorship matrices | `co_occurrence` / `co_authorship` |
@@ -96,4 +96,5 @@ Abstract
 
 - Scopus indexing is a *source* claim, not a quality certificate — a Scopus-indexed paper can still be weak; say so rather than equating indexing with correctness.
 - The engine covers performance + co-word + co-authorship. Co-citation and bibliographic coupling need citation-reference data; if your export lacks it, use an external tool (VOSviewer/Bibliometrix) or state that the analysis was not run — never fabricate a network.
+- **Keyword variants are not merged automatically** ("digital twin" vs "digital twins"). For a clean map, merge plurals/synonyms with a thesaurus (VOSviewer/Bibliometrix export) and report the merge rule; do not silently hand-edit counts.
 - Every number in the report must trace to `summary()` / `co_occurrence()` output from the real corpus.

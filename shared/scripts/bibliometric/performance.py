@@ -3,6 +3,17 @@
 from collections import Counter, defaultdict
 
 
+# Generic Scopus index-keyword artifacts (document types, indexer shorthand)
+# that carry no topical signal; filtered at analysis time, never at parse time.
+KEYWORD_NOISE = {
+    "article", "articles", "review", "conference paper", "conference papers",
+    "english", "human", "humans", "priority journal", "controlled study",
+    "major clinical study", "meta analysis", "systematic review", "short survey",
+    "editorial", "note", "book", "chapter", "proceedings", "dataset",
+    "in vitro study", "animal", "animals", "male", "female", "adult",
+}
+
+
 def publications_per_year(records):
     c = Counter()
     for r in records:
@@ -24,10 +35,12 @@ def top_journals(records, n=10):
     return c.most_common(n)
 
 
-def top_keywords(records, n=20):
+def top_keywords(records, n=20, exclude=KEYWORD_NOISE):
     c = Counter()
     for r in records:
         for k in r.get("keywords", []):
+            if exclude and k in exclude:
+                continue
             c[k] += 1
     return c.most_common(n)
 

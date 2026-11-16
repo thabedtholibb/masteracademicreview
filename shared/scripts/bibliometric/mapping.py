@@ -4,11 +4,18 @@ from collections import Counter
 
 import numpy as np
 
+try:  # package import
+    from .performance import KEYWORD_NOISE
+except ImportError:  # direct script import
+    from performance import KEYWORD_NOISE
 
-def _index_and_matrix(records, field, top_n, undirected):
+
+def _index_and_matrix(records, field, top_n, undirected, exclude=None):
     counter = Counter()
     for r in records:
         for item in r.get(field, []):
+            if exclude and item in exclude:
+                continue
             counter[item] += 1
     labels = [k for k, _ in counter.most_common(top_n)]
     idx = {lab: i for i, lab in enumerate(labels)}
@@ -26,13 +33,16 @@ def _index_and_matrix(records, field, top_n, undirected):
     return labels, m
 
 
-def co_occurrence(records, field="keywords", top_n=20):
+def co_occurrence(records, field="keywords", top_n=20, exclude="auto"):
     """Co-occurrence matrix over a list-valued field (default: keywords).
 
     Diagonal = number of records containing the item; off-diagonal = number of
-    records containing both items.
+    records containing both items. Index-keyword noise is excluded by default
+    for keywords; pass ``exclude=None`` to keep everything.
     """
-    return _index_and_matrix(records, field, top_n, undirected=True)
+    if exclude == "auto":
+        exclude = KEYWORD_NOISE if field == "keywords" else None
+    return _index_and_matrix(records, field, top_n, undirected=True, exclude=exclude)
 
 
 def co_authorship(records, top_n=20):

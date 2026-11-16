@@ -13,6 +13,7 @@ Every record is normalized to:
 """
 
 import csv
+import io
 import os
 import re
 
@@ -37,7 +38,7 @@ _ALIASES = {
     "authors": ["author full names", "authors", "author", "af"],
     "year": ["year", "publication year", "publication_year", "pub_year", "py"],
     "journal": ["source title", "journal", "source", "publication name", "so"],
-    "keywords": ["author keywords", "keywords", "author_keywords", "de", "keyword"],
+    "keywords": ["author keywords", "keywords", "author_keywords", "index keywords", "de", "keyword"],
     "citations": ["cited by", "citations", "times cited", "times_cited", "tc"],
     "doi": ["doi", "digital object identifier"],
     "document_type": ["document type", "document_type", "dt"],
@@ -77,28 +78,55 @@ def _to_int(s):
     return int(m.group()) if m else None
 
 
+def _read_text(path, encoding="utf-8-sig"):
+    """Read a file as text, falling back to cp1252/latin-1 for non-UTF-8 exports.
+
+    Scopus CSV exports are frequently cp1252 (Windows-1252) rather than UTF-8,
+    so a strict UTF-8 read would fail on names like "Universit\u00e0".
+    """
+    with open(path, "rb") as f:
+        raw = f.read()
+    for enc in (encoding, "cp1252", "latin-1"):
+        if not enc:
+            continue
+        try:
+            return raw.decode(enc)
+        except UnicodeDecodeError:
+            continue
+    return raw.decode("latin-1", errors="replace")
+
+
+def _detect_delimiter(text):
+    """Guess the delimiter from the header line (Scopus uses ';', WoS uses tab)."""
+    first_line = text.split("\n", 1)[0]
+    counts = {d: first_line.count(d) for d in (";", ",", "\t", "|")}
+    best = max(counts, key=counts.get)
+    return best if counts[best] else ","
+
+
 def load_csv(path, encoding="utf-8-sig"):
+    text = _read_text(path, encoding)
+    delimiter = _detect_delimiter(text)
     records = []
-    with open(path, encoding=encoding, newline="") as f:
-        reader = csv.DictReader(f)
-        for row in reader:
-            row_norm = {_norm_key(k): v for k, v in row.items() if v is not None}
-            title = _field_of(row_norm, _ALIASES["title"])
-            if not title:
-                continue
-            authors_raw = _field_of(row_norm, _ALIASES["authors"]) or ""
-            kw_raw = _field_of(row_norm, _ALIASES["keywords"]) or ""
-            records.append({
-                "id": title,
-                "title": title,
-                "authors": [_normalize_author(a) for a in _split_names(authors_raw)],
-                "year": _to_int(_field_of(row_norm, _ALIASES["year"])),
-                "journal": _field_of(row_norm, _ALIASES["journal"]),
-                "keywords": _split_keywords(kw_raw),
-                "citations": _to_int(_field_of(row_norm, _ALIASES["citations"])),
-                "doi": _field_of(row_norm, _ALIASES["doi"]),
-                "document_type": _field_of(row_norm, _ALIASES["document_type"]),
-            })
+    reader = csv.DictReader(io.StringIO(text), delimiter=delimiter)
+    for row in reader:
+        row_norm = {_norm_key(k): v for k, v in row.items() if k is not None and v is not None}
+        title = _field_of(row_norm, _ALIASES["title"])
+        if not title:
+            continue
+        authors_raw = _field_of(row_norm, _ALIASES["authors"]) or ""
+        kw_raw = _field_of(row_norm, _ALIASES["keywords"]) or ""
+        records.append({
+            "id": title,
+            "title": title,
+            "authors": [_normalize_author(a) for a in _split_names(authors_raw)],
+            "year": _to_int(_field_of(row_norm, _ALIASES["year"])),
+            "journal": _field_of(row_norm, _ALIASES["journal"]),
+            "keywords": _split_keywords(kw_raw),
+            "citations": _to_int(_field_of(row_norm, _ALIASES["citations"])),
+            "doi": _field_of(row_norm, _ALIASES["doi"]),
+            "document_type": _field_of(row_norm, _ALIASES["document_type"]),
+        })
     return records
 
 
@@ -157,6 +185,8 @@ def _parse_field(pair):
 
 def _normalize_author(a):
     a = a.strip()
+    # Scopus "Author full names" append numeric IDs: "Iacovanelli, Matteo (59534050000)"
+    a = re.sub(r"\s*\(\s*\d+(?:\s*;\s*\d+)*\s*\)\s*$", "", a).strip()
     if "," in a:
         parts = [p.strip() for p in a.split(",")]
         if len(parts) >= 2 and parts[1]:
