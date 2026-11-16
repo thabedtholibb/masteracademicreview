@@ -1,0 +1,7 @@
+title,authors,year,journal,keywords,citations
+Diffusion models for images,Andi; Budi,2020,NeurIPS,diffusion; generative; images,120
+GANs for low-dim data,Budi; Citra,2021,ICML,gan; generative; low-dim,45
+Diffusion for audio,Andi; Citra,2021,ICASSP,diffusion; generative; audio,30
+Score-based generative models,Andi,2022,Nature MI,diffusion; score-based; generative,200
+GAN stability,Budi; Dewi,2022,ICLR,gan; stability; training,15
+Audio diffusion survey,Citra; Dewi,2023,IEEE TASLP,diffusion; audio; survey,10

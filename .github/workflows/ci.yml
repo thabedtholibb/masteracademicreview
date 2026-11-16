@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  engines:
+    name: engines (py${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.12"]
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install numpy scipy matplotlib python-docx reportlab
+
+      - name: Meta-analysis engine
+        run: python shared/scripts/meta/example.py
+
+      - name: Bibliometric engine
+        run: python shared/scripts/bibliometric/example.py
+
+      - name: Export parser regression (Scopus semicolon + cp1252 + author IDs)
+        run: |
+          python shared/scripts/bibliometric/validate_export.py tests/fixtures/scopus_mini.csv
+          python shared/scripts/bibliometric/validate_export.py shared/scripts/bibliometric/sample.csv
+
+      - name: PRISMA flow (stdlib only)
+        run: |
+          python shared/scripts/prisma_flow.py
+          python -c "s=open('prisma_flow.svg',encoding='utf-8').read(); assert s.startswith('<svg') and 'Studies included in review' in s; print('prisma SVG OK')"
+
+      - name: Markdown export smoke test (no Pandoc)
+        run: |
+          mkdir -p /tmp/export-smoke
+          printf '# Test Review\n\nHello **world**.\n' > /tmp/export-smoke/review.md
+          python shared/scripts/export.py /tmp/export-smoke/review.md
+          python -c "import zipfile; assert zipfile.is_zipfile('/tmp/export-smoke/review.docx'), 'bad docx'; assert open('/tmp/export-smoke/review.pdf','rb').read(5)==b'%PDF-', 'bad pdf'; print('DOCX + PDF export OK')"

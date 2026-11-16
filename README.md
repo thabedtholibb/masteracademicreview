@@ -1,6 +1,7 @@
 # Master Academic Review
 
 ![License: MIT](https://img.shields.io/badge/license-MIT-blue)
+![CI](https://github.com/thabedtholibb/masteracademicreview/actions/workflows/ci.yml/badge.svg)
 ![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue)
 ![Skills: 15](https://img.shields.io/badge/skills-15-2ea44f)
 ![Review genres: 13](https://img.shields.io/badge/review%20genres-13-2ea44f)
