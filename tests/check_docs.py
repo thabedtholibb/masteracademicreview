@@ -129,6 +129,18 @@ for doc_page in ("SECURITY.md", "CODE_OF_CONDUCT.md", "CONTRIBUTING.md", "CITATI
 if not (ROOT / "examples" / "systematic-review-demo" / "run_demo.py").exists():
     fail("examples/systematic-review-demo/run_demo.py missing")
 
+# slash commands: one per skill, all prefixed "mar-" so "/mar" lists them together
+skill_ids = {p.parent.name for p in ROOT.glob("*/SKILL.md")}
+for cmd in sorted((ROOT / "commands").glob("*.md")):
+    body = cmd.read_text(encoding="utf-8")
+    if not cmd.name.startswith("mar-"):
+        fail(f"commands/{cmd.name}: slash commands must start with 'mar-'")
+    if "description: MAR · " not in body:
+        fail(f"commands/{cmd.name}: description must start with 'MAR · '")
+    loaded = re.findall(r"`([a-z-]+)` skill", body)
+    if not loaded or any(s not in skill_ids for s in loaded):
+        fail(f"commands/{cmd.name}: must load an existing skill (found {loaded})")
+
 # house style: Title Case headings and table headers in every hand-written doc
 sys.path.insert(0, str(ROOT / "tests"))
 from md_style import style_problems  # noqa: E402

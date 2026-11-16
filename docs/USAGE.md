@@ -40,7 +40,7 @@ masteracademicreview produces **one kind of deliverable: a review document**, pl
 **How you start (pick one):**
 - **Auto:** describe what you want (*"Saya mau meta-analysis dari data ini"*); the matching skill loads itself.
 - **`@skill-id` (OpenCode):** `@brainstorm`, `@meta-analysis`, `@book-review`, etc.
-- **`/command` (Claude Code):** `/brainstorm`, `/review`, `/meta-analysis`, etc. (after copying `commands/`: see INSTALL.md).
+- **`/command` (Claude Code):** `/mar-brainstorm`, `/mar-review`, `/mar-meta-analysis`, etc. (after copying `commands/`: see INSTALL.md).
 
 1. If your topic is vague, `brainstorm` sharpens the research question and builds keywords first.
 2. If you want to publish, `journal-match` turns the topic into a ranked, verified target-journal shortlist (optional; it can also run after drafting).

@@ -144,8 +144,8 @@ All of these are offline by default and run in CI on Linux and Windows with Pyth
 ## Invoking A Skill (Three Ways)
 
 1. **Auto (default).** Just describe what you want (*"I want a meta-analysis of this data"*) and the skill whose `description` matches loads itself.
-2. **`@skill-id` (OpenCode).** Type `@meta-analysis`, `@brainstorm`, `@journal-match`, `@book-review`, and so on.
-3. **`/command` (Claude Code).** Copy `commands/*.md` into `.claude/commands/`, then use `/review`, `/brainstorm`, `/journal-match`, `/meta-analysis`, `/systematic-review`, and so on.
+2. **`@skill-id` (OpenCode).** Type `@meta-analysis`, `@brainstorm`, `@journal-match`, `@book-review`, and so on. Every command starts with `mar-`, so typing `/mar` lists them all.
+3. **`/command` (Claude Code).** Copy `commands/*.md` into `.claude/commands/`, then use `/mar-review`, `/mar-brainstorm`, `/mar-journal-match`, `/mar-meta-analysis`, `/mar-systematic-review`, and so on.
 
 ---
 
@@ -217,7 +217,7 @@ One brainstorm + one orchestrator + one optional journal matcher + one shared co
    - *"Help me write a review."* → `review-router` interviews you and classifies the type.
    - *"I want a meta-analysis of this data."* → `meta-analysis` (runs `shared/scripts/meta/`).
    - *"Where should I submit this review?"* → `journal-match` builds a verified, ranked shortlist.
-   - Or use `@meta-analysis` / `/meta-analysis` to jump straight in.
+   - Or use `@meta-analysis` / `/mar-meta-analysis` to jump straight in.
 3. **See it in action:** [docs/WALKTHROUGH.md](docs/WALKTHROUGH.md) shows a full annotated session.
 
 ---
@@ -249,11 +249,11 @@ masteracademicreview/
 ├── mapping-review/SKILL.md
 ├── bibliometric-review/SKILL.md
 ├── realist-review/SKILL.md
-├── commands/                       # slash commands (copy to .claude/commands/ for Claude Code)
-│   ├── brainstorm.md
-│   ├── review.md
-│   ├── journal-match.md
-│   └── *.md                        # one per genre (13)
+├── commands/                       # slash commands, all prefixed mar- (copy to .claude/commands/)
+│   ├── mar-brainstorm.md
+│   ├── mar-review.md
+│   ├── mar-journal-match.md
+│   └── mar-*.md                    # one per genre (13)
 ├── shared/                         # shared library (methodology + scripts)
 │   ├── search_strategy.md
 │   ├── screening.md

@@ -126,7 +126,7 @@ mkdir -p .claude/commands
 cp commands/*.md .claude/commands/
 ```
 
-Then use `/brainstorm`, `/review`, `/journal-match`, `/meta-analysis`, `/systematic-review`, etc.
+Then use `/mar-brainstorm`, `/mar-review`, `/mar-journal-match`, `/mar-meta-analysis`, `/mar-systematic-review`, etc.
 
 ---
 

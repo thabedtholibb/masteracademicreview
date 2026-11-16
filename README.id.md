@@ -88,6 +88,10 @@ Skill (`*/SKILL.md`) dipasang dengan meng-*clone* repositori; langkahnya ada di
 [docs/INSTALL.md](docs/INSTALL.md). Paket pip berisi alat-alatnya, sedangkan
 skill memanggil alat yang sama lewat `python shared/scripts/<alat>.py`.
 
+## Memanggil Skill Di Claude Code
+
+Semua slash command diawali `mar-`, jadi cukup ketik `/mar` untuk melihat semuanya. Mulai dari `/mar-review` bila belum yakin genre apa yang dibutuhkan; skill akan mewawancarai Anda lalu merekomendasikan genre #1. Langsung ke genre tertentu: `/mar-systematic-review`, `/mar-meta-analysis`, `/mar-scoping-review`, dan seterusnya. Topik masih kabur: `/mar-brainstorm`. Jurnal tujuan: `/mar-journal-match`.
+
 ## Contoh Lengkap
 
 [`examples/systematic-review-demo/`](examples/systematic-review-demo/) berisi

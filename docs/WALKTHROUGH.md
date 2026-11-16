@@ -2,7 +2,7 @@
 
 This walks through one real usage so you can see *exactly* what happens. The example uses meta-analysis (the most involved path); the other genres follow the same shape, just with fewer scripts.
 
-**How you start (pick one):** describe what you want in plain words (auto), type `@meta-analysis` / `@brainstorm` (OpenCode), or `/meta-analysis` / `/brainstorm` (Claude Code, after copying `commands/` per [INSTALL.md](INSTALL.md)).
+**How you start (pick one):** describe what you want in plain words (auto), type `@meta-analysis` / `@brainstorm` (OpenCode), or `/mar-meta-analysis` / `/mar-brainstorm` (Claude Code, after copying `commands/` per [INSTALL.md](INSTALL.md)).
 
 Assumptions: skills installed (see [INSTALL.md](INSTALL.md)), Python deps present, and you have a few studies with extractable data.
 

@@ -2,6 +2,10 @@
 
 Format: [Keep a Changelog](https://keepachangelog.com). Versioning: SemVer.
 
+## [Unreleased]
+### Changed
+- Slash commands are prefixed with the suite's initials: `/mar-review`, `/mar-meta-analysis`, `/mar-systematic-review`, ... (type `/mar` to list them all); descriptions start with `MAR ·`. Skill IDs are unchanged. If you copied the old commands into `.claude/commands/`, delete the old unprefixed files and copy `commands/mar-*.md` again.
+
 ## [0.1.1] - 2026-11-17
 ### Changed
 - House style: Title Case headings and table headers across all docs, skills and generated reports, enforced by `tests/check_docs.py`; em-dashes used as sentence joiners replaced (385 to 0 outside tables, code blocks and quoted titles).
