@@ -1,6 +1,6 @@
 ---
 name: review-router
-description: "Routes a review request to the correct review genre. Use when the user wants to write any kind of review (book review, narrative review, literature review, systematic review, meta-analysis, critical review, scoping review, umbrella review, meta-synthesis, rapid review, integrative review, mapping review, bibliometric review, realist review, resensi, tinjauan, kajian) or is unsure which type they need. Interviews the author along four axes — object, purpose, rigor/reproducibility, and available data — then ranks the matching genres (best fit first) and dispatches to the recommended skill. Trigger terms: write a review, review, resensi, tinjauan, kajian, literature review, systematic review, meta-analysis, narrative review, critical review, scoping review, umbrella review, meta-synthesis, rapid review, integrative review, mapping review, bibliometric review, realist review, ulasan."
+description: "Routes a review request to the correct review genre, and optionally to a verified target-journal shortlist. Use when the user wants to write any kind of review (book review, narrative review, literature review, systematic review, meta-analysis, critical review, scoping review, umbrella review, meta-synthesis, rapid review, integrative review, mapping review, bibliometric review, realist review, resensi, tinjauan, kajian) or is unsure which type they need. Interviews the author along four axes — object, purpose, rigor/reproducibility, and available data — then ranks the matching genres (best fit first) and dispatches to the recommended skill. Trigger terms: write a review, review, resensi, tinjauan, kajian, literature review, systematic review, meta-analysis, narrative review, critical review, scoping review, umbrella review, meta-synthesis, rapid review, integrative review, mapping review, bibliometric review, realist review, ulasan, target journal."
 metadata:
   version: "0.1.0"
   skills:
@@ -103,6 +103,7 @@ Default to genre #1 from the ranked shortlist, then produce a brief containing:
 - **purpose** (one sentence)
 - **rigor level** (protocol required: yes/no; statistical pooling: yes/no)
 - **what the author must provide** before writing starts (e.g. full texts, database exports, the effect-size dataset, the existing reviews, the bibliographic corpus)
+- **journal target (optional)** — if the author wants to publish, hand off to `journal-match` with the genre and object; it returns a reach / target / safety shortlist with every metric verified.
 
 Present the brief and hand off to the target skill. If the author is unsure, they can pick a different genre from the ranked shortlist instead of accepting #1.
 
@@ -112,3 +113,4 @@ Present the brief and hand off to the target skill. If the author is unsure, the
 - If the author says "meta-analysis" but has only 1 study or no numeric data, flag that pooling is impossible and route to `systematic-review` (or `narrative-review`).
 - If the author wants to map a field but has no narrow question, route to `scoping-review` (or `mapping-review` if they want a framework matrix), not `systematic-review`.
 - Never invent effect sizes or study counts. These come from the author's data or the literature, never from you.
+- If the author asks "where should I submit?", that is not a genre question — route to `journal-match`. Never answer it with a quartile, APC, or acceptance rate from memory.

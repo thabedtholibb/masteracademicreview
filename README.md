@@ -3,7 +3,7 @@
 ![License: MIT](https://img.shields.io/badge/license-MIT-blue)
 ![CI](https://github.com/thabedtholibb/masteracademicreview/actions/workflows/ci.yml/badge.svg)
 ![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue)
-![Skills: 15](https://img.shields.io/badge/skills-15-2ea44f)
+![Skills: 16](https://img.shields.io/badge/skills-16-2ea44f)
 ![Review genres: 13](https://img.shields.io/badge/review%20genres-13-2ea44f)
 ![Reporting: PRISMA 2020](https://img.shields.io/badge/reporting-PRISMA%202020-6f42c1)
 
@@ -24,6 +24,8 @@ vague idea
    │
    ▼
 brainstorm ──► focused research question + keyword set (PICO / PICo / PCC / SPIDER)
+   │                │
+   │                └──► journal-match (optional) ──► verified journal shortlist (JEV)
    │
    ▼
 review-router ──► classify + rank the review genre (best fit first)
@@ -46,6 +48,7 @@ Every run ends with **one review document plus supporting artifacts** (see [shar
 1. **`review.md`** — the review itself: a title, a metadata block (review type, reporting standard, sources, search date, gate status), an abstract, the genre's sections, and references.
 2. **Artifacts** (per genre) — e.g. `prisma_flow.svg`, `forest.png`, `funnel.png`, `effects.csv`, `characteristics.csv`.
 3. **`review.docx` / `review.pdf`** — optional, via `python shared/scripts/export.py review.md` (Pandoc, with an automatic no-Pandoc fallback), so the review can be submitted to Word-based journals or a supervisor.
+4. **`journal_shortlist.md`** — optional, from `journal-match`: a ranked target-journal shortlist with verified metrics and a submission cascade.
 
 ---
 
@@ -57,25 +60,39 @@ A review is a *family* of genres, each with its own methodology, reporting stand
 |---|---|---|
 | **Book review** | Critically assess a single book | Genre conventions |
 | **Narrative review** | Broad expert synthesis of a field | SANRA |
-| **Critical review** | Argue a conceptual thesis across literature | — |
+| **Critical review** | Argue a conceptual thesis across literature | — (argument contract) |
 | **Systematic review** | Reproducible, comprehensive synthesis | PRISMA 2020 |
 | **Meta-analysis** | Statistically pool effect sizes | PRISMA + MOOSE, GRADE |
 | **Scoping review** | Map the breadth of a field | PRISMA-ScR |
 | **Umbrella review** | Synthesize existing reviews | PRIOR |
 | **Meta-synthesis** | Qualitative evidence synthesis | ENTREQ |
-| **Rapid review** | Streamlined systematic review | Cochrane RAPID |
+| **Rapid review** | Streamlined systematic review | Cochrane rapid-review guidance |
 | **Integrative review** | Combine diverse designs into a whole | Whittemore & Knafl |
 | **Mapping review** | Visual evidence & gap map | ROSES / EGM |
-| **Bibliometric review** | Citation & co-word analysis | PRISMA (search) |
+| **Bibliometric review** | Citation & co-word analysis | PRISMA 2020 (search) |
 | **Realist review** | Theory-driven explanation (CMO) | RAMESES |
+
+Every standard above is backed by a Crossref-verified citation in [`shared/method_sources.md`](shared/method_sources.md), along with the method papers behind each workflow and a cross-genre **Q1-readiness checklist**. Two genres (critical review, book review) have no EQUATOR-registered checklist; the suite says so and uses an explicit internal contract instead of borrowing a standard that does not fit.
+
+---
+
+## Journal Targeting (Optional)
+
+Writing the review and choosing the venue are two decisions. **`journal-match`** handles the second one — before you write (recommended, because the venue shapes scope and length) or after.
+
+- **Ranked, not guessed.** Eight criteria — scope fit (30%), article type (15%), method acceptance (15%), indexing (10%), speed (10%), cost/APC (10%), audience (5%), legitimacy (5%) — are scored 0–5 and combined by `shared/scripts/journal_rank.py`, so the ranking is reproducible.
+- **Evidence-first (JEV).** Every quartile, APC, and decision-time claim carries a source and a check date. Anything unverified is labelled `unverified` and lowers the confidence; it is never filled in with a plausible number.
+- **Submission cascade.** Reach / target / safety with explicit triggers and no simultaneous submissions. The recommended **#1** is the best fit-adjusted target, not the highest quartile.
+
+Ask *"Where should I submit this review?"* — `brainstorm` offers it after the question + keywords, and `review-router` passes the genre and object to it.
 
 ---
 
 ## Invoking a Skill (Three Ways)
 
 1. **Auto (default).** Just describe what you want — *"I want a meta-analysis of this data"* — and the skill whose `description` matches loads itself.
-2. **`@skill-id` (OpenCode).** Type `@meta-analysis`, `@brainstorm`, `@book-review`, and so on.
-3. **`/command` (Claude Code).** Copy `commands/*.md` into `.claude/commands/`, then use `/review`, `/brainstorm`, `/meta-analysis`, `/systematic-review`, and so on.
+2. **`@skill-id` (OpenCode).** Type `@meta-analysis`, `@brainstorm`, `@journal-match`, `@book-review`, and so on.
+3. **`/command` (Claude Code).** Copy `commands/*.md` into `.claude/commands/`, then use `/review`, `/brainstorm`, `/journal-match`, `/meta-analysis`, `/systematic-review`, and so on.
 
 ---
 
@@ -84,16 +101,20 @@ A review is a *family* of genres, each with its own methodology, reporting stand
 ```
 brainstorm ──► research question + keywords ──► review-router ──► classify + rank ──► dispatch
       │
-      ├─ shared/                     # reusable core (not a skill)
-      │    ├─ search_strategy.md     # database query + grey literature
-      │    ├─ screening.md           # title/abstract/full-text + PRISMA flow
-      │    ├─ data_extraction.md     # extraction forms + effect-size data
-      │    ├─ risk_of_bias.md        # RoB 2, ROBINS-I, NOS, CASP, AMSTAR-2, GRADE
-      │    ├─ reporting_standards.md # PRISMA / SANRA / MOOSE / ENTREQ / PRIOR / RAMESES
+      ├─ journal-match/               # optional: verified target-journal shortlist (JEV)
+      │
+      ├─ shared/                      # reusable core (not a skill)
+      │    ├─ search_strategy.md      # database query + grey literature
+      │    ├─ screening.md            # title/abstract/full-text + PRISMA flow
+      │    ├─ data_extraction.md      # extraction forms + effect-size data
+      │    ├─ risk_of_bias.md         # RoB 2, ROBINS-I, NOS, CASP, AMSTAR-2, GRADE
+      │    ├─ reporting_standards.md  # PRISMA / PRISMA-ScR / SANRA / ENTREQ / PRIOR / RAMESES / ROSES / AMSTAR-2
+      │    ├─ method_sources.md       # verified citations + Q1-readiness checklist
       │    └─ scripts/
-      │         ├─ prisma_flow.py    # deterministic PRISMA flow-diagram generator (stdlib SVG)
-      │         ├─ meta/             # real meta-analysis statistics engine (numpy/scipy/matplotlib)
-      │         └─ bibliometric/     # bibliometric engine (parse, performance, co-word mapping, plots)
+      │         ├─ prisma_flow.py     # deterministic PRISMA flow-diagram generator (stdlib SVG)
+      │         ├─ journal_rank.py    # deterministic journal-fit scoring (stdlib)
+      │         ├─ meta/              # real meta-analysis statistics engine (numpy/scipy/matplotlib)
+      │         └─ bibliometric/      # bibliometric engine (parse, performance, co-word mapping, plots)
       │
       └─ one directory per genre (each a standalone skill)
            book-review/  narrative-review/  critical-review/
@@ -102,7 +123,7 @@ brainstorm ──► research question + keywords ──► review-router ──
            integrative-review/  mapping-review/  bibliometric-review/  realist-review/
 ```
 
-One brainstorm + one orchestrator + one shared core + one skill per genre. **Narrow and deep, not a 13-agent mega-suite.**
+One brainstorm + one orchestrator + one optional journal matcher + one shared core + one skill per genre. **Narrow and deep, not a 13-agent mega-suite.**
 
 ---
 
@@ -114,6 +135,7 @@ One brainstorm + one orchestrator + one shared core + one skill per genre. **Nar
 | Orphan genres (book / narrative / critical / umbrella / meta-synthesis / integrative / mapping / realist) | ✅ | ❌ | ❌ | ❌ |
 | Review-type diagnostic router (ranked) | ✅ | ❌ | ❌ | ❌ |
 | Research-question + keyword brainstorm | ✅ | ⚠️ | ❌ | ❌ |
+| Ranked target-journal shortlist with verified metrics (JEV) | ✅ | ⚠️ | ❌ | ❌ |
 | Real meta-analysis statistics (Python) | ✅ | ❌ | ❌ | ❌ |
 | Deterministic reporting-standard gates | ✅ | ⚠️ | ❌ | ✅ |
 | Focus on *reviews* (not papers) | ✅ | ❌ | ❌ | ❌ |
@@ -126,11 +148,12 @@ One brainstorm + one orchestrator + one shared core + one skill per genre. **Nar
 
 ## Quick Start
 
-1. **[Install](docs/INSTALL.md)** — copy or register the skill directories plus `shared/` in your harness (Claude Code / OpenCode / generic). Python is needed only for `systematic-review`, `scoping-review`, `mapping-review`, `meta-analysis`, and `bibliometric-review`.
+1. **[Install](docs/INSTALL.md)** — copy or register the skill directories plus `shared/` in your harness (Claude Code / OpenCode / generic). Python is needed only for `systematic-review`, `scoping-review`, `mapping-review`, `meta-analysis`, `bibliometric-review`, and the `journal-match` scorer.
 2. **Ask for a review** — in a session, say:
    - *"I want to write a review but I don't know the topic yet."* → `brainstorm` sharpens the question + keywords.
    - *"Help me write a review."* → `review-router` interviews you and classifies the type.
    - *"I want a meta-analysis of this data."* → `meta-analysis` (runs `shared/scripts/meta/`).
+   - *"Where should I submit this review?"* → `journal-match` builds a verified, ranked shortlist.
    - Or use `@meta-analysis` / `/meta-analysis` to jump straight in.
 3. **See it in action** — [docs/WALKTHROUGH.md](docs/WALKTHROUGH.md) shows a full annotated session.
 
@@ -144,8 +167,9 @@ masteracademicreview/
 ├── LICENSE
 ├── .gitignore
 ├── .gitattributes
-├── brainstorm/SKILL.md             # pre-router: research question + keywords
+├── brainstorm/SKILL.md             # pre-router: research question + keywords (+ optional journal fit)
 ├── review-router/SKILL.md          # orchestrator: interview → classify + rank → dispatch
+├── journal-match/SKILL.md          # optional: verified target-journal shortlist (JEV)
 ├── book-review/SKILL.md
 ├── narrative-review/SKILL.md
 ├── critical-review/SKILL.md
@@ -162,6 +186,7 @@ masteracademicreview/
 ├── commands/                       # slash commands (copy to .claude/commands/ for Claude Code)
 │   ├── brainstorm.md
 │   ├── review.md
+│   ├── journal-match.md
 │   └── *.md                        # one per genre (13)
 ├── shared/                         # shared library (methodology + scripts)
 │   ├── search_strategy.md
@@ -169,9 +194,11 @@ masteracademicreview/
 │   ├── data_extraction.md
 │   ├── risk_of_bias.md
 │   ├── reporting_standards.md
+│   ├── method_sources.md           # Crossref-verified method citations + Q1 checklist
 │   ├── output_spec.md
 │   └── scripts/
 │       ├── prisma_flow.py
+│       ├── journal_rank.py         # deterministic journal-fit scorer (stdlib)
 │       ├── export.py               # one-command MD → DOCX/PDF (Pandoc, fallback to mdconvert)
 │       ├── mdconvert.py            # no-Pandoc converter (python-docx + reportlab)
 │       ├── meta/
@@ -190,8 +217,9 @@ masteracademicreview/
 │           ├── validate_export.py  # regression checks on a real Scopus/WoS export
 │           └── sample.csv
 ├── tests/
-│   └── fixtures/scopus_mini.csv    # cp1252 + semicolon fixture used by CI
-├── .github/workflows/ci.yml        # engines + parser regression + export smoke test
+│   ├── fixtures/scopus_mini.csv    # cp1252 + semicolon fixture used by CI
+│   └── fixtures/journals_example.csv  # fictional journal table for the scorer's CI check
+├── .github/workflows/ci.yml        # engines + parser regression + export + journal scorer
 └── docs/
     ├── INSTALL.md
     ├── USAGE.md
@@ -209,6 +237,7 @@ Skill directories are named in lowercase (e.g. `meta-analysis/`) because that is
 - **Recommendation-first.** At every decision point, the skill presents the best options in priority order with a recommended default — never a bare open question.
 - **Deterministic where it matters.** Search counts, screening tallies, PRISMA flow, and meta-analysis arithmetic are computed by code, never by an LLM guessing.
 - **Reporting standards are gates, not suggestions.** A review that skips a PRISMA item is flagged, not silently passed.
+- **Evidence over memory.** Journal quartiles, APCs, and decision times are verified against a primary source and date-stamped; unverified values are labelled, never invented.
 - **Portable.** Plain `SKILL.md` frontmatter (`name` + `description`) works across Claude Code, OpenCode, and other agent harnesses with minimal adjustment.
 
 ---

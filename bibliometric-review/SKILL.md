@@ -1,10 +1,10 @@
 ---
 name: bibliometric-review
-description: "Conduct a bibliometric review — analyze a body of literature with citation, co-word, and co-authorship methods to map its intellectual structure and trends, using a bundled Python engine. Reported per PRISMA (search) plus bibliometric conventions. Use when the deliverable is a quantitative map of a field (authors, sources, themes) rather than a synthesis of findings. Trigger terms: bibliometric review, bibliometric analysis, citation analysis, co-citation, co-word, science mapping, VOSviewer, bibliometrix."
+description: "Conduct a bibliometric review — analyze a body of literature with citation, co-word, and co-authorship methods to map its intellectual structure and trends, using a bundled Python engine. Reported per PRISMA 2020 (search) plus bibliometric conventions. Use when the deliverable is a quantitative map of a field (authors, sources, themes) rather than a synthesis of findings. Trigger terms: bibliometric review, bibliometric analysis, citation analysis, co-citation, co-word, science mapping, VOSviewer, bibliometrix."
 metadata:
   version: "0.1.0"
   genre: bibliometric-review
-  reporting_standard: "PRISMA (search) + bibliometric conventions"
+  reporting_standard: "PRISMA 2020 (search) + Donthu et al. (2021)"
   requires_python: true
 ---
 
@@ -83,6 +83,10 @@ Abstract
 3. Results — performance + science-mapping outputs (trend, top lists, co-occurrence map)
 4. Discussion — intellectual structure, trends, limitations
 ```
+
+## Standards & sources
+
+Reporting: **PRISMA 2020** for the search (Page et al., 2021, doi:10.1136/bmj.n71). Method sources: Donthu et al. 2021 (doi:10.1016/j.jbusres.2021.04.070), Zupic & Čater 2015 (doi:10.1177/1094428114562629), van Eck & Waltman 2010 (doi:10.1007/s11192-009-0146-3), Aria & Cuccurullo 2017 (doi:10.1016/j.joi.2017.08.007). Full citations and the Q1-readiness checklist: `shared/method_sources.md`.
 
 ## Gate
 

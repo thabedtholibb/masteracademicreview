@@ -68,6 +68,10 @@ Abstract (structured)
 Other — registration, funding, conflicts, data availability
 ```
 
+## Standards & sources
+
+Governing standard: **PRISMA 2020** (Page et al., 2021, doi:10.1136/bmj.n71) with **PRISMA-S** for search reporting (Rethlefsen et al., 2021, doi:10.1186/s13643-020-01542-z). Method sources: *Cochrane Handbook* v6.4 (2023), RoB 2 (Sterne et al., 2019, doi:10.1136/bmj.l4898), ROBINS-I (Sterne et al., 2016, doi:10.1136/bmj.i4919), GRADE (Guyatt et al., 2008, doi:10.1136/bmj.39489.470347.AD). Full citations and the Q1-readiness checklist: `shared/method_sources.md`.
+
 ## Gate (PRISMA 2020, 27 items)
 
 Walk `shared/reporting_standards.md` item by item and mark each **present / partial / missing**. Flag every `missing` item; the review is not "done" until each is satisfied or explicitly waived by the author with a recorded reason. The flow diagram must exist and match the reported counts.

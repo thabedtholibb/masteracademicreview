@@ -40,6 +40,10 @@ Abstract
 4. Discussion — what the gaps mean, implications
 ```
 
+## Standards & sources
+
+Governing standard: **ROSES** (Haddaway et al., 2018, doi:10.1186/s13750-018-0121-7). Method sources: Saran & White 2018 on evidence and gap map approaches (doi:10.4073/cmdp.2018.2). Full citations and the Q1-readiness checklist: `shared/method_sources.md`.
+
 ## Gate
 
 - [ ] A framework matrix is defined and applied consistently.

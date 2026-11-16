@@ -42,6 +42,17 @@ jobs:
           python shared/scripts/prisma_flow.py
           python -c "s=open('prisma_flow.svg',encoding='utf-8').read(); assert s.startswith('<svg') and 'Studies included in review' in s; print('prisma SVG OK')"
 
+      - name: Journal-fit scorer (stdlib only)
+        run: |
+          python shared/scripts/journal_rank.py --selftest
+          python shared/scripts/journal_rank.py tests/fixtures/journals_example.csv > /tmp/journals.md
+          grep -q "#1 recommended" /tmp/journals.md
+          grep -q "LEGITIMACY RISK" /tmp/journals.md
+          echo "journal scorer OK"
+
+      - name: Documentation integrity (standards + provenance)
+        run: python tests/check_docs.py
+
       - name: Markdown export smoke test (no Pandoc)
         run: |
           mkdir -p /tmp/export-smoke

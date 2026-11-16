@@ -1,6 +1,6 @@
 ---
 name: brainstorm
-description: "Sharpen a vague topic into a focused research question and a search-ready keyword set before starting any review. Use when the user has a rough idea but no clear research question, or struggles to choose search keywords / database terms. Presents the best framings, candidate questions, and keywords in priority order with a recommendation, then hands off to review-router. Trigger terms: brainstorm, research question, rumusan masalah, pertanyaan penelitian, keyword, kata kunci, search terms, PICO, PICo, SPIDER, PCC, istilah pencarian."
+description: "Sharpen a vague topic into a focused research question and a search-ready keyword set before starting any review, then optionally shortlist verified target journals. Use when the user has a rough idea but no clear research question, or struggles to choose search keywords / database terms. Presents the best framings, candidate questions, keywords, and journal options in priority order with a recommendation, then hands off to review-router. Trigger terms: brainstorm, research question, rumusan masalah, pertanyaan penelitian, keyword, kata kunci, search terms, PICO, PICo, SPIDER, PCC, istilah pencarian, jurnal tujuan, where to submit."
 metadata:
   version: "0.1.0"
   role: "pre-router"
@@ -38,6 +38,8 @@ Never hand the author a bare open question when you can offer **ranked options**
 
 6. **Hand off with a ranked genre hint.** State the **top 1–2 likely review genres** (recommendation first) and hand the brief to `review-router` for final classification.
 
+7. **Offer journal targeting (JEV, optional).** If the author intends to publish, run `journal-match` with this brief. Ask only for the hard constraints (indexing, minimum quartile, APC budget, deadline, open access). Do **not** name a target journal, quartile, or APC from memory here — `journal-match` verifies every metric and returns a reach / target / safety cascade with **#1 recommended**.
+
 ## Output (the brief)
 
 1. **Research question** — the chosen one (from the ranked candidates).
@@ -45,6 +47,7 @@ Never hand the author a bare open question when you can offer **ranked options**
 3. **Keyword table** — one column per concept, terms ranked best-first, top pick marked.
 4. **Boolean query** — ready to paste, with a per-database translation note.
 5. **Genre hint** — the top 1–2 likely review genres, ranked with **#1 recommended**, handed to `review-router` for final classification.
+6. **Journal fit (optional)** — if requested, the `journal-match` shortlist: reach / target / safety, target marked **#1**, with every metric sourced and date-stamped.
 
 ## Guardrails
 
@@ -52,3 +55,4 @@ Never hand the author a bare open question when you can offer **ranked options**
 - Do not invent MeSH terms. If you are unsure a controlled term exists, mark it `[verify]` and let the search confirm.
 - A recommendation is a default, not a decision — the author approves the final question and keyword set before you hand off.
 - A question answerable with "yes/no" is usually a poor review question; push toward "what / why / how / to what extent".
+- Never state a journal's quartile, APC, or acceptance rate from memory. That is `journal-match`'s job, and it verifies each metric against a primary source with a check date.

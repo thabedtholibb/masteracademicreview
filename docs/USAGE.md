@@ -1,6 +1,6 @@
 # How to Use masteracademicreview
 
-For the step-by-step flow of **each** of the 15 skills, see [FLOWS.md](FLOWS.md).
+For the step-by-step flow of **each** of the 16 skills, see [FLOWS.md](FLOWS.md).
 
 ## The short answer: it is *not* a full-paper pipeline
 
@@ -23,6 +23,8 @@ masteracademicreview produces **one kind of deliverable: a review document**, pl
  vague idea
    ▼
  brainstorm ──► research question + keywords   (skip if you already have both)
+   │
+   ├──► journal-match ──► verified target-journal shortlist (optional)
    ▼
  review-router ──► interviews you ──► classifies the genre
    ▼
@@ -41,10 +43,11 @@ masteracademicreview produces **one kind of deliverable: a review document**, pl
 - **`/command` (Claude Code)** — `/brainstorm`, `/review`, `/meta-analysis`, etc. (after copying `commands/` — see INSTALL.md).
 
 1. If your topic is vague, `brainstorm` sharpens the research question and builds keywords first.
-2. `review-router` interviews you along four axes — **object, purpose, rigor, data** — and classifies the genre (or you jump straight to a genre).
-3. The genre skill runs its protocol, pulling methodology from `shared/` and, for the protocol-driven genres, running the Python scripts.
-4. You make the decisions (inclusion/exclusion, protocol, thesis); the tool does the grunt work and the arithmetic.
-5. You receive a review document and its artifacts.
+2. If you want to publish, `journal-match` turns the topic into a ranked, verified target-journal shortlist (optional; it can also run after drafting).
+3. `review-router` interviews you along four axes — **object, purpose, rigor, data** — and classifies the genre (or you jump straight to a genre).
+4. The genre skill runs its protocol, pulling methodology from `shared/` and, for the protocol-driven genres, running the Python scripts.
+5. You make the decisions (inclusion/exclusion, protocol, thesis); the tool does the grunt work and the arithmetic.
+6. You receive a review document and its artifacts.
 
 **Output format:** the review is a **`review.md`** Markdown document plus artifacts; run `python shared/scripts/export.py review.md` to also produce `review.docx` (Word) and `review.pdf`. The full convention is in `shared/output_spec.md`.
 
@@ -88,6 +91,12 @@ masteracademicreview produces **one kind of deliverable: a review document**, pl
 > **You:** "Resensi buku ini."
 > **Skill:** asks for the book's thesis, then produces summary → critique → verdict.
 
+## Journal targeting (optional)
+
+> **You:** "Jurnal mana yang cocok untuk review ini?"
+> **Skill:** collects the topic, genre, and hard constraints (indexing, quartile, APC budget, deadline), builds 8–15 candidates from the review corpus and the reference list, scores eight criteria 0–5, and runs `shared/scripts/journal_rank.py`.
+> **You get:** `journal_shortlist.md` — a ranked table with fit, confidence, evidence gaps, reach/target/safety tiers, a submission cascade, and a cover-letter angle for the top three. Every metric carries a source and a check date; anything unverified is labelled, never guessed.
+
 ## Running the Python scripts
 
 From the repo root:
@@ -96,6 +105,8 @@ From the repo root:
 python shared/scripts/meta/example.py    # end-to-end demo of the meta engine
 python shared/scripts/meta/pooling.py    # demo of fixed/random effects + I²/Q
 python shared/scripts/prisma_flow.py     # demo PRISMA flow → prisma_flow.svg
+python shared/scripts/journal_rank.py --selftest   # journal-fit scorer checks
+python shared/scripts/journal_rank.py journals.csv # ranked shortlist from your evidence table
 ```
 
 In real work, the skill guides you to (a) prepare the inputs — a screening-counts dict for `prisma_flow.py`, or an `effects.csv` for the meta engine — then (b) run the relevant functions. Scripts live under `shared/scripts/` and are referenced from skills as `../shared/scripts/…`.

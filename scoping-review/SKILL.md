@@ -45,9 +45,13 @@ Abstract (structured)
 - **Framing** — recommend **PCC (#1)** for mapping questions.
 - **Quality appraisal** — recommend **skipping it (#1)**; PRISMA-ScR permits it as optional, but it is not the norm for scoping.
 
+## Standards & sources
+
+Governing standard: **PRISMA-ScR** (Tricco et al., 2018, doi:10.7326/M18-0850). Method sources: Arksey & O'Malley 2005 (doi:10.1080/1364557032000119616), Levac et al. 2010 (doi:10.1186/1748-5908-5-69), Peters et al. 2020 (doi:10.11124/JBIES-20-00167), and the JBI Manual for Evidence Synthesis. Full citations and the Q1-readiness checklist: `shared/method_sources.md`.
+
 ## Gate (PRISMA-ScR, 22 items)
 
-Walk the PRISMA-ScR checklist in `shared/reporting_standards.md` item by item; mark each **present / partial / missing** and flag every missing item. The flow diagram must exist and match the reported counts.
+Walk the 22 PRISMA-ScR items in `shared/reporting_standards.md` item by item; mark each **present / partial / missing** and flag every missing item. The flow diagram must exist and match the reported counts.
 
 ## Guardrails
 

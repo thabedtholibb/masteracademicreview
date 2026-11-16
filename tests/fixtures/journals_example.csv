@@ -1,0 +1,6 @@
+journal,issn,publisher,tier,scope_fit,article_fit,method_fit,indexing,speed,cost,audience,risk,verified,scope_quote,evidence_url,notes
+Journal of Fictional Evidence Synthesis,0000-0001,Example Press,target,5,5,5,5,3,4,4,5,scope_fit;article_fit;method_fit;indexing;audience;risk,"Publishes evidence syntheses and methodological reviews",https://example.org/jfes,Fictional fixture for CI
+Fictional Review Quarterly,0000-0002,Example Society,reach,5,4,5,5,2,2,5,5,scope_fit;article_fit;indexing;audience,"A journal of review articles across disciplines",https://example.org/frq,Fictional fixture for CI
+Applied Fictional Methods,0000-0003,Example Press,target,4,4,4,4,4,5,3,5,scope_fit;method_fit;speed;cost,"Methodological and applied research syntheses",https://example.org/afm,Fictional fixture for CI
+Open Fictional Science,0000-0004,Example Open,target,4,5,4,2,5,5,2,4,scope_fit;article_fit;method_fit;cost;speed,"Open-access multidisciplinary reviews",https://example.org/ofs,Fictional fixture for CI
+Example Journal of Unverified Claims,0000-0005,Unknown,,3,3,3,1,5,5,1,1,,,,Fictional fixture: deliberately low legitimacy and no verified fields

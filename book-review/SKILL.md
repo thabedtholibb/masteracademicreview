@@ -53,6 +53,10 @@ Ask the author for, or gather:
 - **Audience & length** — recommend by venue: scholarly journal (#1, ~1,500–3,000 words) vs newspaper/class resensi (#2, ~500–800 words); don't ask the author to pick a length blind.
 - **Verdict** — recommend the strongest honest verdict (#1), including a mixed one, rather than forcing praise.
 
+## Standards & sources
+
+No EQUATOR-registered checklist and no peer-reviewed *method* standard exists for book reviews (EQUATOR registry, checked 2026); the closest genre definitions come from review typologies such as Grant & Booth (2009, doi:10.1111/j.1471-1842.2009.00848.x). Conventions come from the venue's author guidelines (length, tone, audience) and scholarly review practice; the gate below is the genre's internal contract (faithful representation → evidence-tied critique → explicit verdict). This limitation is recorded in `shared/method_sources.md` rather than hidden behind a borrowed checklist.
+
 ## Gate (before calling it done)
 
 - [ ] The book's actual argument is represented before it is criticized.

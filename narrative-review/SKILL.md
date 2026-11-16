@@ -45,6 +45,10 @@ You write a **broad, expert synthesis** of a field. Unlike a systematic review, 
 - **Organization** — recommend **thematic synthesis (#1)** over chronological; chronological only if the field's history is itself the point.
 - **Tables/figures** — recommend adding one when it would compress many studies (#1), otherwise skip.
 
+## Standards & sources
+
+Governing standard: **SANRA** (Baethge et al., 2019, doi:10.1186/s41073-019-0064-8). Context: Greenhalgh et al. 2018 on why narrative reviews are not a lesser systematic review (doi:10.1111/eci.12931). Full citations and the Q1-readiness checklist: `shared/method_sources.md`.
+
 ## SANRA gate (6 items — see `shared/reporting_standards.md`)
 
 - [ ] Justification of the review's importance

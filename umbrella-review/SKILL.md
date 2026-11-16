@@ -46,9 +46,13 @@ Abstract (structured)
 - **Quality tool** — recommend **AMSTAR-2 (#1)** for appraising included reviews.
 - **Overlap** — recommend reporting the **corrected covered area (CCA) (#1)** to show double-counting.
 
+## Standards & sources
+
+Governing standard: **PRIOR** (Gates et al., 2022, doi:10.1136/bmj-2022-070849). Method sources: Aromataris et al. 2015 (doi:10.1097/XEB.0000000000000055), AMSTAR 2 (Shea et al., 2017, doi:10.1136/bmj.j4008), and Pieper et al. 2015 on AMSTAR's measurement properties (doi:10.1016/j.jclinepi.2014.12.009). Full citations and the Q1-readiness checklist: `shared/method_sources.md`.
+
 ## Gate (PRIOR)
 
-Walk the PRIOR checklist in `shared/reporting_standards.md`; flag every missing item. AMSTAR-2 ratings and the CCA must be reported.
+Walk the PRIOR items in `shared/reporting_standards.md`; flag every missing item. AMSTAR-2 ratings and the CCA must be reported.
 
 ## Guardrails
 

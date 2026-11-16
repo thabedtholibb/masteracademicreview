@@ -68,6 +68,10 @@ An end-to-end runnable demo exists: `shared/scripts/meta/example.py`.
 | Forest / funnel plot | `forest_plot` / `funnel_plot` |
 | Egger's test | `egger_test` |
 
+## Standards & sources
+
+Governing standards: **PRISMA 2020** (Page et al., 2021, doi:10.1136/bmj.n71), **MOOSE** for observational data (Stroup et al., 2000, doi:10.1001/jama.283.15.2008), **GRADE** for certainty (Guyatt et al., 2008, doi:10.1136/bmj.39489.470347.AD). Method sources: Higgins & Thompson 2002 for I²/Q (doi:10.1002/sim.1186), DerSimonian & Laird 1986 for random effects (doi:10.1016/0197-2456(86)90046-2), Egger et al. 1997 (doi:10.1136/bmj.315.7109.629), Duval & Tweedie 2000 (doi:10.1111/j.0006-341X.2000.00455.x), Borenstein et al. 2021. Full citations: `shared/method_sources.md`.
+
 ## Gate (before calling it done)
 
 - [ ] ≥2 studies pooled; each study's effect size is traceable to extracted data.

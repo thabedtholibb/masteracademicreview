@@ -4,7 +4,7 @@ description: "Conduct an integrative review — synthesize empirical and theoret
 metadata:
   version: "0.1.0"
   genre: integrative-review
-  reporting_standard: "Whittemore & Knafl (5 stages)"
+  reporting_standard: "Whittemore & Knafl (2005); no EQUATOR checklist"
 ---
 
 # Integrative Review
@@ -39,6 +39,10 @@ Abstract
 3. Results — the integrated themes/framework
 4. Discussion — meaning, limitations, implications
 ```
+
+## Standards & sources
+
+Governing method: **Whittemore & Knafl's five stages** (Whittemore & Knafl, 2005, doi:10.1111/j.1365-2648.2005.03621.x). Method sources: Torraco 2005 (doi:10.1177/1534484305278283), Hopia et al. 2016 (doi:10.1111/scs.12327). No EQUATOR-registered checklist exists for integrative reviews; the gate below is the method contract. Full citations: `shared/method_sources.md`.
 
 ## Gate
 

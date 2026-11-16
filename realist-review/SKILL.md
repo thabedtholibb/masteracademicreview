@@ -41,6 +41,10 @@ Abstract
 4. Discussion — the middle-range theory, limitations, implications
 ```
 
+## Standards & sources
+
+Governing standard: **RAMESES** (Wong et al., 2013, doi:10.1186/1741-7015-11-21). Method source: Pawson et al. 2005, the original realist-review method (doi:10.1258/1355819054308530). Full citations and the Q1-readiness checklist: `shared/method_sources.md`.
+
 ## Gate
 
 - [ ] CMO configurations are explicit (context, mechanism, outcome separated).

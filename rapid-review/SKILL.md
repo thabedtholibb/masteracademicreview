@@ -1,10 +1,10 @@
 ---
 name: rapid-review
-description: "Conduct a rapid review — a streamlined systematic review for time-pressured decisions, with declared shortcuts (fewer databases, single reviewer, simplified extraction). Reported per Cochrane RAPID / adapted PRISMA. Use when the author needs a trustworthy-but-fast synthesis and accepts explicit methodological shortcuts. Trigger terms: rapid review, rapid evidence, Cochrane RAPID, accelerated review, tinjauan cepat."
+description: "Conduct a rapid review — a streamlined systematic review for time-pressured decisions, with declared shortcuts (fewer databases, single reviewer, simplified extraction). Reported per Cochrane rapid-review guidance / adapted PRISMA. Use when the author needs a trustworthy-but-fast synthesis and accepts explicit methodological shortcuts. Trigger terms: rapid review, rapid evidence, Cochrane RAPID, accelerated review, tinjauan cepat."
 metadata:
   version: "0.1.0"
   genre: rapid-review
-  reporting_standard: "Cochrane RAPID / adapted PRISMA"
+  reporting_standard: "Cochrane rapid-review guidance (2021/2024) + adapted PRISMA"
 ---
 
 # Rapid Review
@@ -44,7 +44,11 @@ Abstract
 4. Discussion — what the shortcuts limit, implications
 ```
 
-## Gate (Cochrane RAPID)
+## Standards & sources
+
+Governing standard: **Cochrane Rapid Reviews Methods Group guidance** (Garritty et al., 2021, doi:10.1016/j.jclinepi.2020.10.007; updated 2024, doi:10.1136/bmj-2023-076335), reported through an **adapted PRISMA 2020** flow. Method sources: Tricco et al. 2015 (doi:10.1186/s12916-015-0465-6), Khangura et al. 2012 (doi:10.1186/2046-4053-1-10). Full citations: `shared/method_sources.md`.
+
+## Gate (Cochrane rapid-review guidance)
 
 - [ ] Every shortcut is declared in a "shortcuts taken" subsection.
 - [ ] The search and screening are documented enough to be re-run.

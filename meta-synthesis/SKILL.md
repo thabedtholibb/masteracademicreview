@@ -41,9 +41,13 @@ Abstract
 4. Discussion — the new interpretation, trustworthiness, limitations
 ```
 
+## Standards & sources
+
+Governing standard: **ENTREQ** (Tong et al., 2012, doi:10.1186/1471-2288-12-181). Method sources: Thomas & Harden 2008 for thematic synthesis (doi:10.1186/1471-2288-8-45), Noblit & Hare 1988 for meta-ethnography, Lockwood et al. 2015 for meta-aggregation (doi:10.1097/XEB.0000000000000062), Flemming et al. 2018 for Cochrane qualitative reporting (doi:10.1016/j.jclinepi.2017.10.022). Full citations: `shared/method_sources.md`.
+
 ## Gate (ENTREQ, 21 items)
 
-Walk the ENTREQ checklist in `shared/reporting_standards.md`; flag every missing item. Every developed theme must trace to the included studies' findings or quotes.
+Walk the 21 ENTREQ items in `shared/reporting_standards.md`; flag every missing item. Every developed theme must trace to the included studies' findings or quotes.
 
 ## Guardrails
 

@@ -4,7 +4,7 @@ description: "Write a critical review — an argumentative, concept-driven engag
 metadata:
   version: "0.1.0"
   genre: critical-review
-  reporting_standard: "none (conceptual); uses explicit thesis + argument discipline"
+  reporting_standard: "none (conceptual); argument discipline"
 ---
 
 # Critical Review
@@ -43,6 +43,10 @@ You write a review whose product is **an argument**, not a summary. The literatu
 ## Decision points (recommendation-first)
 
 - **Thesis** — recommend sharpening the author's thesis (#1) over substituting your own; if the author has none, propose 1–2 candidate theses ranked, best first.
+
+## Standards & sources
+
+No EQUATOR-registered checklist exists for a critical review; the genre is defined in the review typologies. Method sources: Grant & Booth 2009 (doi:10.1111/j.1471-1842.2009.00848.x), Paré et al. 2015 (doi:10.1016/j.im.2014.08.008), Snyder 2019 (doi:10.1016/j.jbusres.2019.07.039). The gate below is the genre's internal argument contract. Full citations: `shared/method_sources.md`.
 
 ## Gate (before calling it done)
 

@@ -1,6 +1,6 @@
 # Skill-by-skill flows
 
-How each masteracademicreview skill runs, end to end. Fifteen skills: two that orchestrate the entry (`brainstorm`, `review-router`) and thirteen review genres.
+How each masteracademicreview skill runs, end to end. Sixteen skills: three at the entry (`brainstorm`, `journal-match`, `review-router`) and thirteen review genres.
 
 Every run ends with **`review.md` + artifacts** (and optional `review.docx`/`review.pdf`); see `shared/output_spec.md`.
 
@@ -25,6 +25,7 @@ vague idea ──► question +      framed request ──► ranked       chose
 | Skill | Use when | You provide | Output |
 |---|---|---|---|
 | `brainstorm` | vague idea, no question/keywords | raw topic | research question + keyword table + Boolean query |
+| `journal-match` | choosing where to submit | topic/manuscript + constraints | ranked journal shortlist + submission cascade |
 | `review-router` | unsure which review type | the request | ranked genre shortlist + brief |
 | `book-review` | reviewing a single book | book + its thesis + venue | book review (summary → critique → verdict) |
 | `narrative-review` | broad expert synthesis | topic + scope | narrative review (SANRA) |
@@ -53,7 +54,22 @@ vague idea ──► question +      framed request ──► ranked       chose
   4. Build a keyword table, terms ranked best-first per concept, top pick marked.
   5. Assemble the Boolean query (`OR` within concept, `AND` across).
   6. Hand off with a ranked genre hint to `review-router`.
-- **Output:** research question + framing + keyword table + Boolean query.
+  7. If the author wants to publish, offer `journal-match` with the brief.
+- **Output:** research question + framing + keyword table + Boolean query (+ optional journal shortlist).
+
+## `journal-match` (Phase A, optional)
+
+- **Use when:** the author asks where to submit, which journal fits, or wants a Q1/Q2 shortlist — before writing (recommended) or after drafting.
+- **You provide:** topic/title + abstract (or key claims), genre, and hard constraints (indexing, quartile, APC budget, deadline, OA).
+- **Flow:**
+  1. Collect inputs; mark scope fit provisional if there is no abstract yet.
+  2. Build 8–15 candidates from the review corpus, reference list, subject lists, and finder tools (leads only).
+  3. Screen against hard constraints, recording every exclusion reason.
+  4. Score eight criteria 0–5 and run `shared/scripts/journal_rank.py`.
+  5. Assign reach / target / safety tiers and a submission cascade (**#1 = target**).
+  6. Write `journal_shortlist.md` with an evidence table (source + check date) and cover-letter angles.
+- **Decision points:** run before writing (**#1**) vs after; target journal (**#1**) vs reach/safety.
+- **Output:** ranked shortlist + evidence table + cascade; **gate: every metric verified or marked `unverified`, author approves the target**.
 
 ## `review-router` (Phase B)
 
@@ -64,7 +80,7 @@ vague idea ──► question +      framed request ──► ranked       chose
   2. Interview along four axes — object, purpose, rigor, data.
   3. Classify into a **ranked shortlist** (top 2–3, **#1 recommended**, each with a reason).
   4. Dispatch #1 with a brief; the author can override.
-- **Output:** ranked genre shortlist + brief + handoff to the genre skill.
+- **Output:** ranked genre shortlist + brief + handoff to the genre skill (and an optional `journal-match` handoff).
 
 ---
 
@@ -140,7 +156,7 @@ vague idea ──► question +      framed request ──► ranked       chose
 - **You provide:** a focused question + a deadline.
 - **Flow:** choose shortcut tier (ranked #1/#2/#3) → search (fewer sources) → screen (single + verification sample) → narrative summary → adapted PRISMA with a mandatory "shortcuts taken" subsection.
 - **Decision points:** shortcut tier (**#1** = 2 databases + verification sample).
-- **Output:** rapid review + declared shortcuts; **gate: Cochrane RAPID**.
+- **Output:** rapid review + declared shortcuts; **gate: Cochrane rapid-review guidance**.
 
 ## `integrative-review`
 
