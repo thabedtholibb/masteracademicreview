@@ -186,7 +186,12 @@ masteracademicreview/
 │           ├── performance.py
 │           ├── mapping.py
 │           ├── plots.py
-│           └── example.py
+│           ├── example.py
+│           ├── validate_export.py  # regression checks on a real Scopus/WoS export
+│           └── sample.csv
+├── tests/
+│   └── fixtures/scopus_mini.csv    # cp1252 + semicolon fixture used by CI
+├── .github/workflows/ci.yml        # engines + parser regression + export smoke test
 └── docs/
     ├── INSTALL.md
     ├── USAGE.md
