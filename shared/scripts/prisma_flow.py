@@ -27,6 +27,14 @@ Usage:
         "prisma_flow.svg",
     )
 
+Variants (``render_prisma(counts, path, variant=...)``):
+    "systematic"  PRISMA 2020 new-review flow (default).
+    "scoping"     PRISMA-ScR / JBI terminology ("sources of evidence").
+    "update"      PRISMA 2020 flow for an updated review: the new studies
+                  flow down the main column; the previous version's studies
+                  and the combined total are shown at the bottom. Extra keys:
+                  previous_studies (int), previous_reports (int, optional).
+
 Optional keys:
     registers                int  - additional records from registers
     removed_before_screening list - [(reason, count)]; overrides the derived
@@ -36,8 +44,12 @@ Optional keys:
     reports_included         int  - reports of the included studies
 """
 
+import argparse
 import html
+import json
+import sys
 import textwrap
+import xml.etree.ElementTree as ET
 
 WIDTH = 1120
 PHASE_X, PHASE_W = 10, 112
@@ -113,7 +125,33 @@ def _phase_band(x, y1, y2, label):
     )
 
 
-def render_prisma(d, out_path):
+VARIANTS = ("systematic", "scoping", "update")
+
+LABELS = {
+    "systematic": {
+        "screened": "Records screened", "excluded_ta": "Records excluded",
+        "sought": "Reports sought for retrieval", "not_retrieved": "Reports not retrieved",
+        "assessed": "Reports assessed for eligibility", "excl_ft": "Reports excluded:",
+        "excl_ft_zero": "Reports excluded", "included": "Studies included in review",
+    },
+    "scoping": {
+        "screened": "Records screened", "excluded_ta": "Records excluded",
+        "sought": "Sources of evidence sought for retrieval",
+        "not_retrieved": "Sources of evidence not retrieved",
+        "assessed": "Sources of evidence assessed for eligibility",
+        "excl_ft": "Sources of evidence excluded:",
+        "excl_ft_zero": "Sources of evidence excluded",
+        "included": "Sources of evidence included in review",
+    },
+}
+LABELS["update"] = dict(LABELS["systematic"], included="New studies included in review")
+
+
+def _main_cx(x, w):
+    return x + w / 2
+
+
+def render_prisma(d, out_path, variant="systematic"):
     """Render a standard PRISMA 2020 flow diagram from screening counts.
 
     Required keys (all integers except where noted):
@@ -128,6 +166,9 @@ def render_prisma(d, out_path):
         excluded_fulltext: list of (reason, count)
         included         : int
     """
+    if variant not in VARIANTS:
+        raise ValueError("variant must be one of %s" % ", ".join(VARIANTS))
+    L = LABELS[variant]
     db = list(d["database_records"])
     n_db = sum(c for _, c in db)
     n_other = int(d.get("other_sources", 0) or 0)
@@ -169,24 +210,24 @@ def render_prisma(d, out_path):
                       removed_lines, fill=SIDE_FILL)
 
     y_c = y_a + max(h_a, h_b) + ARROW_GAP
-    box_c, h_c = _box(MAIN_X, y_c, MAIN_W, f"Records screened (n = {screened})")
-    box_d, h_d = _box(SIDE_X, y_c, SIDE_W, f"Records excluded (n = {excl_ta})",
+    box_c, h_c = _box(MAIN_X, y_c, MAIN_W, f"{L['screened']} (n = {screened})")
+    box_d, h_d = _box(SIDE_X, y_c, SIDE_W, f"{L['excluded_ta']} (n = {excl_ta})",
                       fill=SIDE_FILL)
 
     y_e = y_c + max(h_c, h_d) + ARROW_GAP
     box_e, h_e = _box(MAIN_X, y_e, MAIN_W,
-                      f"Reports sought for retrieval (n = {sought})")
+                      f"{L['sought']} (n = {sought})")
     box_f, h_f = _box(SIDE_X, y_e, SIDE_W,
-                      f"Reports not retrieved (n = {not_retrieved})", fill=SIDE_FILL)
+                      f"{L['not_retrieved']} (n = {not_retrieved})", fill=SIDE_FILL)
 
     y_g = y_e + max(h_e, h_f) + ARROW_GAP
     box_g, h_g = _box(MAIN_X, y_g, MAIN_W,
-                      f"Reports assessed for eligibility (n = {assessed})")
+                      f"{L['assessed']} (n = {assessed})")
     if excl_ft:
-        box_h, h_h = _box(SIDE_X, y_g, SIDE_W, "Reports excluded:",
+        box_h, h_h = _box(SIDE_X, y_g, SIDE_W, L["excl_ft"],
                           [f"{r} (n = {c})" for r, c in excl_ft], fill=SIDE_FILL)
     else:
-        box_h, h_h = _box(SIDE_X, y_g, SIDE_W, "Reports excluded (n = 0)",
+        box_h, h_h = _box(SIDE_X, y_g, SIDE_W, L["excl_ft_zero"] + " (n = 0)",
                           fill=SIDE_FILL)
 
     y_i = y_g + max(h_g, h_h) + ARROW_GAP
@@ -194,8 +235,31 @@ def render_prisma(d, out_path):
     if reports_included is not None:
         included_lines.append(f"Reports of included studies (n = {reports_included})")
     box_i, h_i = _box(MAIN_X, y_i, MAIN_W,
-                      f"Studies included in review (n = {included})",
+                      f"{L['included']} (n = {included})",
                       included_lines, fill="#ffffff")
+    extra_boxes = ""
+    extra_parts = []
+    y_end = y_i + h_i
+    if variant == "update":
+        prev = int(d.get("previous_studies", 0) or 0)
+        prev_lines = []
+        if d.get("previous_reports") is not None:
+            prev_lines.append(f"Reports of previous studies (n = {d['previous_reports']})")
+        box_p, h_p = _box(SIDE_X, y_i, SIDE_W,
+                          f"Studies included in previous version (n = {prev})",
+                          prev_lines, fill=SIDE_FILL)
+        y_t = y_i + max(h_i, h_p) + ARROW_GAP
+        box_t, h_t = _box(MAIN_X, y_t, MAIN_W,
+                          f"Total studies included in review (n = {included + prev})")
+        extra_boxes = box_p + box_t
+        px = SIDE_X + SIDE_W / 2
+        extra_parts = [
+            _arrow(_main_cx(MAIN_X, MAIN_W), y_i + h_i, _main_cx(MAIN_X, MAIN_W), y_t),
+            f'<line x1="{px:.1f}" y1="{y_i + h_p:.1f}" x2="{px:.1f}" '
+            f'y2="{y_t + h_t / 2:.1f}" stroke="{LINE}" stroke-width="1.3"/>',
+            _arrow(px, y_t + h_t / 2, MAIN_X + MAIN_W, y_t + h_t / 2),
+        ]
+        y_end = y_t + h_t
 
     # ---------------- Connectors ----------------
     main_cx = MAIN_X + MAIN_W / 2
@@ -218,7 +282,7 @@ def render_prisma(d, out_path):
     top = y_a - 16
     boundary_1 = y_c - ARROW_GAP / 2
     boundary_2 = y_i - ARROW_GAP / 2
-    bottom = y_i + h_i + 16
+    bottom = y_end + 16
     height = bottom + 10
 
     parts.insert(0, _phase_band(PHASE_X, top, boundary_1, "Identification"))
@@ -237,7 +301,8 @@ def render_prisma(d, out_path):
         "</defs>"
         '<rect width="100%" height="100%" fill="#ffffff"/>'
         + box_a + box_b + box_c + box_d + box_e + box_f + box_g + box_h + box_i
-        + "".join(parts)
+        + extra_boxes
+        + "".join(parts) + "".join(extra_parts)
         + "</svg>"
     )
     with open(out_path, "w", encoding="utf-8") as f:
@@ -245,21 +310,152 @@ def render_prisma(d, out_path):
     return out_path
 
 
+SVG_NS = "{http://www.w3.org/2000/svg}"
+EXPECTED_ARROWS = {"systematic": 8, "scoping": 8, "update": 10}
+REQUIRED_TEXT = {
+    "systematic": ["Records identified from", "Records screened", "Studies included in review"],
+    "scoping": ["Sources of evidence assessed for eligibility",
+                "Sources of evidence included in review"],
+    "update": ["New studies included in review", "Studies included in previous version",
+               "Total studies included in review"],
+}
+
+
+def validate_svg(path, variant="systematic"):
+    """Structural check of a PRISMA SVG (parsed as XML, not substring search).
+
+    Verifies: well-formed SVG, viewBox matches size, boxes inside the canvas
+    and non-overlapping, text anchored inside a box (and not wider than it),
+    main-column boxes ordered top to bottom, the arrow count, the three phase
+    bands, and the variant's required labels. Returns a list of problems.
+    """
+    problems = []
+    try:
+        root = ET.parse(path).getroot()
+    except (ET.ParseError, OSError) as exc:
+        return ["not a readable SVG: %s" % exc]
+    if root.tag != SVG_NS + "svg":
+        return ["root element is not <svg>"]
+    vb = [float(v) for v in root.get("viewBox", "0 0 0 0").split()]
+    w, h = float(root.get("width", 0)), float(root.get("height", 0))
+    if vb[2:] != [w, h]:
+        problems.append("viewBox does not match width/height")
+
+    boxes, bands = [], []
+    for r in root.iter(SVG_NS + "rect"):
+        if r.get("stroke"):
+            boxes.append(tuple(float(r.get(k)) for k in ("x", "y", "width", "height")))
+        elif r.get("x") is not None:
+            bands.append(r)
+    if len(bands) != 3:
+        problems.append("expected 3 phase bands, found %d" % len(bands))
+    for x, y, bw, bh in boxes:
+        if x < 0 or y < 0 or x + bw > w or y + bh > h:
+            problems.append("box at (%g,%g) lies outside the canvas" % (x, y))
+    for i, a in enumerate(boxes):
+        for b in boxes[i + 1:]:
+            if (a[0] < b[0] + b[2] and b[0] < a[0] + a[2]
+                    and a[1] < b[1] + b[3] and b[1] < a[1] + a[3]):
+                problems.append("boxes overlap at (%g,%g) and (%g,%g)" % (a[0], a[1], b[0], b[1]))
+
+    texts = []
+    for t in root.iter(SVG_NS + "text"):
+        if t.get("transform"):          # rotated phase label
+            continue
+        x, y = float(t.get("x")), float(t.get("y"))
+        size = float(t.get("font-size", 11.5))
+        content = "".join(t.itertext())
+        texts.append(content)
+        host = [b for b in boxes if b[0] <= x <= b[0] + b[2] and b[1] <= y <= b[1] + b[3]]
+        if not host:
+            problems.append("text %r is not inside any box" % content[:40])
+        elif x + len(content) * size * 0.6 > host[0][0] + host[0][2] + 4:
+            problems.append("text %r overflows its box" % content[:40])
+
+    main_x = min(b[0] for b in boxes) if boxes else 0
+    col = sorted(b[1] for b in boxes if b[0] == main_x)
+    if any(b2 <= b1 for b1, b2 in zip(col, col[1:])):
+        problems.append("main column boxes are not ordered top to bottom")
+    arrows = sum(1 for ln in root.iter(SVG_NS + "line") if ln.get("marker-end"))
+    if arrows != EXPECTED_ARROWS[variant]:
+        problems.append("expected %d arrows for %s, found %d"
+                        % (EXPECTED_ARROWS[variant], variant, arrows))
+    for needle in REQUIRED_TEXT[variant]:
+        if not any(needle in t for t in texts):
+            problems.append("missing label %r" % needle)
+    return problems
+
+
+_SAMPLE = {
+    "database_records": [("PubMed", 102), ("Scopus", 88)],
+    "other_sources": 9,
+    "after_dedup": 140,
+    "screened": 140,
+    "excluded_title_abstract": 95,
+    "sought_retrieval": 45,
+    "not_retrieved": 4,
+    "assessed": 41,
+    "excluded_fulltext": [("Wrong population", 12), ("Wrong outcome", 11),
+                          ("Wrong design", 8)],
+    "included": 10,
+}
+
+
+def _selftest():
+    import os
+    import tempfile
+    with tempfile.TemporaryDirectory() as d:
+        for variant in VARIANTS:
+            data = dict(_SAMPLE, previous_studies=7, previous_reports=9)
+            path = os.path.join(d, variant + ".svg")
+            render_prisma(data, path, variant)
+            problems = validate_svg(path, variant)
+            assert not problems, (variant, problems)
+        with open(os.path.join(d, "update.svg"), encoding="utf-8") as f:
+            broken = f.read().replace('width="430"', 'width="2000"', 1)
+        bad = os.path.join(d, "bad.svg")
+        with open(bad, "w", encoding="utf-8") as f:
+            f.write(broken)
+        assert validate_svg(bad, "update"), "oversized box must be detected"
+        assert validate_svg(os.path.join(d, "nope.svg")), "missing file must be reported"
+        try:
+            render_prisma(_SAMPLE, os.path.join(d, "x.svg"), "bogus")
+        except ValueError:
+            pass
+        else:
+            raise AssertionError("unknown variant must raise")
+    print("prisma_flow selftest OK (%s)" % ", ".join(VARIANTS))
+
+
+def main(argv=None):
+    p = argparse.ArgumentParser(description="PRISMA 2020 flow diagram (SVG).")
+    p.add_argument("input", nargs="?", help="counts JSON (default: built-in demo)")
+    p.add_argument("--variant", choices=VARIANTS, default="systematic")
+    p.add_argument("--out", default="prisma_flow.svg")
+    p.add_argument("--validate", metavar="SVG", help="structurally validate an SVG and exit")
+    p.add_argument("--selftest", action="store_true")
+    a = p.parse_args(argv)
+    if a.selftest:
+        _selftest()
+        return 0
+    if a.validate:
+        problems = validate_svg(a.validate, a.variant)
+        for problem in problems:
+            print("FAIL: " + problem)
+        print("RESULT: %s" % ("FAIL" if problems else "PASS"))
+        return 1 if problems else 0
+    if a.input:
+        with open(a.input, encoding="utf-8-sig") as f:
+            data = json.load(f)
+        data["database_records"] = [tuple(x) for x in data["database_records"]]
+        if data.get("excluded_fulltext"):
+            data["excluded_fulltext"] = [tuple(x) for x in data["excluded_fulltext"]]
+    else:
+        data = dict(_SAMPLE, previous_studies=7)
+    render_prisma(data, a.out, a.variant)
+    print("wrote %s" % a.out)
+    return 0
+
+
 if __name__ == "__main__":
-    render_prisma(
-        {
-            "database_records": [("PubMed", 102), ("Scopus", 88)],
-            "other_sources": 9,
-            "after_dedup": 140,
-            "screened": 140,
-            "excluded_title_abstract": 95,
-            "sought_retrieval": 45,
-            "not_retrieved": 4,
-            "assessed": 41,
-            "excluded_fulltext": [("Wrong population", 12), ("Wrong outcome", 11),
-                                  ("Wrong design", 8)],
-            "included": 10,
-        },
-        "prisma_flow.svg",
-    )
-    print("wrote prisma_flow.svg")
+    sys.exit(main())

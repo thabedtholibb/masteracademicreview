@@ -4,7 +4,8 @@ Guards the claims the README makes:
 - every review genre has a 'Standards & sources' section and a gate;
 - the method-provenance file exists and carries enough verified DOIs;
 - the reporting-standards file covers every standard named by a genre skill;
-- the journal scorer and the journal-match skill are present.
+- the journal scorer and the journal-match skill are present;
+- the reproducibility tools exist and are wired into the shared documentation.
 
 Stdlib only. Exit 0 on success, 1 on the first broken invariant.
 """
@@ -95,10 +96,36 @@ for skill in ("journal-match", "brainstorm", "review-router"):
 if not (ROOT / "shared" / "scripts" / "journal_rank.py").exists():
     fail("shared/scripts/journal_rank.py missing")
 
+for doc_page in ("DECISION_TREE.md", "FAQ.md", "TROUBLESHOOTING.md"):
+    if not (ROOT / "docs" / doc_page).exists():
+        fail(f"docs/{doc_page} missing")
+
+for script in ("verify_refs.py", "screening_agreement.py", "validate_extraction.py", "check_review.py", "protocol.py"):
+    if not (ROOT / "shared" / "scripts" / script).exists():
+        fail(f"shared/scripts/{script} missing")
+
+for doc, needle in {
+    "shared/screening.md": "screening_agreement.py",
+    "shared/data_extraction.md": "validate_extraction.py",
+    "shared/output_spec.md": "verify_refs.py",
+    "shared/method_sources.md": "Byrt et al. 1993",
+}.items():
+    path = ROOT / doc
+    if not path.exists():
+        fail(f"{doc} missing")
+    elif needle not in path.read_text(encoding="utf-8"):
+        fail(f"{doc}: does not reference {needle}")
+
+if not (ROOT / "tests" / "run_tool_tests.py").exists():
+    fail("tests/run_tool_tests.py missing")
+
 if errors:
     print("documentation checks FAILED:")
     for err in errors:
         print(f"  - {err}")
     sys.exit(1)
 
-print(f"documentation checks OK ({len(GENRES)} genres, standards + gates + provenance + journal skill)")
+print(
+    f"documentation checks OK ({len(GENRES)} genres, standards + gates + provenance "
+    "+ journal skill + reproducibility tools)"
+)

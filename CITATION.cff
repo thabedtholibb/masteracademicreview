@@ -1,0 +1,15 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "Master Academic Review"
+type: software
+version: 0.1.0
+date-released: "2026-11-16"
+license: MIT
+repository-code: "https://github.com/thabedtholibb/masteracademicreview"
+abstract: >-
+  A portable agent skill-suite for writing academic reviews (13 genres) with
+  reporting standards, reproducible meta-analysis, PRISMA flow, screening
+  agreement, extraction validation and reference-integrity checking.
+keywords: [systematic review, meta-analysis, PRISMA, agent skills, evidence synthesis]
+authors:
+  - alias: thabedtholibb

@@ -28,7 +28,14 @@ At full-text stage, **every excluded study must carry an exclusion reason**. Use
 
 - Two reviewers screen independently; conflicts resolved by discussion or a third reviewer.
 - Do **not** silently default to "include on conflict" — adjudicate each conflict.
-- Record inter-rater agreement (Cohen's κ, or PABAK for skewed prevalence) at title/abstract stage.
+- Record inter-rater agreement at every dual-screened stage: Cohen's κ with **PABAK** (κ is unstable when one decision dominates). Compute both from the log:
+
+  ```
+  python shared/scripts/screening_agreement.py screening_log.csv --long --reviewers alice,bob --min-kappa 0.6 --out agreement.md --disagreements conflicts.csv
+  ```
+
+  Use the wide form (`reviewer1,reviewer2` columns) when the log is already pivoted. A κ below the protocol threshold means the criteria need re-calibration and a re-screen, not a lower threshold.
+- Report agreement per stage, not only overall: title/abstract and full-text agreement can differ.
 
 ## 4. Track the flow (PRISMA)
 

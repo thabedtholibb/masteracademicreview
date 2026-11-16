@@ -40,17 +40,21 @@ If there are fewer than 2 studies, pooling is mathematically meaningless — sto
 3. **Pool** — fixed and random effects with `shared/scripts/meta/pooling.py`:
    ```python
    from pooling import inverse_variance, random_effects, confidence_interval
-   re = random_effects(effects, variances)        # random effects (DerSimonian–Laird)
-   ci = confidence_interval(re["effect"], re["variance"])
-   # re["heterogeneity"] -> {Q, df, p, I2}
+   re = random_effects(effects, variances, method="reml", hksj=True)
+   # method: "dl" (default) | "reml" | "pm"; hksj=True -> Hartung-Knapp-Sidik-Jonkman
+   re["ci"]                                        # CI (t with k-1 df when hksj)
+   # re["heterogeneity"] -> {Q, df, p, I2}; re["tau2"]
    ```
+   Default to **REML + HKSJ** when k is small or heterogeneity is present; state the estimator in Methods and report DL as a sensitivity analysis when the field expects it.
 4. **Assess heterogeneity & bias** — report I² and Q; draw forest and funnel plots, and run Egger's test with `shared/scripts/meta/plots.py`:
    ```python
    from plots import forest_plot, funnel_plot, egger_test
    forest_plot(studies, effects, variances, re["effect"], re["variance"], ...)
    funnel_plot(effects, variances, re["effect"], ...)
-   egger = egger_test(effects, variances)          # {intercept, se, t, p}
+   egger = egger_test(effects, variances)          # {intercept, se, t, p, adequate, warning}
    ```
+   Egger is flagged `adequate=False` when k < 10: do not interpret it (state this, do not claim "no publication bias").
+4b. **Heterogeneity and sensitivity** — report a 95% **prediction interval** (`prediction_interval(re)`, k ≥ 3), run **leave-one-out** (`leave_one_out`), and, only with enough studies, `subgroup_analysis` / `meta_regression` (pre-specified moderators; < 10 studies per moderator is exploratory and returns a `warning`).
 5. **Rate certainty** — apply GRADE (`shared/risk_of_bias.md`) using I² (inconsistency), CIs (imprecision), RoB, indirectness, and Egger's result (publication bias).
 6. **Report** — PRISMA 2020 + MOOSE; include the forest plot, funnel plot, pooled estimate with CI, I², tau², and Egger's test.
 
@@ -63,7 +67,10 @@ An end-to-end runnable demo exists: `shared/scripts/meta/example.py`.
 | Hedges' g + variance | `hedges_g` |
 | Log OR / log RR | `log_odds_ratio` / `log_risk_ratio` |
 | Fixed-effect pooled estimate | `inverse_variance` |
-| Random-effects (DL) + tau² | `random_effects` |
+| Random-effects (DL/REML/PM, optional HKSJ) + tau² | `random_effects` |
+| Prediction interval | `prediction_interval` |
+| Leave-one-out sensitivity | `leave_one_out` |
+| Subgroup test / meta-regression | `subgroup_analysis` / `meta_regression` |
 | I² and Cochran's Q | `heterogeneity` |
 | Forest / funnel plot | `forest_plot` / `funnel_plot` |
 | Egger's test | `egger_test` |
@@ -75,10 +82,13 @@ Governing standards: **PRISMA 2020** (Page et al., 2021, doi:10.1136/bmj.n71), *
 ## Gate (before calling it done)
 
 - [ ] ≥2 studies pooled; each study's effect size is traceable to extracted data.
+- [ ] `effects.csv` validated (finite effects, variance > 0, one row per study–outcome): `python shared/scripts/validate_extraction.py effects.csv`.
 - [ ] Fixed *and* random effects reported (report random-effects as primary).
 - [ ] I², Q (with p), and tau² reported and interpreted.
-- [ ] Forest plot and funnel plot produced from the code, with Egger's result stated.
+- [ ] Forest plot and funnel plot produced from the code, with Egger's result stated; k < 10 is acknowledged as underpowered for Egger.
 - [ ] Publication-bias and heterogeneity limitations are discussed (high I² → cautious interpretation).
+- [ ] Dual screening agreement reported (`screening_agreement.py`) or the single-reviewer limitation stated.
+- [ ] References checked: `python shared/scripts/verify_refs.py review.md`.
 - [ ] GRADE certainty rating per outcome.
 
 ## Guardrails

@@ -18,6 +18,10 @@ from .pooling import (
     random_effects,
     heterogeneity,
     confidence_interval,
+    prediction_interval,
+    leave_one_out,
+    subgroup_analysis,
+    meta_regression,
 )
 from .plots import (
     forest_plot,
@@ -36,6 +40,10 @@ __all__ = [
     "random_effects",
     "heterogeneity",
     "confidence_interval",
+    "prediction_interval",
+    "leave_one_out",
+    "subgroup_analysis",
+    "meta_regression",
     "forest_plot",
     "funnel_plot",
     "egger_test",

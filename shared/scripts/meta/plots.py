@@ -76,12 +76,14 @@ def funnel_plot(effects, variances, pooled, filename="funnel.png",
     return filename
 
 
-def egger_test(effects, variances):
+def egger_test(effects, variances, min_k=10):
     """Egger's regression test for small-study / publication bias.
 
     Regresses the standardized effect (effect/SE) on precision (1/SE);
     a nonzero intercept suggests asymmetry. Returns a dict with
-    intercept, se, t, and two-sided p.
+    intercept, se, t, two-sided p, and ``adequate`` (False with a
+    ``warning`` when k < ``min_k``: low power, do not interpret;
+    Sterne et al. 2011).
     """
     effects = np.asarray(effects, dtype=float)
     variances = np.asarray(variances, dtype=float)
@@ -91,7 +93,8 @@ def egger_test(effects, variances):
     n = len(effects)
     if n < 3:
         return {"intercept": float("nan"), "se": float("nan"),
-                "t": float("nan"), "p": float("nan")}
+                "t": float("nan"), "p": float("nan"), "adequate": False,
+                "warning": "k < 3: Egger test not computable"}
     x = np.column_stack([np.ones(n), precision])
     beta, *_ = np.linalg.lstsq(x, snd, rcond=None)
     resid = snd - x @ beta
@@ -101,5 +104,9 @@ def egger_test(effects, variances):
     se_intercept = math.sqrt(cov[0, 0])
     t_stat = beta[0] / se_intercept
     p = 2 * tdist.sf(abs(t_stat), dof)
+    ok = n >= min_k
     return {"intercept": float(beta[0]), "se": se_intercept,
-            "t": float(t_stat), "p": float(p)}
+            "t": float(t_stat), "p": float(p), "adequate": ok,
+            "warning": None if ok else
+            "k < %d: low power; do not interpret as evidence for or "
+            "against publication bias" % min_k}

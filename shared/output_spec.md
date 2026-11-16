@@ -8,6 +8,7 @@ the user always knows what they will receive.
 One review document + supporting artifacts + optional export:
 
 ```
+protocol.md          ← registration-ready protocol (protocol.py; registrable genres)
 review.md            ← the review (single source of truth)
 prisma_flow.svg      ← systematic / scoping / mapping reviews
 forest.png           ← meta-analysis
@@ -15,6 +16,11 @@ funnel.png           ← meta-analysis
 effects.csv          ← meta-analysis (the extracted effect sizes)
 characteristics.csv  ← systematic / scoping / mapping (study table)
 screening_log.csv    ← systematic / meta / scoping / mapping
+conflicts.csv        ← disagreements for adjudication (screening_agreement.py)
+agreement.md         ← dual-screening κ/PABAK report (screening_agreement.py)
+extraction_check.md  ← extraction validation report (validate_extraction.py)
+ref_check.md         ← reference integrity report (verify_refs.py)
+review_check.md      ← gate validation report (check_review.py)
 review.docx          ← optional, via export.py (Word)
 review.pdf           ← optional, via export.py (needs a PDF engine)
 ```
@@ -65,8 +71,14 @@ Every review ends with a gate check. The status line is one of:
 - `⚠ partial` — some items partial; the missing ones are listed at the end.
 - `✗ failed` — not done; missing items are listed with what is needed.
 
-A review is not "done" unless the gate line says `✓ passed` (or a waiver is
+`python shared/scripts/check_review.py review.md` automates this gate: header fields, genre sections, citations, artifacts and gate-line consistency. A review is not "done" unless the gate line says `✓ passed` (or a waiver is
 recorded with a reason).
+
+For **every** genre, the gate cannot pass while `verify_refs.py` reports an error
+(an unresolved citation or a duplicate DOI). Systematic and meta reviews also run
+`screening_agreement.py` and `validate_extraction.py`; their reports are the
+artifacts listed above. A reference that cannot be resolved is fixed or removed,
+never left in the list.
 
 ## Export to Word / PDF
 

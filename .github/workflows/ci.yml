@@ -27,7 +27,9 @@ jobs:
           pip install numpy scipy matplotlib python-docx reportlab
 
       - name: Meta-analysis engine
-        run: python shared/scripts/meta/example.py
+        run: |
+          python shared/scripts/meta/example.py
+          python shared/scripts/meta/selftest.py
 
       - name: Bibliometric engine
         run: python shared/scripts/bibliometric/example.py
@@ -39,8 +41,13 @@ jobs:
 
       - name: PRISMA flow (stdlib only)
         run: |
+          python shared/scripts/prisma_flow.py --selftest
           python shared/scripts/prisma_flow.py
-          python -c "s=open('prisma_flow.svg',encoding='utf-8').read(); assert s.startswith('<svg') and 'Studies included in review' in s; print('prisma SVG OK')"
+          python shared/scripts/prisma_flow.py --validate prisma_flow.svg
+          python shared/scripts/prisma_flow.py --variant scoping --out /tmp/prisma_scr.svg
+          python shared/scripts/prisma_flow.py --variant scoping --validate /tmp/prisma_scr.svg
+          python shared/scripts/prisma_flow.py --variant update --out /tmp/prisma_update.svg
+          python shared/scripts/prisma_flow.py --variant update --validate /tmp/prisma_update.svg
 
       - name: Journal-fit scorer (stdlib only)
         run: |
@@ -49,6 +56,9 @@ jobs:
           grep -q "#1 recommended" /tmp/journals.md
           grep -q "LEGITIMACY RISK" /tmp/journals.md
           echo "journal scorer OK"
+
+      - name: Reproducibility tools (stdlib only)
+        run: python tests/run_tool_tests.py
 
       - name: Documentation integrity (standards + provenance)
         run: python tests/check_docs.py
@@ -59,3 +69,42 @@ jobs:
           printf '# Test Review\n\nHello **world**.\n' > /tmp/export-smoke/review.md
           python shared/scripts/export.py /tmp/export-smoke/review.md
           python -c "import zipfile; assert zipfile.is_zipfile('/tmp/export-smoke/review.docx'), 'bad docx'; assert open('/tmp/export-smoke/review.pdf','rb').read(5)==b'%PDF-', 'bad pdf'; print('DOCX + PDF export OK')"
+
+  windows:
+    name: windows (stdlib tools + encoding)
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install python-docx reportlab
+
+      - name: Reproducibility tools
+        run: python tests/run_tool_tests.py
+
+      - name: Documentation integrity
+        run: python tests/check_docs.py
+
+      - name: Export parser regression (cp1252 / semicolon)
+        run: python shared/scripts/bibliometric/validate_export.py tests/fixtures/scopus_mini.csv
+
+      - name: PRISMA flow + journal scorer
+        run: |
+          python shared/scripts/prisma_flow.py
+          python shared/scripts/journal_rank.py --selftest
+
+      - name: Console encoding (cp1252 stdout must not crash)
+        env:
+          PYTHONIOENCODING: cp1252
+        run: python shared/scripts/journal_rank.py tests/fixtures/journals_example.csv
+
+      - name: Markdown export smoke test
+        shell: bash
+        run: |
+          mkdir -p "$RUNNER_TEMP/smoke"
+          printf '# Test Review\n\nHello **world** – é.\n' > "$RUNNER_TEMP/smoke/review.md"
+          python shared/scripts/export.py "$RUNNER_TEMP/smoke/review.md"
+          python -c "import sys,zipfile; d=sys.argv[1]; assert zipfile.is_zipfile(d+'/review.docx'); assert open(d+'/review.pdf','rb').read(5)==b'%PDF-'; print('export OK')" "$RUNNER_TEMP/smoke"

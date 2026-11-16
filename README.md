@@ -17,6 +17,10 @@ Most academic-AI tools treat "review" as a side-mode of a paper generator. **Mas
 
 ---
 
+## Documentation
+
+[Decision tree (which skill?)](docs/DECISION_TREE.md) · [FAQ](docs/FAQ.md) · [Troubleshooting (Windows, Pandoc, encoding)](docs/TROUBLESHOOTING.md) · [Usage](docs/USAGE.md) · [Install](docs/INSTALL.md)
+
 ## The Flow
 
 ```
@@ -46,7 +50,7 @@ The **`brainstorm` skill** sits before classification because most people get st
 Every run ends with **one review document plus supporting artifacts** (see [shared/output_spec.md](shared/output_spec.md)):
 
 1. **`review.md`** — the review itself: a title, a metadata block (review type, reporting standard, sources, search date, gate status), an abstract, the genre's sections, and references.
-2. **Artifacts** (per genre) — e.g. `prisma_flow.svg`, `forest.png`, `funnel.png`, `effects.csv`, `characteristics.csv`.
+2. **Artifacts** (per genre) — e.g. `prisma_flow.svg`, `forest.png`, `funnel.png`, `effects.csv`, `characteristics.csv`, plus the gate reports `agreement.md`, `extraction_check.md`, and `ref_check.md`.
 3. **`review.docx` / `review.pdf`** — optional, via `python shared/scripts/export.py review.md` (Pandoc, with an automatic no-Pandoc fallback), so the review can be submitted to Word-based journals or a supervisor.
 4. **`journal_shortlist.md`** — optional, from `journal-match`: a ranked target-journal shortlist with verified metrics and a submission cascade.
 
@@ -88,6 +92,22 @@ Ask *"Where should I submit this review?"* — `brainstorm` offers it after the 
 
 ---
 
+## Reproducibility Checks (Built In)
+
+The suite does not ask you to trust arithmetic it cannot show. Stdlib-only tools are part of the gates:
+
+| Check | Command | What it catches |
+|---|---|---|
+| **Reference integrity** | `python shared/scripts/verify_refs.py review.md` | duplicate DOIs, citations with no reference, orphan references, missing year/title. Add `--online` for a Crossref DOI/title/year check. |
+| **Screening agreement** | `python shared/scripts/screening_agreement.py screening_log.csv --long --reviewers alice,bob` | Cohen's κ, PABAK, per-stage agreement, and a `conflicts.csv` for adjudication. |
+| **Extraction validation** | `python shared/scripts/validate_extraction.py effects.csv` | non-finite effects, variance ≤ 0, bad sample sizes/years, duplicate study–outcome rows, and k < 2 / k < 10 guards. |
+| **Protocol** | `python shared/scripts/protocol.py protocol.json --out protocol.md` | a registration-ready protocol (PROSPERO/OSF fields) per genre, PRISMA-P based; undecided fields stay `[TO COMPLETE]` and `--strict` fails until they are filled. Start with `--template GENRE`. |
+| **Review gate** | `python shared/scripts/check_review.py review.md` | missing metadata fields, missing genre sections, unresolved citations, referenced/required artifacts that do not exist, leftover `TODO`/`[citation needed]`, and a gate line that says "passed" with an incomplete checklist. |
+
+All of these are offline by default and run in CI; only `verify_refs.py --online` needs the network. Reports land in `review_check.md`, `ref_check.md`, `agreement.md`, and `extraction_check.md`.
+
+---
+
 ## Invoking a Skill (Three Ways)
 
 1. **Auto (default).** Just describe what you want — *"I want a meta-analysis of this data"* — and the skill whose `description` matches loads itself.
@@ -113,6 +133,9 @@ brainstorm ──► research question + keywords ──► review-router ──
       │    └─ scripts/
       │         ├─ prisma_flow.py     # deterministic PRISMA flow-diagram generator (stdlib SVG)
       │         ├─ journal_rank.py    # deterministic journal-fit scoring (stdlib)
+      │         ├─ verify_refs.py     # reference integrity: offline + Crossref (stdlib)
+      │         ├─ screening_agreement.py  # Cohen's κ + PABAK for dual screening (stdlib)
+      │         ├─ validate_extraction.py  # effects/characteristics validation (stdlib)
       │         ├─ meta/              # real meta-analysis statistics engine (numpy/scipy/matplotlib)
       │         └─ bibliometric/      # bibliometric engine (parse, performance, co-word mapping, plots)
       │
@@ -199,6 +222,9 @@ masteracademicreview/
 │   └── scripts/
 │       ├── prisma_flow.py
 │       ├── journal_rank.py         # deterministic journal-fit scorer (stdlib)
+│       ├── verify_refs.py          # reference consistency + Crossref verification (stdlib)
+│       ├── screening_agreement.py  # Cohen's κ + PABAK, wide or long logs (stdlib)
+│       ├── validate_extraction.py  # meta/generic extraction checks (stdlib)
 │       ├── export.py               # one-command MD → DOCX/PDF (Pandoc, fallback to mdconvert)
 │       ├── mdconvert.py            # no-Pandoc converter (python-docx + reportlab)
 │       ├── meta/
@@ -217,9 +243,14 @@ masteracademicreview/
 │           ├── validate_export.py  # regression checks on a real Scopus/WoS export
 │           └── sample.csv
 ├── tests/
+│   ├── check_docs.py               # standards/gates/provenance integrity (stdlib)
+│   ├── run_tool_tests.py           # CLI regression tests for the reproducibility tools
 │   ├── fixtures/scopus_mini.csv    # cp1252 + semicolon fixture used by CI
-│   └── fixtures/journals_example.csv  # fictional journal table for the scorer's CI check
-├── .github/workflows/ci.yml        # engines + parser regression + export + journal scorer
+│   ├── fixtures/journals_example.csv  # fictional journal table for the scorer's CI check
+│   ├── fixtures/review_refs_*.md   # clean / broken / running-bibliography reference fixtures
+│   ├── fixtures/screening_*.csv    # wide and long dual-screening fixtures
+│   └── fixtures/effects_*.csv      # valid / invalid meta-analysis extraction fixtures
+├── .github/workflows/ci.yml        # engines + parser + export + journal + reproducibility tools
 └── docs/
     ├── INSTALL.md
     ├── USAGE.md

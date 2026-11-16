@@ -59,7 +59,9 @@ Stop at 8–15. A shortlist of 30 is not a decision.
 
 Drop any journal that fails a hard constraint (not indexed where required, does not publish reviews of this type, APC over budget, wrong language). Record *why* it was dropped — the author may want to revisit a constraint.
 
-### 4. Score each survivor (0–5 per criterion)
+### 4. Score each survivor (anchored 5 / 3 / 1 / 0)
+
+Score against the written anchors, not by feel: `python shared/scripts/journal_rank.py --rubric` prints what a 5, 3, 1 and 0 mean for every criterion (2 and 4 are flagged `OFF_ANCHOR`; `--strict-anchors` forbids them). Record the evidence for each journal in `journal-match/evidence_worksheet.md` first, then copy the scores into the CSV. **A `scope_fit` of 3 or more requires a verbatim `scope_quote`**; the engine refuses the row otherwise. Look values up manually: do not scrape Scopus or any source whose terms forbid it.
 
 | Criterion | 5 means | 0 means | Default weight |
 |---|---|---|---:|
@@ -77,6 +79,7 @@ Then let the **engine** do the arithmetic:
 ```bash
 python shared/scripts/journal_rank.py journals.csv --out journal_shortlist.md
 python shared/scripts/journal_rank.py --template > journals.csv   # columns
+python shared/scripts/journal_rank.py journals.csv --explain       # points contributed/lost per criterion
 ```
 
 CSV columns: `journal, issn, publisher, tier, scope_fit, article_fit, method_fit, indexing, speed, cost, audience, risk, verified, scope_quote, evidence_url, notes`. `verified` is a semicolon list of the criteria you actually checked (e.g. `scope_fit;indexing;cost`). Do not mark a field verified because it "looks right".

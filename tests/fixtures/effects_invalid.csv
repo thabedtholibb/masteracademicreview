@@ -1,0 +1,6 @@
+study,effect,variance,n,year,outcome
+Study A,0.42,0.03,120,2018,one
+Study A,abc,0.04,98,2019,two
+Study B,0.35,0,100,2020,one
+Study C,0.28,-0.01,80,2021,one
+,0.50,0.02,60,2022,one

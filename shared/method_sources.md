@@ -47,12 +47,20 @@ Every genre skill is built on a published methodological standard plus the peer-
 - Stroup DF, Berlin JA, Morton SC, et al. Meta-analysis of observational studies in epidemiology: a proposal for reporting. *JAMA*. 2000;283(15):2008-2012. doi:10.1001/jama.283.15.2008
 - Higgins JPT, Thompson SG. Quantifying heterogeneity in a meta-analysis. *Stat Med*. 2002;21(11):1539-1558. doi:10.1002/sim.1186
 - DerSimonian R, Laird N. Meta-analysis in clinical trials. *Control Clin Trials*. 1986;7(3):177-188. doi:10.1016/0197-2456(86)90046-2
+- Hartung J, Knapp G. On tests of the overall treatment effect in meta-analysis with normally distributed responses. *Stat Med*. 2001;20(12):1771-1782. doi:10.1002/sim.791
+- Sidik K, Jonkman JN. A simple confidence interval for meta-analysis. *Stat Med*. 2002;21(21):3153-3159. doi:10.1002/sim.1262
+- IntHout J, Ioannidis JPA, Borm GF. The Hartung-Knapp-Sidik-Jonkman method for random effects meta-analysis is straightforward and considerably outperforms the standard DerSimonian-Laird method. *BMC Med Res Methodol*. 2014;14:25. doi:10.1186/1471-2288-14-25
+- Higgins JPT, Thompson SG, Spiegelhalter DJ. A re-evaluation of random-effects meta-analysis. *J R Stat Soc A*. 2009;172(1):137-159. doi:10.1111/j.1467-985X.2008.00552.x
+- Paule RC, Mandel J. Consensus values and weighting factors. *J Res Natl Bur Stand*. 1982;87(5):377-385. doi:10.6028/jres.087.022
+- Viechtbauer W. Bias and efficiency of meta-analytic variance estimators in the random-effects model. *J Educ Behav Stat*. 2005;30(3):261-293. doi:10.3102/10769986030003261
+- Sterne JAC, Sutton AJ, Ioannidis JPA, et al. Recommendations for examining and interpreting funnel plot asymmetry in meta-analyses of randomised controlled trials. *BMJ*. 2011;343:d4002. doi:10.1136/bmj.d4002
 - Egger M, Davey Smith G, Schneider M, Minder C. Bias in meta-analysis detected by a simple, graphical test. *BMJ*. 1997;315(7109):629-634. doi:10.1136/bmj.315.7109.629
 - Duval S, Tweedie R. Trim and fill: a simple funnel-plot-based method of testing and adjusting for publication bias in meta-analysis. *Biometrics*. 2000;56(2):455-463. doi:10.1111/j.0006-341X.2000.00455.x
 - Viechtbauer W. Conducting meta-analyses in R with the metafor package. *J Stat Softw*. 2010;36(3):1-48. doi:10.18637/jss.v036.i03
 - Borenstein M, Hedges LV, Higgins JPT, Rothstein HR. *Introduction to Meta-Analysis*. 2nd ed. Wiley; 2021.
 
 ### Scoping review
+- Moher D, Shamseer L, Clarke M, et al. Preferred reporting items for systematic review and meta-analysis protocols (PRISMA-P) 2015 statement. *Syst Rev*. 2015;4:1. doi:10.1186/2046-4053-4-1
 - Tricco AC, Lillie E, Zarin W, et al. PRISMA Extension for Scoping Reviews (PRISMA-ScR): checklist and explanation. *Ann Intern Med*. 2018;169(7):467-473. doi:10.7326/M18-0850
 - Arksey H, O'Malley L. Scoping studies: towards a methodological framework. *Int J Soc Res Methodol*. 2005;8(1):19-32. doi:10.1080/1364557032000119616
 - Levac D, Colquhoun H, O'Brien KK. Scoping studies: advancing the methodology. *Implement Sci*. 2010;5:69. doi:10.1186/1748-5908-5-69
@@ -124,11 +132,19 @@ Every genre skill is built on a published methodological standard plus the peer-
 | Risk of bias (mixed methods) | MMAT 2018 (Hong et al. 2018, doi:10.3233/EFI-180221) | five criteria per design |
 | Qualitative appraisal | CASP Qualitative Checklist | trustworthiness, not exclusion |
 | Certainty of evidence | GRADE (Guyatt et al. 2008) | risk of bias, inconsistency, indirectness, imprecision, publication bias |
+| Inter-rater agreement | Cohen 1960; Landis & Koch 1977 | κ and its interpretation bands |
+| Agreement with skewed prevalence | Byrt et al. 1993 | PABAK, prevalence and bias indices |
 | Heterogeneity | Higgins & Thompson 2002 | I², Cochran's Q |
 | Random-effects pooling | DerSimonian & Laird 1986 | tau², pooled estimate |
+| tau² estimators | Paule & Mandel 1982; Viechtbauer 2005 | PM and REML options in `random_effects` |
+| Small-k interval adjustment | Hartung & Knapp 2001; Sidik & Jonkman 2002; IntHout et al. 2014 | `hksj=True` |
+| Prediction interval | Higgins et al. 2009 | `prediction_interval` |
+| Small-study test adequacy | Sterne et al. 2011 | Egger guard (k ≥ 10) |
 | Small-study effects | Egger et al. 1997; Duval & Tweedie 2000 | Egger's test, trim-and-fill |
 | Mixed-methods reviews | Pluye & Hong 2014 (doi:10.1146/annurev-publhealth-032013-182440) | integrating qualitative + quantitative evidence |
 | Scoping/mapping conduct | JBI Manual for Evidence Synthesis (2024) | PCC, charting, optional appraisal |
+
+**Agreement statistics:** Cohen J. A coefficient of agreement for nominal scales. *Educ Psychol Meas*. 1960;20(1):37-46. doi:10.1177/001316446002000104 · Landis JR, Koch GG. The measurement of observer agreement for categorical data. *Biometrics*. 1977;33(1):159-174. doi:10.2307/2529310 · Byrt T, Bishop J, Carlin JB. Bias, prevalence and kappa. *J Clin Epidemiol*. 1993;46(5):423-429. doi:10.1016/0895-4356(93)90018-V.
 
 ---
 
@@ -157,12 +173,13 @@ A Q1 editor or reviewer will typically check the following. The genre gates cove
 - [ ] **Protocol** — registered (PROSPERO/OSF) where the genre requires it; deviations reported.
 - [ ] **Reproducible search** — databases, full strategies, limits, dates, deduplication (PRISMA-S).
 - [ ] **Eligibility criteria** — explicit, applied consistently, with ordered exclusion reasons.
-- [ ] **Dual processes** — screening and extraction performed independently, with agreement reported.
+- [ ] **Dual processes** — screening and extraction performed independently, with agreement reported (`screening_agreement.py`).
 - [ ] **Risk of bias** — design-matched tool, per-study results, not a single aggregate score.
 - [ ] **Synthesis** — method matches the data (pooling, thematic, CMO, mapping); heterogeneity handled.
 - [ ] **Certainty** — GRADE or the genre's equivalent, with reasons for downgrading.
 - [ ] **Reporting checklist** — completed checklist attached as a supplement, not just cited.
 - [ ] **Data availability** — extraction sheet, search log, analysis code available.
+- [ ] **Reference integrity** — every in-text citation resolves, no duplicate DOIs, DOI-bearing references spot-checked (`verify_refs.py`).
 - [ ] **Limitations** — of the evidence *and* of the review process, stated separately.
 - [ ] **Funding/COI and AI-use disclosure** — per the venue's policy.
 

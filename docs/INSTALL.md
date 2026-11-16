@@ -22,6 +22,9 @@ masteracademicreview/
 │   └── scripts/
 │       ├── prisma_flow.py
 │       ├── journal_rank.py
+│       ├── verify_refs.py
+│       ├── screening_agreement.py
+│       ├── validate_extraction.py
 │       ├── export.py / mdconvert.py
 │       ├── meta/
 │       └── bibliometric/
@@ -38,6 +41,7 @@ masteracademicreview/
 - Python 3.10+ **only** for the skills that compute artifacts:
   - `systematic-review`, `scoping-review`, `mapping-review` → PRISMA flow (`prisma_flow.py`, stdlib only);
   - `journal-match` → journal scoring (`journal_rank.py`, stdlib only);
+  - reference, agreement, and extraction checks (`verify_refs.py`, `screening_agreement.py`, `validate_extraction.py`, stdlib only);
   - `meta-analysis` → statistics (`numpy`, `scipy`, `pandas`, `matplotlib`);
   - `bibliometric-review` → corpus analysis (`numpy`, `matplotlib`);
   - Markdown export (`export.py`) → `python-docx`, `reportlab` (or Pandoc if installed).
@@ -131,6 +135,7 @@ For the deterministic pieces, run:
 
 ```bash
 python tests/check_docs.py
+python tests/run_tool_tests.py
 python shared/scripts/journal_rank.py --selftest
 python shared/scripts/prisma_flow.py
 ```

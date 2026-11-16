@@ -40,6 +40,15 @@ Track what is missing and, where feasible, note that authors were contacted. Do 
 - `characteristics.csv` — the study characteristics table (feeds the review's Table 1).
 - `effects.csv` — the effect-size dataset (feeds `meta/pooling.py`).
 
+Validate both before synthesis:
+
+```
+python shared/scripts/validate_extraction.py effects.csv --profile meta --out extraction_check.md
+python shared/scripts/validate_extraction.py characteristics.csv --profile generic --required study,year,design --key study
+```
+
+`effects.csv` must have one row per study–outcome, finite effects, and variance > 0. The validator errors on impossible values and warns when k < 10 (Egger's test is underpowered below 10 studies). `--strict` turns warnings into failures when the protocol requires it.
+
 ## Guardrails
 
 - Extraction is transcription of reported values, not your judgement about whether the study was "good" — that is risk-of-bias's job, kept separate.

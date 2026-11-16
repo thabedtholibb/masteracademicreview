@@ -114,9 +114,9 @@ vague idea ──► question +      framed request ──► ranked       chose
 
 - **Use when:** reproducible, comprehensive synthesis of a focused question (PRISMA).
 - **You provide:** PICO question + protocol (ideally PROSPERO-registered) + database access.
-- **Flow:** frame + protocol → search (`shared/search_strategy.md`) → screen (dual, `shared/screening.md`) → extract (`shared/data_extraction.md`) → risk of bias (`shared/risk_of_bias.md`) → narrative synthesis → PRISMA report + flow diagram (`shared/scripts/prisma_flow.py`).
+- **Flow:** frame + protocol → search (`shared/search_strategy.md`) → screen (dual, `shared/screening.md`) → extract (`shared/data_extraction.md`) → risk of bias (`shared/risk_of_bias.md`) → narrative synthesis → PRISMA report + flow diagram (`shared/scripts/prisma_flow.py`). Dual-screening agreement and extraction checks run before the gate.
 - **Decision points:** risk-of-bias tool by design (**#1** = design-matched); if pooling is wanted → `meta-analysis`.
-- **Output:** PRISMA review + `prisma_flow.svg` + screening log + characteristics table; **gate: PRISMA 2020 (27 items)**.
+- **Output:** PRISMA review + `prisma_flow.svg` + screening log + characteristics table + `agreement.md` + `extraction_check.md` + `ref_check.md`; **gate: PRISMA 2020 (27 items)**.
 
 ## `meta-analysis`
 
@@ -124,7 +124,7 @@ vague idea ──► question +      framed request ──► ranked       chose
 - **You provide:** effect-size data (means/SD per arm, 2×2 tables, or correlations).
 - **Flow:** run the full `systematic-review` protocol → convert to a common effect size (`effect_sizes.py`) → pool (`pooling.py`, random effects) → assess heterogeneity (I², Q) → forest/funnel + Egger (`plots.py`) → GRADE certainty → PRISMA + MOOSE report.
 - **Decision points:** effect-size measure (**Hedges' g / log OR / Fisher z (#1)** by data type); model (**random effects #1**).
-- **Output:** pooled estimate + 95% CI, I²/Q/tau², `forest.png`, `funnel.png`, `effects.csv`, report; **gate: PRISMA + MOOSE**.
+- **Output:** pooled estimate + 95% CI, I²/Q/tau², `forest.png`, `funnel.png`, `effects.csv`, `extraction_check.md`, `ref_check.md`, report; **gate: PRISMA + MOOSE**.
 
 ## `scoping-review`
 

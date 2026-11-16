@@ -27,7 +27,7 @@ You map the **breadth and volume** of evidence on a topic — what has been stud
 2. **Search** — follow `shared/search_strategy.md`. Scoping searches are deliberately broad; document databases, full query, and limits.
 3. **Screen** — follow `shared/screening.md` (title/abstract → full text; dual reviewer recommended).
 4. **Chart the data** — extract study characteristics, concept categories, and evidence types into a matrix (see `shared/data_extraction.md`, charting focus rather than outcomes). No risk-of-bias appraisal — PRISMA-ScR permits it as optional, but it is not the norm.
-5. **Map & report** — present the evidence as a descriptive map (tables, matrices, frequency counts) and identify gaps; generate the PRISMA-ScR flow diagram with `shared/scripts/prisma_flow.py`.
+5. **Map & report** — present the evidence as a descriptive map (tables, matrices, frequency counts) and identify gaps; generate the PRISMA-ScR flow diagram with `shared/scripts/prisma_flow.py --variant scoping`.
 
 ## Structure (PRISMA-ScR)
 

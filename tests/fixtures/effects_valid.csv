@@ -1,0 +1,7 @@
+study,effect,variance,n,year,outcome
+Study A,0.42,0.030,120,2018,primary
+Study B,0.35,0.040,98,2019,primary
+Study C,0.28,0.050,145,2020,primary
+Study D,0.51,0.025,76,2021,primary
+Study E,0.33,0.045,210,2022,primary
+Study F,0.47,0.035,132,2023,primary

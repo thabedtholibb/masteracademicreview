@@ -1,0 +1,32 @@
+{
+  "title": "Synthetic value for title",
+  "registration_id": "",
+  "authors": "Synthetic value for authors",
+  "contact": "Synthetic value for contact",
+  "funding": "Synthetic value for funding",
+  "coi": "Synthetic value for coi",
+  "rationale": "Synthetic value for rationale",
+  "question": "Synthetic value for question",
+  "study_designs": "Synthetic value for study_designs",
+  "language": "Synthetic value for language",
+  "date_range": "Synthetic value for date_range",
+  "databases": [
+    "Scopus",
+    "PubMed"
+  ],
+  "grey_literature": "Synthetic value for grey_literature",
+  "search_string": "Synthetic value for search_string",
+  "screening_reviewers": "Synthetic value for screening_reviewers",
+  "disagreement": "Synthetic value for disagreement",
+  "extraction_items": "Synthetic value for extraction_items",
+  "missing_data": "Synthetic value for missing_data",
+  "synthesis_plan": "Synthetic value for synthesis_plan",
+  "certainty_plan": "Synthetic value for certainty_plan",
+  "timeline": "Synthetic value for timeline",
+  "population": "Synthetic value for population",
+  "intervention": "Synthetic value for intervention",
+  "comparator": "Synthetic value for comparator",
+  "outcomes": "Synthetic value for outcomes",
+  "rob_tool": "Synthetic value for rob_tool",
+  "genre": "systematic-review"
+}

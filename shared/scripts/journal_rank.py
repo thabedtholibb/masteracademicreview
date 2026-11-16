@@ -72,6 +72,62 @@ LABELS = {
 
 TIERS = ("", "reach", "target", "safety")
 
+ANCHOR_SCORES = (0, 1, 3, 5)
+
+# Scoring anchors: what a 5 / 3 / 1 / 0 must look like, so two runs (or two
+# people) score the same evidence the same way. 2 and 4 are only allowed as
+# "between anchors" and are flagged OFF_ANCHOR.
+ANCHORS = {
+    "scope_fit": {
+        5: "aims & scope name this topic AND this article type (quoted)",
+        3: "scope covers the field broadly; topic is plausible but not named",
+        1: "only tangential overlap; no scope sentence supports it",
+        0: "outside scope",
+    },
+    "article_fit": {
+        5: "published >= 3 reviews of this type in the last 2 years",
+        3: "accepts reviews in the author guide but few recent examples",
+        1: "reviews only on invitation / exceptional",
+        0: "does not publish reviews",
+    },
+    "method_fit": {
+        5: "recent articles use this method at this rigour (named examples)",
+        3: "method appears occasionally; reporting expectations unclear",
+        1: "method is unusual for the journal; desk-reject risk",
+        0: "method explicitly unsuitable",
+    },
+    "indexing": {
+        5: "indexed (Scopus/WoS) and Q1 in the stated metric, verified",
+        3: "indexed and Q2, or Q1 in a different metric than stated",
+        1: "indexed but Q3/Q4, or indexing only partly verified",
+        0: "not indexed / unverified",
+    },
+    "speed": {
+        5: "published first decision <= deadline with margin",
+        3: "published times roughly meet the deadline",
+        1: "published times exceed the deadline",
+        0: "no evidence of decision time",
+    },
+    "cost": {
+        5: "free, or APC fully within budget",
+        3: "APC within budget with waiver/discount uncertainty",
+        1: "APC at or above budget limit",
+        0: "APC far over budget",
+    },
+    "audience": {
+        5: "core readership the author needs",
+        3: "adjacent readership",
+        1: "weak overlap with intended readers",
+        0: "wrong audience",
+    },
+    "risk": {
+        5: "indexed, COPE member, transparent peer review and fees",
+        3: "legitimate but one item unverified",
+        1: "one or more red flags (opaque fees, vague scope, no board)",
+        0: "predatory indicators",
+    },
+}
+
 
 class JournalError(Exception):
     pass
@@ -96,7 +152,8 @@ def _verified(row: dict) -> set[str]:
     return {p for p in parts if p}
 
 
-def score_row(row: dict, weights: dict[str, float], lineno: int = 1) -> dict:
+def score_row(row: dict, weights: dict[str, float], lineno: int = 1,
+              require_quote: bool = True, strict_anchors: bool = False) -> dict:
     """Score one journal row. Pure function: no I/O, no globals mutated."""
     scores = {key: _num(row, key, lineno) for key in CRITERIA}
     total_weight = sum(weights.values())
@@ -104,6 +161,25 @@ def score_row(row: dict, weights: dict[str, float], lineno: int = 1) -> dict:
         raise JournalError("weights must sum to a positive number")
 
     fit = sum(weights[key] * scores[key] / 5.0 for key in CRITERIA) / total_weight * 100.0
+    contributions = {
+        key: {
+            "weight_pct": round(weights[key] / total_weight * 100.0, 1),
+            "score": scores[key],
+            "points": round(weights[key] * scores[key] / 5.0 / total_weight * 100.0, 2),
+            "lost": round(weights[key] * (5 - scores[key]) / 5.0 / total_weight * 100.0, 2),
+        }
+        for key in CRITERIA
+    }
+    off_anchor = [k for k in CRITERIA if scores[k] not in ANCHOR_SCORES]
+    if strict_anchors and off_anchor:
+        raise JournalError(
+            f"row {lineno}: scores must be 0/1/3/5 (anchored); off-anchor: "
+            + ", ".join(off_anchor))
+    quote = str(row.get("scope_quote", "") or "").strip()
+    if require_quote and scores["scope_fit"] >= 3 and not quote:
+        raise JournalError(
+            f"row {lineno}: scope_fit >= 3 requires a scope_quote from the "
+            "journal's own aims & scope (or lower the score)")
 
     verified = _verified(row)
     unknown = verified - set(CRITERIA)
@@ -123,6 +199,8 @@ def score_row(row: dict, weights: dict[str, float], lineno: int = 1) -> dict:
         flags.append("NOT INDEXED / UNVERIFIED")
     if confidence < 50:
         flags.append("LOW EVIDENCE")
+    if off_anchor:
+        flags.append("OFF_ANCHOR")
 
     tier = str(row.get("tier", "") or "").strip().lower()
     if tier not in TIERS:
@@ -140,15 +218,19 @@ def score_row(row: dict, weights: dict[str, float], lineno: int = 1) -> dict:
         "unknown_verified_fields": sorted(unknown),
         "gaps": [key for key in CRITERIA if key not in verified_known],
         "flags": flags,
+        "off_anchor": off_anchor,
+        "contributions": contributions,
         "scope_quote": str(row.get("scope_quote", "") or "").strip(),
         "evidence_url": str(row.get("evidence_url", "") or "").strip(),
         "notes": str(row.get("notes", "") or "").strip(),
     }
 
 
-def rank(rows: list[dict], weights: dict[str, float] | None = None) -> list[dict]:
+def rank(rows: list[dict], weights: dict[str, float] | None = None,
+         require_quote: bool = True, strict_anchors: bool = False) -> list[dict]:
     weights = dict(DEFAULT_WEIGHTS if weights is None else weights)
-    scored = [score_row(row, weights, i + 2) for i, row in enumerate(rows)]
+    scored = [score_row(row, weights, i + 2, require_quote, strict_anchors)
+              for i, row in enumerate(rows)]
     missing = [s["journal"] for s in scored if not s["journal"]]
     if missing:
         raise JournalError("every row needs a non-empty 'journal'")
@@ -159,7 +241,20 @@ def _md_cell(text: str) -> str:
     return str(text).replace("|", "\\|").replace("\n", " ")
 
 
-def to_markdown(scored: list[dict], weights: dict[str, float], source: str = "") -> str:
+def rubric_markdown() -> str:
+    lines = ["# Scoring anchors", "",
+             "Score only 5 / 3 / 1 / 0 against these descriptions; 2 and 4 are "
+             "flagged OFF_ANCHOR (use `--strict-anchors` to forbid them).", ""]
+    for key in CRITERIA:
+        lines.append(f"## {LABELS[key]} (`{key}`)")
+        for s in (5, 3, 1, 0):
+            lines.append(f"- **{s}** — {ANCHORS[key][s]}")
+        lines.append("")
+    return "\n".join(lines)
+
+
+def to_markdown(scored: list[dict], weights: dict[str, float], source: str = "",
+                explain: bool = False) -> str:
     total_weight = sum(weights.values())
     weight_line = " · ".join(
         f"{LABELS[k]} {weights[k] / total_weight * 100:.0f}%" for k in CRITERIA
@@ -215,6 +310,17 @@ def to_markdown(scored: list[dict], weights: dict[str, float], source: str = "")
             lines.append("- Flags: " + ", ".join(row["flags"]))
         if row["notes"]:
             lines.append(f"- Notes: {row['notes']}")
+        if explain:
+            lines += ["", "| Criterion | Weight | Score | Points | Lost |",
+                      "|---|---:|---:|---:|---:|"]
+            for key in CRITERIA:
+                c = row["contributions"][key]
+                lines.append(f"| {LABELS[key]} | {c['weight_pct']:.0f}% | {c['score']:g}/5 | "
+                             f"{c['points']:.1f} | {c['lost']:.1f} |")
+            biggest = max(CRITERIA, key=lambda k: row["contributions"][k]["lost"])
+            lines.append("")
+            lines.append(f"- Largest loss: **{LABELS[biggest]}** "
+                         f"(-{row['contributions'][biggest]['lost']:.1f} points)")
         lines.append("")
 
     lines += [
@@ -283,6 +389,7 @@ def _selftest() -> None:
     assert sum(weights.values()) == 100, "default weights must sum to 100"
 
     base = {key: "5" for key in CRITERIA}
+    base["scope_quote"] = "aims and scope sentence"
     perfect = score_row({**base, "journal": "Perfect", "verified": ";".join(CRITERIA)}, weights)
     assert perfect["fit"] == 100.0, perfect["fit"]
     assert perfect["confidence"] == 100.0
@@ -300,8 +407,8 @@ def _selftest() -> None:
 
     rows = [
         {**base, "journal": "A", "verified": ";".join(CRITERIA)},
-        {**{k: "4" for k in CRITERIA}, "journal": "B", "verified": "scope_fit;indexing"},
-        {**{k: "3" for k in CRITERIA}, "journal": "C"},
+        {**{k: "4" for k in CRITERIA}, "journal": "B", "verified": "scope_fit;indexing", "scope_quote": "q"},
+        {**{k: "3" for k in CRITERIA}, "journal": "C", "scope_quote": "q"},
     ]
     ranked = rank(rows, weights)
     assert [r["journal"] for r in ranked] == ["A", "B", "C"], [r["journal"] for r in ranked]
@@ -313,6 +420,23 @@ def _selftest() -> None:
         pass
     else:
         raise AssertionError("out-of-range score must fail")
+
+    # Anchors, scope_quote rule and explain breakdown.
+    assert set(ANCHORS) == set(CRITERIA)
+    assert all(set(v) == {0, 1, 3, 5} for v in ANCHORS.values())
+    mid = score_row({**base, "journal": "Mid", "scope_fit": "4"}, weights)
+    assert "OFF_ANCHOR" in mid["flags"], mid["flags"]
+    noq = {k: v for k, v in base.items() if k != "scope_quote"}
+    try:
+        score_row({**noq, "journal": "NoQ"}, weights)
+    except JournalError:
+        pass
+    else:
+        raise AssertionError("scope_fit >= 3 without scope_quote must fail")
+    assert score_row({**noq, "journal": "NoQ"}, weights, require_quote=False)["fit"] == 100.0
+    total = sum(c["points"] for c in mid["contributions"].values())
+    assert abs(total - mid["fit"]) < 0.1, (total, mid["fit"])
+    assert "Largest loss" in to_markdown([mid], weights, explain=True)
 
     # Markdown must render without raising and must contain the recommendation.
     md = to_markdown(ranked, weights, "selftest")
@@ -327,6 +451,11 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--weights", help="criterion=number,... (merged with defaults)")
     parser.add_argument("--json", dest="json_out", help="write the scored table as JSON")
     parser.add_argument("--out", help="write the Markdown shortlist to a file")
+    parser.add_argument("--explain", action="store_true", help="per-criterion points contributed and lost")
+    parser.add_argument("--rubric", action="store_true", help="print the 5/3/1/0 scoring anchors and exit")
+    parser.add_argument("--strict-anchors", action="store_true", help="reject scores other than 0/1/3/5")
+    parser.add_argument("--allow-missing-quote", action="store_true",
+                        help="do not require scope_quote when scope_fit >= 3")
     parser.add_argument("--template", action="store_true", help="print the CSV header and exit")
     parser.add_argument("--selftest", action="store_true", help="run internal checks and exit")
     args = parser.parse_args(argv)
@@ -337,6 +466,9 @@ def main(argv: list[str] | None = None) -> int:
     if args.template:
         print(_template())
         return 0
+    if args.rubric:
+        print(rubric_markdown())
+        return 0
     if not args.csv:
         parser.error("provide a CSV file (or --template / --selftest)")
 
@@ -345,12 +477,12 @@ def main(argv: list[str] | None = None) -> int:
         rows = _read_table(Path(args.csv))
         if not rows:
             raise JournalError("the file has no data rows")
-        scored = rank(rows, weights)
+        scored = rank(rows, weights, not args.allow_missing_quote, args.strict_anchors)
     except JournalError as exc:
         print(f"error: {exc}", file=sys.stderr)
         return 2
 
-    markdown = to_markdown(scored, weights, Path(args.csv).name)
+    markdown = to_markdown(scored, weights, Path(args.csv).name, args.explain)
     if args.out:
         Path(args.out).write_text(markdown, encoding="utf-8")
         print(f"wrote {args.out}")

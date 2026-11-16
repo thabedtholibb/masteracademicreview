@@ -97,6 +97,12 @@ masteracademicreview produces **one kind of deliverable: a review document**, pl
 > **Skill:** collects the topic, genre, and hard constraints (indexing, quartile, APC budget, deadline), builds 8–15 candidates from the review corpus and the reference list, scores eight criteria 0–5, and runs `shared/scripts/journal_rank.py`.
 > **You get:** `journal_shortlist.md` — a ranked table with fit, confidence, evidence gaps, reach/target/safety tiers, a submission cascade, and a cover-letter angle for the top three. Every metric carries a source and a check date; anything unverified is labelled, never guessed.
 
+## Which skill? FAQ? Something broke?
+
+- [docs/DECISION_TREE.md](DECISION_TREE.md): which skill do I need?
+- [docs/FAQ.md](FAQ.md): scope, references, methods, output files
+- [docs/TROUBLESHOOTING.md](TROUBLESHOOTING.md): Windows, encoding, Pandoc, dependencies
+
 ## Running the Python scripts
 
 From the repo root:
@@ -105,8 +111,15 @@ From the repo root:
 python shared/scripts/meta/example.py    # end-to-end demo of the meta engine
 python shared/scripts/meta/pooling.py    # demo of fixed/random effects + I²/Q
 python shared/scripts/prisma_flow.py     # demo PRISMA flow → prisma_flow.svg
+python shared/scripts/prisma_flow.py counts.json --variant scoping|update --out prisma_flow.svg   # ScR terminology / updated review
+python shared/scripts/prisma_flow.py --validate prisma_flow.svg    # structural SVG check (XML, not substrings)
 python shared/scripts/journal_rank.py --selftest   # journal-fit scorer checks
 python shared/scripts/journal_rank.py journals.csv # ranked shortlist from your evidence table
+python shared/scripts/verify_refs.py review.md     # reference consistency (add --online for Crossref)
+python shared/scripts/protocol.py --template systematic-review > protocol.json   # then: protocol.py protocol.json --out protocol.md
+python shared/scripts/check_review.py review.md       # the gate: header, sections, citations, artifacts
+python shared/scripts/screening_agreement.py screening_log.csv --long --reviewers alice,bob
+python shared/scripts/validate_extraction.py effects.csv  # meta schema + sanity checks
 ```
 
 In real work, the skill guides you to (a) prepare the inputs — a screening-counts dict for `prisma_flow.py`, or an `effects.csv` for the meta engine — then (b) run the relevant functions. Scripts live under `shared/scripts/` and are referenced from skills as `../shared/scripts/…`.

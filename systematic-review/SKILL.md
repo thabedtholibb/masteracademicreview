@@ -28,7 +28,7 @@ If these are missing, stop and establish them first — do not run an un-protoco
 
 ## Method (run in order)
 
-1. **Frame & protocol** — write the question, eligibility criteria, and methods; register if possible.
+1. **Frame & protocol** — write the question, eligibility criteria, and methods; register if possible. Generate the document with `python shared/scripts/protocol.py --template systematic-review > protocol.json`, fill it in, then `protocol.py protocol.json --out protocol.md` (fields you have not decided stay `[TO COMPLETE]`).
 2. **Search** — follow `shared/search_strategy.md`; record per-database queries and raw counts (PRISMA-S).
 3. **Screen** — follow `shared/screening.md`; dual reviewers, ordered exclusion reasons, agreement (κ/PABAK).
 4. **Extract** — follow `shared/data_extraction.md`; build the characteristics table.
@@ -75,6 +75,18 @@ Governing standard: **PRISMA 2020** (Page et al., 2021, doi:10.1136/bmj.n71) wit
 ## Gate (PRISMA 2020, 27 items)
 
 Walk `shared/reporting_standards.md` item by item and mark each **present / partial / missing**. Flag every `missing` item; the review is not "done" until each is satisfied or explicitly waived by the author with a recorded reason. The flow diagram must exist and match the reported counts.
+
+Reproducibility checks (run before the gate can pass):
+
+```
+python shared/scripts/screening_agreement.py screening_log.csv --long --reviewers alice,bob --out agreement.md --disagreements conflicts.csv
+python shared/scripts/validate_extraction.py characteristics.csv --profile generic --required study,year,design --key study
+python shared/scripts/verify_refs.py review.md --out ref_check.md
+```
+
+- `agreement.md` reports κ/PABAK per stage; every disagreement in `conflicts.csv` is adjudicated.
+- `extraction_check.md` has no errors; any warning (including k < 10) is addressed in the methods.
+- `ref_check.md` has no duplicate DOI and no unresolved in-text citation. Run `verify_refs.py review.md --online` for a Crossref spot-check of DOI-bearing references; record any unverified entry in the limitations.
 
 ## Guardrails
 
