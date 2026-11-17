@@ -33,6 +33,7 @@ class Case:
 
 
 CASES = [
+    Case("install selftest", "../../install.py", ("--selftest",), 0, ("install selftest OK",)),
     Case("journal_rank selftest", "journal_rank.py", ("--selftest",), 0, ("journal_rank selftest OK",)),
     Case("journal_rank rubric", "journal_rank.py", ("--rubric",), 0, ("Scoring Anchors", "OFF_ANCHOR")),
     Case(

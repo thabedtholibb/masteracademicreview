@@ -72,9 +72,15 @@ and otherwise falls back to the built-in converter.
 - Metadata lines (`**Review type:** ...`) must end with **two spaces**; without
   them the fields merge into one paragraph. `check_review.py` warns about this.
 
+## Skills Or `/mar` Commands Do Not Appear
+
+1. Open a **new** session; skills and slash commands load when a session starts.
+2. Run `python install.py --dry-run` from the clone to see where they are installed; run `python install.py` if they are missing.
+3. On Windows, check for a folder literally named `~` in your home folder (`C:\Users\<you>\~`). It comes from running a bash-style `git clone ... ~/...` in PowerShell. Move the clone out of it and use `"$HOME\masteracademicreview"` instead.
+
 ## Skill Not Found By The Harness (Windows Install)
 
-The installation guide uses symlinks. On Windows, creating symlinks needs
+Older instructions used symlinks; `install.py` copies instead. On Windows, creating symlinks needs
 Developer Mode (or an elevated shell). If you cannot create them, **copy** the
 whole repository folder instead and keep the internal layout (`shared/` must
 sit next to the skill folders).

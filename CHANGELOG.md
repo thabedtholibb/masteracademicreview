@@ -3,6 +3,12 @@
 Format: [Keep a Changelog](https://keepachangelog.com). Versioning: SemVer.
 
 ## [Unreleased]
+### Added
+- `install.py`: one-command install of the 16 skills, `shared/` and the `/mar-*` commands for Claude Code and OpenCode (copies, no symlinks; `--dry-run`, `--project`, `--uninstall` via a manifest; never replaces a same-named skill from another pack unless `--force`).
+
+### Fixed
+- `docs/INSTALL.md` told OpenCode users to register the repository root as a skill source; OpenCode treats every root `.md` file as a skill, so README/CHANGELOG would have appeared as skills. The bash `~` clone path also misbehaved in PowerShell. Both replaced by the installer.
+
 ### Changed
 - Slash commands are prefixed with the suite's initials: `/mar-review`, `/mar-meta-analysis`, `/mar-systematic-review`, ... (type `/mar` to list them all); descriptions start with `MAR ·`. Skill IDs are unchanged. If you copied the old commands into `.claude/commands/`, delete the old unprefixed files and copy `commands/mar-*.md` again.
 

@@ -32,7 +32,7 @@ The 16 skills are **1 brainstorm + 1 router + 1 journal matcher + 13 genres**. T
 
 ### Your First Session
 
-1. Open the repository in Claude Code or OpenCode.
+1. Install once (`python install.py` from a clone; see [docs/INSTALL.md](docs/INSTALL.md)), then open a **new** Claude Code or OpenCode session in any project.
 2. Type `/mar-review` (Claude Code) or `@review-router` (OpenCode). If you already know the genre, jump to `/mar-systematic-review`, `/mar-meta-analysis`, and so on.
 3. Answer the router's four questions: **object, purpose, rigor, data**.
 4. Approve the **#1 genre**, choose #2/#3, or override the recommendation.
@@ -259,7 +259,7 @@ One brainstorm + one orchestrator + one optional journal matcher + one shared co
 
 ## Quick Start
 
-1. **Install the tools** (needed for gates, meta-analysis, and bibliometrics): `pip install masteracademicreview`. Then run `mar selftest`. For the skills, see [docs/INSTALL.md](docs/INSTALL.md).
+1. **Install the tools** (needed for gates, meta-analysis, and bibliometrics): `pip install masteracademicreview`. Then run `mar selftest`. For the skills and `/mar-*` commands, clone the repository and run `python install.py` (Claude Code and OpenCode; see [docs/INSTALL.md](docs/INSTALL.md)).
 2. **Open a session** and type `/mar-review` (Claude Code) or `@review-router` (OpenCode). If you already know the genre, jump to `/mar-systematic-review`, `/mar-meta-analysis`, and so on.
 3. **Follow the #1 genre recommendation.** The genre skill asks for your protocol, sources, and decisions. Run `/mar-journal-match` before drafting (recommended) or after the draft is ready.
 4. **Check and submit:** `mar check-review review.md`, then `/mar-journal-match` if you still need a venue.

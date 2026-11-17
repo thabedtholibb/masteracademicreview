@@ -65,45 +65,57 @@ The writing-only genres (`book-review`, `narrative-review`, `critical-review`, `
 
 ---
 
-## Claude Code
+## Claude Code And OpenCode (Installer)
 
-Claude Code discovers skills as `~/.claude/skills/<name>/SKILL.md` (one level deep). Clone once, then symlink every skill directory plus `shared/` as siblings:
+One clone, one command. The installer copies the 16 skills plus `shared/` and the
+`/mar-*` slash commands to the folders each app reads, for your user account, so
+the skills work in every project.
+
+**Mac / Linux (Terminal):**
 
 ```bash
-git clone https://github.com/thabedtholibb/masteracademicreview.git /tmp/masteracademicreview
-mkdir -p ~/.claude/skills
-
-for d in /tmp/masteracademicreview/*/; do
-  name=$(basename "$d")
-  if [ -f "$d/SKILL.md" ]; then
-    ln -s "$d" ~/.claude/skills/"$name"
-  fi
-done
-ln -s /tmp/masteracademicreview/shared ~/.claude/skills/shared
+git clone https://github.com/thabedtholibb/masteracademicreview.git ~/masteracademicreview
+python3 ~/masteracademicreview/install.py
 ```
 
-Result: every skill directory plus `shared/` sits side by side, so each skill's `../shared/…` reference resolves correctly.
+**Windows (PowerShell):** use `$HOME`, not `~`. PowerShell does not expand `~` for
+`git`, which would create a folder literally named `~`.
 
-**Project-local alternative:** run the same loop with `.claude/skills/` (inside your project) as the destination.
-
----
-
-## OpenCode
-
-Register the repo root as a skills source. In your project's `opencode.jsonc` (or `.opencode/opencode.jsonc`):
-
-```jsonc
-{
-  "$schema": "https://opencode.ai/config.json",
-  "skills": ["./masteracademicreview"]
-}
+```bash
+git clone https://github.com/thabedtholibb/masteracademicreview.git "$HOME\masteracademicreview"
+python "$HOME\masteracademicreview\install.py"
 ```
 
-OpenCode recursively discovers each `*/SKILL.md` and assigns the ID from the directory name: `brainstorm`, `journal-match`, `review-router`, and all thirteen genres. `shared/` is skipped (no `SKILL.md`).
+Then **open a new session** (skills and commands load when a session starts) and
+type `/mar` in Claude Code, or `@review-router` in OpenCode.
 
-**Global alternative:** clone into `~/.config/opencode/skills/masteracademicreview` and it is discovered automatically.
+| App | Skills Go To | Slash Commands Go To |
+|---|---|---|
+| Claude Code | `~/.claude/skills/` (+ `shared/`) | `~/.claude/commands/mar-*.md` |
+| OpenCode | read from `~/.claude/skills/` (OpenCode's compatibility path) | `~/.config/opencode/commands/mar-*.md` |
 
-> OpenCode also reads `~/.claude/skills` for compatibility, so the Claude Code recipe above works for OpenCode too.
+| Option | Effect |
+|---|---|
+| `--dry-run` | print the plan, change nothing |
+| `--claude` / `--opencode` | one app only (`--opencode` alone puts skills in `~/.config/opencode/skills/`) |
+| `--project DIR` | install into one project (`DIR/.claude/`, `DIR/.opencode/`) instead of your account |
+| `--uninstall` | remove only what the installer added (it keeps a manifest) |
+| `--force` | replace a same-named skill from another pack (skipped by default) |
+
+**Update:** `git pull` in the clone, then run the installer again.
+
+### Manual Install (No Installer)
+
+Copy, do not symlink (symlinks need Developer Mode on Windows), and keep `shared/`
+**next to** the skill folders so each skill's `../shared/` path resolves:
+
+1. every folder that contains a `SKILL.md`, plus `shared/`, into `~/.claude/skills/`;
+2. `commands/mar-*.md` into `~/.claude/commands/` (Claude Code) and
+   `~/.config/opencode/commands/` (OpenCode).
+
+Do **not** register the repository root as an OpenCode skill source: OpenCode
+treats every `.md` file at a source root as a skill, so `README.md`, `CHANGELOG.md`
+and the other root documents would appear as skills.
 
 ---
 
@@ -119,14 +131,7 @@ Once installed, start a session any of three ways:
 
 1. **Auto (default):** just describe what you want (*"Saya mau meta-analysis dari data ini"*); the skill whose `description` matches loads itself.
 2. **`@skill-id` (OpenCode):** `@brainstorm`, `@review-router`, `@journal-match`, `@meta-analysis`, `@book-review`, etc. The ID is the skill's directory name.
-3. **`/command` (Claude Code):** copy the bundled commands into `.claude/commands/`:
-
-```bash
-mkdir -p .claude/commands
-cp commands/*.md .claude/commands/
-```
-
-Then use `/mar-brainstorm`, `/mar-review`, `/mar-journal-match`, `/mar-meta-analysis`, `/mar-systematic-review`, etc.
+3. **`/command` (Claude Code and OpenCode):** the installer copies the commands; type `/mar` to list them. Then use `/mar-brainstorm`, `/mar-review`, `/mar-journal-match`, `/mar-meta-analysis`, `/mar-systematic-review`, etc.
 
 ---
 
@@ -138,6 +143,7 @@ Start a session and type:
 
 The `review-router` should kick in and interview you about the object, purpose, rigor, and data. If nothing appears:
 
+0. Open a **new** session: skills and commands are loaded when a session starts. `python install.py --dry-run` shows where they were installed.
 1. Confirm each skill directory sits at the expected level and contains its own `SKILL.md`.
 2. Confirm `shared/` is beside them (not inside one of them).
 3. Confirm the skill has a non-empty `description` in its frontmatter (discovery depends on it).

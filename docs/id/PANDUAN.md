@@ -81,6 +81,7 @@ terakhir, alat menyebutkan kandidat bersih berikutnya.
 | Masalah | Solusi |
 |---|---|
 | `mar` tidak dikenali | `python -m masteracademicreview ...`, atau tambahkan folder Scripts Python ke PATH |
+| `/mar` atau skill tidak muncul | buka **sesi baru**; cek dengan `python install.py --dry-run`; di Windows jangan pakai `~` saat `git clone` di PowerShell, pakai `"$HOME\masteracademicreview"` |
 | `pip` tidak dikenali (Windows) | `py -m pip install ...` |
 | Huruf aneh di konsol Windows | `$env:PYTHONUTF8 = "1"` (PowerShell), atau tulis laporan ke file dengan `--out` |
 | Ekspor Scopus tidak terbaca | `mar bib-validate scopus.csv`; ekspor ulang langsung dari Scopus, jangan disimpan ulang lewat Excel |

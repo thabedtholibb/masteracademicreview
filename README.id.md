@@ -153,11 +153,28 @@ gunakan `python -m masteracademicreview list`.
 | 7. Submit | `mar submission response komentar.txt --lang id` | kerangka balasan reviewer |
 | 7. Submit | `mar export review.md` | DOCX / PDF |
 
-## Memasang Skill (Untuk Claude Code Dan Lainnya)
+## Memasang Skill (Claude Code Dan OpenCode)
 
-Skill (`*/SKILL.md`) dipasang dengan meng-*clone* repositori; langkahnya ada di
-[docs/INSTALL.md](docs/INSTALL.md). Paket pip berisi alat-alatnya, sedangkan
-skill memanggil alat yang sama lewat `python shared/scripts/<alat>.py`.
+Clone sekali, lalu jalankan installer. Skill dan slash command `/mar-*` akan tersalin ke folder yang dibaca Claude Code dan OpenCode, untuk semua proyek Anda.
+
+Windows (PowerShell), pakai `$HOME`, bukan `~`:
+
+```bash
+git clone https://github.com/thabedtholibb/masteracademicreview.git "$HOME\masteracademicreview"
+```
+
+```bash
+python "$HOME\masteracademicreview\install.py"
+```
+
+Mac/Linux:
+
+```bash
+git clone https://github.com/thabedtholibb/masteracademicreview.git ~/masteracademicreview
+python3 ~/masteracademicreview/install.py
+```
+
+Lalu **buka sesi baru** dan ketik `/mar`. Opsi: `--dry-run` (lihat rencana tanpa mengubah apa pun), `--uninstall` (hapus hanya yang dipasang installer), `--project .` (pasang per proyek). Untuk update: `git pull` di folder clone, lalu jalankan installer lagi. Rincian: [docs/INSTALL.md](docs/INSTALL.md).
 
 ## Cara Memanggil Skill
 

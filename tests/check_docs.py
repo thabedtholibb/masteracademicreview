@@ -191,6 +191,11 @@ for doc, needle in {
     elif needle not in path.read_text(encoding="utf-8"):
         fail(f"{doc}: does not reference {needle}")
 
+if not (ROOT / "install.py").exists():
+    fail("install.py missing")
+elif "install.py" not in (ROOT / "docs" / "INSTALL.md").read_text(encoding="utf-8"):
+    fail("docs/INSTALL.md does not explain install.py")
+
 if not (ROOT / "tests" / "run_tool_tests.py").exists():
     fail("tests/run_tool_tests.py missing")
 
