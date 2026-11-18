@@ -181,7 +181,7 @@ if len(set(versions.values())) > 1:
 if not (ROOT / "shared" / "scripts" / "journal_rank.py").exists():
     fail("shared/scripts/journal_rank.py missing")
 
-for doc_page in ("DECISION_TREE.md", "FAQ.md", "TROUBLESHOOTING.md"):
+for doc_page in ("DECISION_TREE.md", "FAQ.md", "TROUBLESHOOTING.md", "ARCHITECTURE.md"):
     if not (ROOT / "docs" / doc_page).exists():
         fail(f"docs/{doc_page} missing")
 

@@ -2,6 +2,10 @@
 
 Format: [Keep a Changelog](https://keepachangelog.com). Versioning: SemVer.
 
+## [Unreleased]
+### Changed
+- README cut from about 3,000 to 1,500 words: one install path (pip for the tools, `install.py` for the skills), one session walkthrough, tools shown as `mar <command>`. The architecture diagram and repository layout moved to `docs/ARCHITECTURE.md`; nothing was removed.
+
 ## [0.1.2] - 2026-11-18
 ### Fixed
 - `check_review.py` detected the wrong genre for common titles ("Systematic review and meta-analysis" as systematic, "Rapid systematic review" as systematic); several names (narrative literature review, Tinjauan sistematis, Resensi buku, Evidence and gap map) were unknown. Detection is now most-specific-first with Indonesian names.
