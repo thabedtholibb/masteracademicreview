@@ -29,6 +29,9 @@ import tempfile
 from dataclasses import dataclass
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from _textio import read_text
+
 INCLUDE = {"include", "included", "i", "1", "yes", "y", "true", "in"}
 EXCLUDE = {"exclude", "excluded", "e", "0", "no", "n", "false", "out"}
 
@@ -134,7 +137,7 @@ def summarize(pairs: list[Pair]) -> tuple[Stats, list[Stats]]:
 
 def load_rows(path: Path, delimiter: str | None) -> tuple[list[dict], set[str]]:
     try:
-        text = path.read_text(encoding="utf-8-sig")
+        text = read_text(path)
     except FileNotFoundError as exc:
         raise AgreementError(f"file not found: {path}") from exc
 

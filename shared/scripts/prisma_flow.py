@@ -48,8 +48,12 @@ import argparse
 import html
 import json
 import sys
+from pathlib import Path
 import textwrap
 import xml.etree.ElementTree as ET
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from _textio import read_text
 import itertools
 
 WIDTH = 1120
@@ -475,8 +479,7 @@ def load_counts(paths):
     """Merge one or more counts JSON files (later files override earlier ones)."""
     data = {}
     for path in paths:
-        with open(path, encoding="utf-8-sig") as f:
-            data.update(json.load(f))
+        data.update(json.loads(read_text(path)))
     for key in ("database_records", "excluded_fulltext", "removed_before_screening"):
         if data.get(key):
             data[key] = [tuple(x) for x in data[key]]
@@ -505,11 +508,23 @@ def main(argv=None):
             print("FAIL: " + problem)
         print(f'RESULT: {"FAIL" if problems else "PASS"}')
         return 1 if problems else 0
-    data = load_counts(a.input) if a.input else dict(_SAMPLE, previous_studies=7)
-    problems = check_counts(data)
+    try:
+        data = load_counts(a.input) if a.input else dict(_SAMPLE, previous_studies=7)
+        problems = check_counts(data)
+    except (OSError, ValueError, KeyError, TypeError) as exc:
+        print(f"error: cannot use the counts file ({type(exc).__name__}: {exc}). "
+              "Expected JSON with database_records, after_dedup, screened, ...; "
+              "see examples/systematic-review-demo/screening_counts.json", file=sys.stderr)
+        return 2
     for problem in problems:
         print("WARNING: counts do not add up: " + problem)
-    render_prisma(data, a.out, a.variant)
+    try:
+        render_prisma(data, a.out, a.variant)
+    except (KeyError, TypeError, ValueError) as exc:
+        print(f"error: the counts file is missing or has a bad field ({type(exc).__name__}: {exc}); "
+              "required: database_records, after_dedup, screened, excluded_title_abstract, "
+              "sought_retrieval, not_retrieved, assessed, included", file=sys.stderr)
+        return 2
     print(f"wrote {a.out}")
     return 1 if (a.strict and problems) else 0
 

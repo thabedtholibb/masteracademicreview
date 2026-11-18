@@ -86,6 +86,13 @@ def _read_text(path, encoding="utf-8-sig"):
     """
     with open(path, "rb") as f:
         raw = f.read()
+    if raw.startswith((b"\xff\xfe", b"\xfe\xff")):
+        return raw.decode("utf-16")
+    if len(raw) >= 4 and raw[1::2].count(0) > len(raw) // 4:
+        try:
+            return raw.decode("utf-16-le")
+        except UnicodeDecodeError:
+            pass
     for enc in (encoding, "cp1252", "latin-1"):
         if not enc:
             continue

@@ -36,6 +36,9 @@ import re
 import sys
 from datetime import date
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from _textio import read_text
 import contextlib
 
 HERE = Path(__file__).resolve().parent
@@ -63,7 +66,7 @@ def _check_review():
 def read_review(path: Path) -> dict:
     if not path.is_file():
         raise SubmissionError(f"file not found: {path}")
-    text = path.read_text(encoding="utf-8-sig")
+    text = read_text(path)
     cr = _check_review()
     meta, _ = cr.parse_metadata(text.splitlines())
     title = ""
@@ -82,7 +85,7 @@ def read_review(path: Path) -> dict:
         "search_date": meta.get("search date", ""),
         "registration": meta.get("registration", "") or meta.get("registration id", ""),
         "gate_line": gate,
-        "gate_status": m.group(2).lower() if m else "missing",
+        "gate_status": cr.GATE_CANON[m.group(1).lower()] if m else "missing",
     }
 
 
@@ -91,7 +94,7 @@ def read_gate_report(path: Path | None) -> int | None:
         return None
     if not path.is_file():
         raise SubmissionError(f"gate report not found: {path} (run check_review.py --out first)")
-    m = re.search(r"\*\*Errors:\*\*\s*(\d+)", path.read_text(encoding="utf-8-sig"))
+    m = re.search(r"\*\*Errors:\*\*\s*(\d+)", read_text(path))
     if not m:
         raise SubmissionError(f"{path} is not a check_review.py report")
     return int(m.group(1))
@@ -100,7 +103,7 @@ def read_gate_report(path: Path | None) -> int | None:
 def read_shortlist(path: Path) -> list[dict]:
     if not path.is_file():
         raise SubmissionError(f"shortlist not found: {path} (run journal_rank.py --json)")
-    data = json.loads(path.read_text(encoding="utf-8-sig"))
+    data = json.loads(read_text(path))
     cands = data.get("candidates") if isinstance(data, dict) else data
     if not cands:
         raise SubmissionError(f"{path} has no candidates")
@@ -467,7 +470,7 @@ def main(argv: list[str] | None = None) -> int:
             if not a.comments.is_file():
                 raise SubmissionError(f"file not found: {a.comments}")
             review = read_review(a.review) if a.review else None
-            text = response(parse_comments(a.comments.read_text(encoding="utf-8-sig")), review, a.lang)
+            text = response(parse_comments(read_text(a.comments)), review, a.lang)
     except Refused as exc:
         print(f"REFUSED: {exc}", file=sys.stderr)
         return 1

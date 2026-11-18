@@ -19,45 +19,74 @@ Stdlib only; offline. Exit codes: 0 = pass, 1 = errors, 2 = cannot read.
 from __future__ import annotations
 
 import argparse
+import contextlib
 import importlib.util
 import re
 import sys
 import tempfile
 from dataclasses import dataclass, field
 from pathlib import Path
-import contextlib
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from _textio import read_text
 
 HERE = Path(__file__).resolve().parent
 
 IMRAD = ("abstract", "introduction", "methods", "results|findings",
          "discussion", "references")
 
-# genre key -> (aliases found in "Review type", required heading patterns)
+# genre key -> (names found in "Review type", English and Indonesian; required heading patterns)
 GENRES: dict[str, tuple[tuple[str, ...], tuple[str, ...]]] = {
-    "systematic-review": (("systematic review",), IMRAD),
-    "meta-analysis": (("meta-analysis", "meta analysis"), IMRAD),
-    "scoping-review": (("scoping review",), IMRAD),
-    "umbrella-review": (("umbrella", "overview of reviews"), IMRAD),
-    "meta-synthesis": (("meta-synthesis", "meta synthesis", "meta-ethnography"), IMRAD),
-    "rapid-review": (("rapid review",), IMRAD),
-    "integrative-review": (("integrative review",), IMRAD),
-    "mapping-review": (("mapping review", "systematic map"), IMRAD),
-    "bibliometric-review": (("bibliometric",), IMRAD),
+    "systematic-review": (("systematic review", "systematic literature review", "tinjauan sistematis",
+                           "tinjauan pustaka sistematis", "kajian sistematis"), IMRAD),
+    "meta-analysis": (("meta-analysis", "meta analysis", "meta-analisis", "meta analisis"), IMRAD),
+    "scoping-review": (("scoping", "pemetaan literatur", "tinjauan lingkup"), IMRAD),
+    "umbrella-review": (("umbrella", "overview of reviews", "review of reviews"), IMRAD),
+    "meta-synthesis": (("meta-synthesis", "meta synthesis", "meta-ethnography", "meta-etnografi",
+                        "qualitative synthesis", "qualitative evidence synthesis",
+                        "sintesis kualitatif"), IMRAD),
+    "rapid-review": (("rapid", "tinjauan cepat"), IMRAD),
+    "integrative-review": (("integrative", "tinjauan integratif"), IMRAD),
+    "mapping-review": (("mapping review", "systematic map", "evidence map", "gap map",
+                        "peta bukti", "tinjauan pemetaan"), IMRAD),
+    "bibliometric-review": (("bibliometric", "bibliometrik"), IMRAD),
     "realist-review": (("realist",), IMRAD),
     "narrative-review": (
-        ("narrative review",),
+        ("narrative", "literature review", "state of the art", "tinjauan naratif",
+         "tinjauan pustaka", "kajian pustaka", "kajian literatur"),
         ("introduction", "thematic|theme", "contradiction|gap|gaps",
          "conclusion", "references"),
     ),
     "critical-review": (
-        ("critical review",),
+        ("critical review", "tinjauan kritis", "kajian kritis"),
         ("thesis", "debate", "critique", "alternative", "implications",
          "references"),
     ),
     "book-review": (
-        ("book review",),
+        ("book review", "resensi", "ulasan buku"),
         ("overview", "summary", "assessment|critical", "verdict"),
     ),
+}
+
+# Detection order: most specific first, because titles combine genres
+# ("Systematic review and meta-analysis" is a meta-analysis; "Rapid systematic
+# review" is a rapid review; "Systematic mapping review" is a mapping review;
+# a "systematic literature review" is not a narrative one).
+DETECT_ORDER = (
+    "mapping-review", "scoping-review", "rapid-review", "umbrella-review", "meta-analysis",
+    "meta-synthesis", "realist-review", "integrative-review", "bibliometric-review",
+    "systematic-review", "critical-review", "book-review", "narrative-review",
+)
+
+# Header labels in Indonesian map to the English field names the checks use.
+FIELD_ALIASES = {
+    "jenis review": "review type", "jenis tinjauan": "review type", "tipe review": "review type",
+    "jenis artikel": "review type",
+    "standar pelaporan": "reporting standard", "pedoman pelaporan": "reporting standard",
+    "sumber": "sources", "sumber data": "sources", "basis data": "sources", "database": "sources",
+    "tanggal pencarian": "search date", "tanggal pencarian terakhir": "search date",
+    "tanggal penelusuran": "search date", "tgl pencarian": "search date",
+    "status gate": "gate", "gerbang": "gate",
 }
 
 # artifacts that must sit next to review.md for the genre
@@ -76,10 +105,24 @@ ARTIFACT_NAMES = {
     "characteristics.csv", "screening_log.csv", "conflicts.csv",
     "agreement.md", "extraction_check.md", "ref_check.md",
 }
+# A placeholder is something an author has to fill in, not a word that may appear in prose.
+# Bracketed markers (including the ones this suite's own tools write), a "TODO:"-style
+# note, a marker alone on its line, and filler text. Code blocks are ignored.
 PLACEHOLDER_RE = re.compile(
-    r"\[citation needed\]|\bTODO\b|\bTBD\b|\bXXX\b|lorem ipsum", re.I)
+    r"\[\s*citation needed\s*\]"
+    r"|\[\s*(?:TO COMPLETE|LENGKAPI|TODO|TBD|FIXME|XXX)\b[^\]]*\]"
+    r"|\b(?:TODO|FIXME)\s*:"
+    r"|^\s*(?:TODO|TBD|XXX|FIXME)\s*$"
+    r"|lorem ipsum",
+    re.I | re.M)
+CODE_RE = re.compile(r"```.*?```|`[^`\n]*`", re.S)
 HEADING_RE = re.compile(r"^(#{1,6})\s+(.*?)\s*#*\s*$")
-GATE_STATUS_RE = re.compile(r"(✓|✔|✗|✘|⚠)\s*(passed|partial|failed)", re.I)
+# status word, optionally preceded by a symbol or checkbox; Indonesian words accepted
+GATE_STATUS_RE = re.compile(
+    r"(?:^|[\s(\[])(?:[✓✔✗✘⚠]|\[[xX ]\])?\s*(pass(?:ed)?|partial|fail(?:ed)?|lulus|sebagian|gagal)\b",
+    re.I)
+GATE_CANON = {"pass": "passed", "passed": "passed", "lulus": "passed", "partial": "partial",
+              "sebagian": "partial", "fail": "failed", "failed": "failed", "gagal": "failed"}
 SCORE_RE = re.compile(r"(\d+)\s*/\s*(\d+)")
 
 
@@ -117,17 +160,20 @@ def parse_metadata(lines: list[str]) -> tuple[dict[str, str], dict[str, bool]]:
         m = re.match(r"\*\*\s*([^*:]+?)\s*:?\s*\*\*\s*:?\s*(.*)$", raw.strip())
         if m:
             key = m.group(1).strip().lower().rstrip(":")
+            key = FIELD_ALIASES.get(key, key)
             meta[key] = m.group(2).strip()
             hard_break[key] = raw.endswith("  ") or raw.rstrip().endswith("\\")
     return meta, hard_break
 
 
 def detect_genre(review_type: str, override: str | None) -> str:
+    """Genre from the 'Review type' line, most specific name first (see DETECT_ORDER)."""
     if override:
         return override
-    rt = review_type.lower()
-    for genre, (aliases, _) in GENRES.items():
-        if any(a in rt for a in aliases):
+    rt = re.sub(r"\s+", " ", review_type.lower())
+    for genre in DETECT_ORDER:
+        names = GENRES[genre][0]
+        if any(name in rt for name in names) or (genre == "systematic-review" and re.search(r"\bslr\b", rt)):
             return genre
     return "unknown"
 
@@ -197,16 +243,18 @@ def check_review(text: str, directory: Path, genre: str | None = None,
                 rep.errors.append(f"artifact: required file '{name}' is missing next to the review")
 
     # 5. placeholders and gate consistency
-    found = {p.upper() for p in PLACEHOLDER_RE.findall(text)}
+    prose = CODE_RE.sub(" ", text)
+    found = sorted({" ".join(m.group(0).split()).lower()[:40] for m in PLACEHOLDER_RE.finditer(prose)})
     if found:
-        rep.errors.append("placeholders left in text: {}".format(", ".join(sorted(found))))
+        rep.errors.append("placeholders left in text: {}".format("; ".join(found)))
 
     gate = meta.get("gate", "")
     m = GATE_STATUS_RE.search(gate)
     if gate and not m:
-        rep.errors.append("gate: line must start with '✓ passed', '⚠ partial' or '✗ failed'")
+        rep.errors.append("gate: write a status: 'passed', 'partial' or 'failed' "
+                          "(a leading ✓ ⚠ ✗ is optional; lulus, sebagian, gagal also work)")
     elif m:
-        status = m.group(2).lower()
+        status = GATE_CANON[m.group(1).lower()]
         score = SCORE_RE.search(gate)
         if status == "passed":
             if ref_errors:
@@ -215,7 +263,8 @@ def check_review(text: str, directory: Path, genre: str | None = None,
                 rep.errors.append("gate: marked passed but checklist is {}/{}".format(*score.groups()))
             if not score and rep.genre in REQUIRED_ARTIFACTS:
                 rep.errors.append("gate: passed needs a checklist score (e.g. 'PRISMA 27/27')")
-        elif not re.search(r"missing|not met|outstanding|waiver|waived", text.lower()):
+        elif not re.search(r"missing|not met|outstanding|waiver|waived|belum|kurang|tidak terpenuhi|dikecualikan",
+                           text.lower()):
             rep.errors.append(f"gate: '{status}' must list what is missing or waived")
     return rep
 
@@ -279,6 +328,43 @@ def selftest() -> None:
             (dp / n).write_text("x", encoding="utf-8")
         assert check_review(sysrev, dp).ok, check_review(sysrev, dp).errors
         assert any("27" in e for e in check_review(sysrev.replace("27/27", "20/27"), dp).errors)
+
+        # Regressions found by auditing realistic titles, labels and prose.
+        wanted = {
+            "Systematic review and meta-analysis": "meta-analysis",
+            "Systematic Review And Meta-Analysis": "meta-analysis",
+            "Rapid systematic review": "rapid-review",
+            "Systematic mapping review": "mapping-review",
+            "Systematic literature review": "systematic-review",
+            "Narrative literature review": "narrative-review",
+            "Literature review": "narrative-review",
+            "Tinjauan sistematis": "systematic-review",
+            "Tinjauan pustaka": "narrative-review",
+            "Evidence and gap map": "mapping-review",
+            "Scoping Review (PRISMA-ScR)": "scoping-review",
+            "Overview of reviews": "umbrella-review",
+            "Qualitative evidence synthesis (meta-synthesis)": "meta-synthesis",
+            "Resensi buku": "book-review",
+            "Critical review": "critical-review",
+            "Something else entirely": "unknown",
+        }
+        for title, genre in wanted.items():
+            assert detect_genre(title, None) == genre, (title, detect_genre(title, None), genre)
+
+        for gate in ("passed", "PASSED", "[x] passed", "✓ passed", "Lulus", "pass"):
+            assert check_review(book.replace("✓ passed", gate), dp).ok, gate
+        assert any("gate" in e for e in check_review(book.replace("✓ passed", "maybe"), dp).errors)
+        indonesian = (book.replace("**Review type:**", "**Jenis review:**")
+                      .replace("**Reporting standard:**", "**Standar pelaporan:**")
+                      .replace("**Sources:**", "**Sumber:**").replace("**Search date:**", "**Tanggal pencarian:**"))
+        assert check_review(indonesian, dp).ok, check_review(indonesian, dp).errors
+
+        for prose in ("The TODO app study (Lee, 2020) tested it.", "Tools for todo lists.",
+                      "A TBD protocol is described by Lee.", "```\nTODO\n```", "Use `XXX` as a marker."):
+            assert check_review(book + "\n" + prose + "\n", dp).ok, prose
+        for marker in ("[TO COMPLETE: funding]", "[LENGKAPI: pendanaan]", "[citation needed]",
+                       "TODO: add figure", "\nTBD\n", "lorem ipsum"):
+            assert any("placeholders" in e for e in check_review(book + "\n" + marker + "\n", dp).errors), marker
     print("check_review selftest OK")
 
 
@@ -304,7 +390,7 @@ def main(argv: list[str] | None = None) -> int:
     if not path.is_file():
         print(f"error: file not found: {path}", file=sys.stderr)
         return 2
-    text = path.read_text(encoding="utf-8-sig")
+    text = read_text(path)
     rep = check_review(text, a.artifacts_dir or path.parent, a.genre, not a.no_artifacts)
     report = render(rep, path.name)
     if a.out:

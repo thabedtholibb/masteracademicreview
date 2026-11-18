@@ -33,9 +33,13 @@ from __future__ import annotations
 
 import argparse
 import csv
+import io
 import json
 import sys
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from _textio import read_text
 
 CRITERIA = (
     "scope_fit",
@@ -337,7 +341,7 @@ def to_markdown(scored: list[dict], weights: dict[str, float], source: str = "",
 def _read_table(path: Path) -> list[dict]:
     delimiter = "\t" if path.suffix.lower() == ".tsv" else ","
     try:
-        with path.open(encoding="utf-8-sig", newline="") as f:
+        with io.StringIO(read_text(path), newline="") as f:
             reader = csv.DictReader(f, delimiter=delimiter)
             if not reader.fieldnames:
                 raise JournalError("file has no header row")

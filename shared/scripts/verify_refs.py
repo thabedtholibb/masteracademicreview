@@ -42,6 +42,9 @@ from datetime import date
 from difflib import SequenceMatcher
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from _textio import read_text
+
 DOI_RE = re.compile(r"10\.\d{4,9}/[^\s\"'<>]+", re.I)
 HEADING_RE = re.compile(r"^(#{1,6})\s+(.+?)\s*$")
 REF_HEADING_RE = re.compile(
@@ -396,7 +399,7 @@ def parse_plain(text: str) -> list[Reference]:
 
 def load_references(path: Path, section: str | None) -> tuple[str, list[Reference]]:
     try:
-        text = path.read_text(encoding="utf-8-sig")
+        text = read_text(path)
     except FileNotFoundError as exc:
         raise ParseError(f"file not found: {path}") from exc
     suffix = path.suffix.lower()

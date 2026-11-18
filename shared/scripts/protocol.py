@@ -22,6 +22,9 @@ import json
 import sys
 from datetime import date
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from _textio import read_text
 import contextlib
 
 PICO = [("population", "Population"), ("intervention", "Intervention / exposure"),
@@ -223,7 +226,14 @@ def main(argv: list[str] | None = None) -> int:
     if not a.input:
         p.error("provide protocol.json (or --template GENRE / --selftest)")
     try:
-        data = json.loads(Path(a.input).read_text(encoding="utf-8-sig"))
+        raw = read_text(a.input)
+        try:
+            data = json.loads(raw)
+        except json.JSONDecodeError as exc:
+            what = "is empty" if not raw.strip() else f"is not valid JSON (line {exc.lineno}, column {exc.colno}: {exc.msg})"
+            raise ValueError(f"{a.input} {what}; create a starting file with: protocol.py --template GENRE") from exc
+        if not isinstance(data, dict):
+            raise ValueError(f"{a.input} must hold one JSON object (see: protocol.py --template GENRE)")
         text, missing = render(data)
     except (OSError, ValueError) as exc:
         print(f"error: {exc}", file=sys.stderr)

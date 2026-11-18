@@ -27,6 +27,9 @@ from dataclasses import dataclass, field
 from datetime import date
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from _textio import read_text
+
 
 class ExtractionError(Exception):
     pass
@@ -47,7 +50,7 @@ class Report:
 
 def read_table(path: Path, delimiter: str | None = None) -> tuple[list[dict], list[str]]:
     try:
-        text = path.read_text(encoding="utf-8-sig")
+        text = read_text(path)
     except FileNotFoundError as exc:
         raise ExtractionError(f"file not found: {path}") from exc
     lines = text.splitlines()
