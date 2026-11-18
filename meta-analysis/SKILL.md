@@ -32,7 +32,7 @@ If there are fewer than 2 studies, pooling is mathematically meaningless: stop a
 
 ## Method
 
-1. **Run the full systematic-review protocol** (steps 1–5 of `systematic-review/SKILL.md`).
+1. **Run the full systematic-review protocol** (steps 1–5 of `systematic-review/SKILL.md`). Deduplicate the database exports with `mar dedup --source <Name>=<file> ...`: certain duplicates are removed, near-matches are listed for you to decide (JEV), and the PRISMA identification counts are written for you.
 2. **Extract effect sizes:** follow `shared/data_extraction.md`, then convert each study's result to a common effect size with `shared/scripts/meta/effect_sizes.py`:
    - continuous → `hedges_g(m1, m2, sd1, sd2, n1, n2)`
    - dichotomous → `log_odds_ratio(a, b, c, d)` or `log_risk_ratio(...)`
@@ -87,6 +87,18 @@ Every decision here follows the JEV protocol (`../shared/jev.md`): ranked option
 - **Sensitivity.** **#1 recommended:** leave-one-out (`leave_one_out`) plus excluding high risk-of-bias studies.
 - *What changes the ranking:* very few studies with high heterogeneity: present the studies without pooling (systematic-review synthesis #2).
 
+## Structure
+
+```
+Title (identifies as a meta-analysis)
+Abstract (structured)
+1. Introduction: rationale, objectives, PICO
+2. Methods: protocol, eligibility, search, selection, extraction, effect measure, model and estimator, heterogeneity, small-study effects, certainty
+3. Results: study selection (flow diagram), characteristics, pooled estimate (forest plot), heterogeneity and prediction interval, sensitivity analyses, small-study effects (funnel plot), certainty
+4. Discussion: interpretation, limitations of the evidence and of the process, implications
+References
+```
+
 ## Standards & Sources
 
 Governing standards: **PRISMA 2020** (Page et al., 2021, doi:10.1136/bmj.n71), **MOOSE** for observational data (Stroup et al., 2000, doi:10.1001/jama.283.15.2008), **GRADE** for certainty (Guyatt et al., 2008, doi:10.1136/bmj.39489.470347.AD). Method sources: Higgins & Thompson 2002 for I²/Q (doi:10.1002/sim.1186), DerSimonian & Laird 1986 for random effects (doi:10.1016/0197-2456(86)90046-2), Egger et al. 1997 (doi:10.1136/bmj.315.7109.629), Duval & Tweedie 2000 (doi:10.1111/j.0006-341X.2000.00455.x), Borenstein et al. 2021. Full citations: `shared/method_sources.md`.
@@ -102,6 +114,11 @@ Governing standards: **PRISMA 2020** (Page et al., 2021, doi:10.1136/bmj.n71), *
 - [ ] Dual screening agreement reported (`screening_agreement.py`) or the single-reviewer limitation stated.
 - [ ] References checked: `python shared/scripts/verify_refs.py review.md`.
 - [ ] GRADE certainty rating per outcome.
+
+**Automated Gate:** run these before you call the review done. Both are offline; `pip install masteracademicreview` provides `mar`.
+
+- [ ] `mar check-review review.md` reports **0 errors**: header fields, the sections this genre needs, citations matched to references, referenced and required artifacts present, no placeholders, and a gate line that matches the checklist. It ranks what to fix first.
+- [ ] `mar verify-refs review.md` finds no unresolved citation or duplicate DOI; add `--online` before submission to check every reference against Crossref.
 
 ## Guardrails
 

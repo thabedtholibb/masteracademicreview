@@ -66,6 +66,7 @@ Abstract (structured)
 3. Results: study selection (flow diagram), characteristics, RoB, individual studies, synthesis
 4. Discussion: interpretation, evidence limitations, process limitations, implications
 Other: registration, funding, conflicts, data availability
+References
 ```
 
 ## Decision Points (JEV)
@@ -98,6 +99,11 @@ python shared/scripts/verify_refs.py review.md --out ref_check.md
 - `agreement.md` reports κ/PABAK per stage; every disagreement in `conflicts.csv` is adjudicated.
 - `extraction_check.md` has no errors; any warning (including k < 10) is addressed in the methods.
 - `ref_check.md` has no duplicate DOI and no unresolved in-text citation. Run `verify_refs.py review.md --online` for a Crossref spot-check of DOI-bearing references; record any unverified entry in the limitations.
+
+**Automated Gate:** run these before you call the review done. Both are offline; `pip install masteracademicreview` provides `mar`.
+
+- [ ] `mar check-review review.md` reports **0 errors**: header fields, the sections this genre needs, citations matched to references, referenced and required artifacts present, no placeholders, and a gate line that matches the checklist. It ranks what to fix first.
+- [ ] `mar verify-refs review.md` finds no unresolved citation or duplicate DOI; add `--online` before submission to check every reference against Crossref.
 
 ## Guardrails
 

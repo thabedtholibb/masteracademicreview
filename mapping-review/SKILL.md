@@ -24,7 +24,7 @@ You produce a **structured visual map** of the evidence: coding studies into a f
 ## Method (JEV)
 
 1. **Define the framework (JEV):** propose a framework matrix (#1) based on the topic and show a small example before coding; the author approves it.
-2. **Search & screen:** follow `shared/search_strategy.md` and `shared/screening.md`; document counts for the flow diagram (`shared/scripts/prisma_flow.py`).
+2. **Search & screen:** follow `shared/search_strategy.md` and `shared/screening.md`; document counts for the flow diagram (`shared/scripts/prisma_flow.py`). Deduplicate the database exports with `mar dedup --source <Name>=<file> ...`: certain duplicates are removed, near-matches are listed for you to decide (JEV), and the PRISMA identification counts are written for you.
 3. **Code studies into the matrix:** place each study in its framework cell(s); this is the core mapping act.
 4. **Visualize:** render the map (a matrix/heatmap) showing cell densities and gaps. No quality appraisal: mapping shows *where*, not *how good*.
 5. **Report:** ROSES; present the map and the gap narrative.
@@ -38,6 +38,7 @@ Abstract
 2. Methods: framework, search, screening, coding
 3. Results: the map, densities, gaps
 4. Discussion: what the gaps mean, implications
+References
 ```
 
 ## Decision Points (JEV)
@@ -57,6 +58,11 @@ Governing standard: **ROSES** (Haddaway et al., 2018, doi:10.1186/s13750-018-012
 - [ ] A framework matrix is defined and applied consistently.
 - [ ] The map (visual) is produced and the gaps are stated.
 - [ ] Flow counts are reported (ROSES).
+
+**Automated Gate:** run these before you call the review done. Both are offline; `pip install masteracademicreview` provides `mar`.
+
+- [ ] `mar check-review review.md` reports **0 errors**: header fields, the sections this genre needs, citations matched to references, referenced and required artifacts present, no placeholders, and a gate line that matches the checklist. It ranks what to fix first.
+- [ ] `mar verify-refs review.md` finds no unresolved citation or duplicate DOI; add `--online` before submission to check every reference against Crossref.
 
 ## Guardrails
 

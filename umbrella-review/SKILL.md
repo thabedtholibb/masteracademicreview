@@ -23,7 +23,7 @@ You synthesize **existing systematic reviews and meta-analyses** rather than pri
 
 ## Method
 
-1. **Search for reviews:** follow `shared/search_strategy.md`, filtering for the SR/meta-analysis study type.
+1. **Search for reviews:** follow `shared/search_strategy.md`, filtering for the SR/meta-analysis study type. Deduplicate the database exports with `mar dedup --source <Name>=<file> ...`: certain duplicates are removed, near-matches are listed for you to decide (JEV), and the PRISMA identification counts are written for you.
 2. **Screen:** follow `shared/screening.md`; eligibility targets *reviews*, not primary studies.
 3. **Assess review quality:** apply **AMSTAR-2** to each included review (see `shared/risk_of_bias.md`).
 4. **Handle overlap:** compute and report the *corrected covered area (CCA)* to show how much primary-study evidence is double-counted across reviews.
@@ -39,6 +39,7 @@ Abstract (structured)
 2. Methods: eligibility, search, selection, AMSTAR-2, overlap, certainty
 3. Results: reviews included, their quality (AMSTAR-2), overlap (CCA), synthesis per outcome
 4. Discussion: interpretation, limitations, implications
+References
 ```
 
 ## Decision Points (JEV)
@@ -57,6 +58,11 @@ Governing standard: **PRIOR** (Gates et al., 2022, doi:10.1136/bmj-2022-070849).
 ## Gate (PRIOR)
 
 Walk the PRIOR items in `shared/reporting_standards.md`; flag every missing item. AMSTAR-2 ratings and the CCA must be reported.
+
+**Automated Gate:** run these before you call the review done. Both are offline; `pip install masteracademicreview` provides `mar`.
+
+- [ ] `mar check-review review.md` reports **0 errors**: header fields, the sections this genre needs, citations matched to references, referenced and required artifacts present, no placeholders, and a gate line that matches the checklist. It ranks what to fix first.
+- [ ] `mar verify-refs review.md` finds no unresolved citation or duplicate DOI; add `--online` before submission to check every reference against Crossref.
 
 ## Guardrails
 

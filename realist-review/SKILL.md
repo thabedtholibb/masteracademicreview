@@ -24,7 +24,7 @@ You explain **how and why** an intervention works (or not) in context, by buildi
 ## Method (JEV)
 
 1. **State the programme theory (draft):** lay out candidate CMOs as hypotheses to test against evidence.
-2. **Search iteratively (JEV):** recommend a purposive, theory-driven search (#1) over exhaustive recall; search, then let findings redirect the next search (snowballing, grey literature).
+2. **Search iteratively (JEV):** recommend a purposive, theory-driven search (#1) over exhaustive recall; search, then let findings redirect the next search (snowballing, grey literature). Deduplicate the database exports with `mar dedup --source <Name>=<file> ...`: certain duplicates are removed, near-matches are listed for you to decide (JEV), and the PRISMA identification counts are written for you.
 3. **Appraise by relevance & rigour:** realist reviews judge sources by whether they can *test a mechanism* (relevance) and their trustworthiness (rigour), not a standard RoB tool.
 4. **Extract CMOs:** pull context, mechanism, and outcome from each source; refine the programme theory as patterns emerge.
 5. **Synthesize:** build refined CMO configurations that explain the outcome pattern; state the middle-range theory.
@@ -39,6 +39,7 @@ Abstract
 2. Methods: iterative search, relevance & rigour appraisal, CMO extraction
 3. Findings: refined CMO configurations (what works for whom, why)
 4. Discussion: the middle-range theory, limitations, implications
+References
 ```
 
 ## Decision Points (JEV)
@@ -58,6 +59,11 @@ Governing standard: **RAMESES** (Wong et al., 2013, doi:10.1186/1741-7015-11-21)
 - [ ] CMO configurations are explicit (context, mechanism, outcome separated).
 - [ ] The programme theory evolved in response to evidence.
 - [ ] Relevance & rigour appraisal is described (not a standard RoB score).
+
+**Automated Gate:** run these before you call the review done. Both are offline; `pip install masteracademicreview` provides `mar`.
+
+- [ ] `mar check-review review.md` reports **0 errors**: header fields, the sections this genre needs, citations matched to references, referenced and required artifacts present, no placeholders, and a gate line that matches the checklist. It ranks what to fix first.
+- [ ] `mar verify-refs review.md` finds no unresolved citation or duplicate DOI; add `--online` before submission to check every reference against Crossref.
 
 ## Guardrails
 

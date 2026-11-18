@@ -33,6 +33,9 @@ class Case:
 
 
 CASES = [
+    Case("all 13 genres: skill Structure passes the gate", "../../tests/check_genres.py", (), 0, ("genre check OK",)),
+    Case("tools read cp1252 / UTF-16 / BOM files", "../../tests/check_encoding.py", (), 0, ("encoding check OK",)),
+    Case("textio selftest", "_textio.py", (), 0, ("textio selftest OK",)),
     Case("install selftest", "../../install.py", ("--selftest",), 0, ("install selftest OK",)),
     Case("journal_rank selftest", "journal_rank.py", ("--selftest",), 0, ("journal_rank selftest OK",)),
     Case("journal_rank rubric", "journal_rank.py", ("--rubric",), 0, ("Scoring Anchors", "OFF_ANCHOR")),

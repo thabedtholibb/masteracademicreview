@@ -24,7 +24,7 @@ You synthesize **diverse source types**, empirical (quantitative and qualitative
 ## Method (Whittemore & Knafl, Recommendation-First)
 
 1. **Problem identification:** frame the topic clearly.
-2. **Literature search:** follow `shared/search_strategy.md`; deliberately multi-database because the designs are diverse. Recommend the 2 best databases (#1/#2).
+2. **Literature search:** follow `shared/search_strategy.md`; deliberately multi-database because the designs are diverse. Recommend the 2 best databases (#1/#2). Deduplicate the database exports with `mar dedup --source <Name>=<file> ...`: certain duplicates are removed, near-matches are listed for you to decide (JEV), and the PRISMA identification counts are written for you.
 3. **Data evaluation:** appraise quality with the tool matching each study's design (see `shared/risk_of_bias.md`); recommend the design-matched tool (#1), not a one-size score.
 4. **Data analysis (JEV):** recommend **constant comparison (#1)** to categorize and integrate findings across designs; order, code, compare, and build themes that connect the evidence.
 5. **Presentation:** present the integrated synthesis (often a model or table of themes) plus a note on limitations from source diversity.
@@ -38,6 +38,7 @@ Abstract
 2. Methods: search, evaluation, analysis approach
 3. Results: the integrated themes/framework
 4. Discussion: meaning, limitations, implications
+References
 ```
 
 ## Decision Points (JEV)
@@ -57,6 +58,11 @@ Governing method: **Whittemore & Knafl's five stages** (Whittemore & Knafl, 2005
 - [ ] The synthesis integrates across designs: it does not just list study summaries.
 - [ ] Quality appraisal is design-matched, not one-size-fits-all.
 - [ ] The diversity of sources is reflected in the limitations.
+
+**Automated Gate:** run these before you call the review done. Both are offline; `pip install masteracademicreview` provides `mar`.
+
+- [ ] `mar check-review review.md` reports **0 errors**: header fields, the sections this genre needs, citations matched to references, referenced and required artifacts present, no placeholders, and a gate line that matches the checklist. It ranks what to fix first.
+- [ ] `mar verify-refs review.md` finds no unresolved citation or duplicate DOI; add `--online` before submission to check every reference against Crossref.
 
 ## Guardrails
 

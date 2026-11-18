@@ -24,7 +24,7 @@ You synthesize **qualitative** studies into higher-order themes or theory. There
 ## Method
 
 1. **Frame (PICo/SPIDER):** Population, phenomenon of Interest, Context.
-2. **Search & screen:** follow `shared/search_strategy.md` and `shared/screening.md`; add qualitative search terms (experience, perception, lived, meaning).
+2. **Search & screen:** follow `shared/search_strategy.md` and `shared/screening.md`; add qualitative search terms (experience, perception, lived, meaning). Deduplicate the database exports with `mar dedup --source <Name>=<file> ...`: certain duplicates are removed, near-matches are listed for you to decide (JEV), and the PRISMA identification counts are written for you.
 3. **Appraise:** apply the **CASP Qualitative** checklist (see `shared/risk_of_bias.md`) to judge trustworthiness; it informs interpretation, it does not exclude.
 4. **Extract findings:** extract each study's themes, categories, and supporting quotes (see `shared/data_extraction.md`).
 5. **Synthesize (JEV):** recommend the method by goal, then state it: **thematic synthesis (#1, default)** for descriptive → analytical themes; **meta-ethnography (#2)** for a new interpretive theory; **meta-aggregation (#3)** for practical recommendations. Build the higher-order themes or theory.
@@ -39,6 +39,7 @@ Abstract
 2. Methods: search, appraisal (CASP), extraction, synthesis method
 3. Findings: the developed themes, each grounded in the studies' data (with quotes)
 4. Discussion: the new interpretation, trustworthiness, limitations
+References
 ```
 
 ## Decision Points (JEV)
@@ -56,6 +57,11 @@ Governing standard: **ENTREQ** (Tong et al., 2012, doi:10.1186/1471-2288-12-181)
 ## Gate (ENTREQ, 21 Items)
 
 Walk the 21 ENTREQ items in `shared/reporting_standards.md`; flag every missing item. Every developed theme must trace to the included studies' findings or quotes.
+
+**Automated Gate:** run these before you call the review done. Both are offline; `pip install masteracademicreview` provides `mar`.
+
+- [ ] `mar check-review review.md` reports **0 errors**: header fields, the sections this genre needs, citations matched to references, referenced and required artifacts present, no placeholders, and a gate line that matches the checklist. It ranks what to fix first.
+- [ ] `mar verify-refs review.md` finds no unresolved citation or duplicate DOI; add `--online` before submission to check every reference against Crossref.
 
 ## Guardrails
 

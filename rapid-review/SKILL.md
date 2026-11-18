@@ -28,7 +28,7 @@ A **systematic review with explicit, declared shortcuts** for when a decision ca
    - **#2:** 1 database + reference-mining, single reviewer, narrative summary only.
    - **#3:** search only, no full-text retrieval for borderline records.
    The author picks a tier; each chosen shortcut is recorded in the methods.
-2. **Search:** follow `shared/search_strategy.md` (fewer sources, documented).
+2. **Search:** follow `shared/search_strategy.md` (fewer sources, documented). Deduplicate the database exports with `mar dedup --source <Name>=<file> ...`: certain duplicates are removed, near-matches are listed for you to decide (JEV), and the PRISMA identification counts are written for you.
 3. **Screen:** follow `shared/screening.md`; single reviewer with a verification sample.
 4. **Extract & summarize:** narrative summary per outcome; no statistical pooling.
 5. **Report:** adapted PRISMA; a mandatory **"shortcuts taken"** subsection.
@@ -42,6 +42,7 @@ Abstract
 2. Methods: shortcuts taken (explicit), search, screening, extraction
 3. Results: included studies, summary per outcome
 4. Discussion: what the shortcuts limit, implications
+References
 ```
 
 ## Decision Points (JEV)
@@ -62,6 +63,11 @@ Governing standard: **Cochrane Rapid Reviews Methods Group guidance** (Garritty 
 - [ ] Every shortcut is declared in a "shortcuts taken" subsection.
 - [ ] The search and screening are documented enough to be re-run.
 - [ ] The deadline and how it shaped the method are stated.
+
+**Automated Gate:** run these before you call the review done. Both are offline; `pip install masteracademicreview` provides `mar`.
+
+- [ ] `mar check-review review.md` reports **0 errors**: header fields, the sections this genre needs, citations matched to references, referenced and required artifacts present, no placeholders, and a gate line that matches the checklist. It ranks what to fix first.
+- [ ] `mar verify-refs review.md` finds no unresolved citation or duplicate DOI; add `--online` before submission to check every reference against Crossref.
 
 ## Guardrails
 

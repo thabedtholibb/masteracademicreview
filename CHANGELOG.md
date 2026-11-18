@@ -2,7 +2,18 @@
 
 Format: [Keep a Changelog](https://keepachangelog.com). Versioning: SemVer.
 
-## [Unreleased]
+## [0.1.2] - 2026-11-18
+### Fixed
+- `check_review.py` detected the wrong genre for common titles ("Systematic review and meta-analysis" as systematic, "Rapid systematic review" as systematic); several names (narrative literature review, Tinjauan sistematis, Resensi buku, Evidence and gap map) were unknown. Detection is now most-specific-first with Indonesian names.
+- The gate line accepts `passed`, `[x] passed` and `lulus`; Indonesian header labels (`Jenis review:`, `Sumber:`) work.
+- Placeholder check no longer flags prose such as "the TODO app study"; it now also catches the `[TO COMPLETE]` / `[LENGKAPI]` markers the suite's own tools write, and ignores code blocks.
+- Tools crashed on files saved by Excel or Notepad (cp1252, UTF-16); they now read UTF-8, BOM, UTF-16 and cp1252.
+- Clear errors for empty, invalid or mis-shaped JSON in `protocol.py` and `prisma_flow.py`.
+
+### Changed
+- Every genre skill's Gate now includes the automated gate (`mar check-review`, `mar verify-refs`); the skills that search several databases mention `mar dedup`; every Structure block lists References (meta-analysis gained one).
+- New tests: all 13 genres against the validator, encoding on five tools, each bug above; `check_docs.py` enforces the wiring.
+
 ### Added
 - `install.py`: one-command install of the 16 skills, `shared/` and the `/mar-*` commands for Claude Code and OpenCode (copies, no symlinks; `--dry-run`, `--project`, `--uninstall` via a manifest; never replaces a same-named skill from another pack unless `--force`).
 

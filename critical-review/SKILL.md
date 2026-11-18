@@ -38,6 +38,7 @@ You write a review whose product is **an argument**, not a summary. The literatu
 3. The critique: where the consensus breaks down, with evidence
 4. The alternative: the proposed framework/reframing
 5. Implications and limits: what this changes, and what it does not
+References
 ```
 
 ## Decision Points (JEV)
@@ -58,6 +59,11 @@ No EQUATOR-registered checklist exists for a critical review; the genre is defin
 - [ ] Each key work is engaged at the level of its *claim*, not merely cited.
 - [ ] The strongest objection to the thesis is addressed, not avoided.
 - [ ] The contribution (new framework/position) is stated in terms another scholar could use.
+
+**Automated Gate:** run these before you call the review done. Both are offline; `pip install masteracademicreview` provides `mar`.
+
+- [ ] `mar check-review review.md` reports **0 errors**: header fields, the sections this genre needs, citations matched to references, referenced and required artifacts present, no placeholders, and a gate line that matches the checklist. It ranks what to fix first.
+- [ ] `mar verify-refs review.md` finds no unresolved citation or duplicate DOI; add `--online` before submission to check every reference against Crossref.
 
 ## Guardrails
 

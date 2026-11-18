@@ -2,8 +2,8 @@ cff-version: 1.2.0
 message: "If you use this software, please cite it as below."
 title: "Master Academic Review"
 type: software
-version: 0.1.1
-date-released: "2026-11-17"
+version: 0.1.2
+date-released: "2026-11-18"
 license: MIT
 repository-code: "https://github.com/thabedtholibb/masteracademicreview"
 abstract: >-

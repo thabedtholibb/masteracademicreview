@@ -24,7 +24,7 @@ You map the **breadth and volume** of evidence on a topic: what has been studied
 ## Method
 
 1. **Frame (PCC):** Population, Concept, Context.
-2. **Search:** follow `shared/search_strategy.md`. Scoping searches are deliberately broad; document databases, full query, and limits.
+2. **Search:** follow `shared/search_strategy.md`. Scoping searches are deliberately broad; document databases, full query, and limits. Deduplicate the database exports with `mar dedup --source <Name>=<file> ...`: certain duplicates are removed, near-matches are listed for you to decide (JEV), and the PRISMA identification counts are written for you.
 3. **Screen:** follow `shared/screening.md` (title/abstract → full text; dual reviewer recommended).
 4. **Chart the data:** extract study characteristics, concept categories, and evidence types into a matrix (see `shared/data_extraction.md`, charting focus rather than outcomes). No risk-of-bias appraisal: PRISMA-ScR permits it as optional, but it is not the norm.
 5. **Map & report:** present the evidence as a descriptive map (tables, matrices, frequency counts) and identify gaps; generate the PRISMA-ScR flow diagram with `shared/scripts/prisma_flow.py --variant scoping`.
@@ -38,6 +38,7 @@ Abstract (structured)
 2. Methods: protocol, eligibility, search, selection, charting
 3. Results: selection (flow diagram), characteristics of sources, mapping of evidence, gaps
 4. Discussion: summary, limitations, implications
+References
 ```
 
 ## Decision Points (JEV)
@@ -57,6 +58,11 @@ Governing standard: **PRISMA-ScR** (Tricco et al., 2018, doi:10.7326/M18-0850). 
 ## Gate (PRISMA-ScR, 22 Items)
 
 Walk the 22 PRISMA-ScR items in `shared/reporting_standards.md` item by item; mark each **present / partial / missing** and flag every missing item. The flow diagram must exist and match the reported counts.
+
+**Automated Gate:** run these before you call the review done. Both are offline; `pip install masteracademicreview` provides `mar`.
+
+- [ ] `mar check-review review.md` reports **0 errors**: header fields, the sections this genre needs, citations matched to references, referenced and required artifacts present, no placeholders, and a gate line that matches the checklist. It ranks what to fix first.
+- [ ] `mar verify-refs review.md` finds no unresolved citation or duplicate DOI; add `--online` before submission to check every reference against Crossref.
 
 ## Guardrails
 

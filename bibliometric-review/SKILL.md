@@ -82,6 +82,7 @@ Abstract
 2. Methods: search (PRISMA, Scopus-only), corpus, document-type filter, techniques
 3. Results: performance + science-mapping outputs (trend, top lists, co-occurrence map)
 4. Discussion: intellectual structure, trends, limitations
+References
 ```
 
 ## Decision Points (JEV)
@@ -103,6 +104,11 @@ Reporting: **PRISMA 2020** for the search (Page et al., 2021, doi:10.1136/bmj.n7
 - [ ] The analysis method (science mapping / performance) is stated.
 - [ ] The numbers are produced by the engine from the corpus, not hand-computed.
 - [ ] Maps/clusters are interpreted, not just displayed.
+
+**Automated Gate:** run these before you call the review done. Both are offline; `pip install masteracademicreview` provides `mar`.
+
+- [ ] `mar check-review review.md` reports **0 errors**: header fields, the sections this genre needs, citations matched to references, referenced and required artifacts present, no placeholders, and a gate line that matches the checklist. It ranks what to fix first.
+- [ ] `mar verify-refs review.md` finds no unresolved citation or duplicate DOI; add `--online` before submission to check every reference against Crossref.
 
 ## Guardrails
 

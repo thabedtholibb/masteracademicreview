@@ -38,6 +38,7 @@ You write a **broad, expert synthesis** of a field. Unlike a systematic review, 
 2. Thematic synthesis: 3–5 themes, each synthesizing multiple studies
 3. Contradictions and gaps: where the evidence disagrees or is thin
 4. Conclusion: what is established, what is open, where the field goes next
+References
 ```
 
 ## Decision Points (JEV)
@@ -60,6 +61,11 @@ Governing standard: **SANRA** (Baethge et al., 2019, doi:10.1186/s41073-019-0064
 - [ ] Referencing: key statements carry citations
 - [ ] Scientific reasoning: conclusions follow from the cited evidence
 - [ ] Appropriate presentation of data (tables/figures where they help)
+
+**Automated Gate:** run these before you call the review done. Both are offline; `pip install masteracademicreview` provides `mar`.
+
+- [ ] `mar check-review review.md` reports **0 errors**: header fields, the sections this genre needs, citations matched to references, referenced and required artifacts present, no placeholders, and a gate line that matches the checklist. It ranks what to fix first.
+- [ ] `mar verify-refs review.md` finds no unresolved citation or duplicate DOI; add `--online` before submission to check every reference against Crossref.
 
 ## Guardrails
 

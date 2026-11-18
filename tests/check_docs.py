@@ -95,6 +95,17 @@ for genre in GENRES:
     else:
         if "#1" not in block or "shared/jev.md" not in block:
             fail(f"{genre}: JEV decision points need a #1 option and a pointer to shared/jev.md")
+    # the automated gate must be part of each genre's own gate, not only of the README
+    gate_block = re.search(r"^## [^\n]*[Gg]ate[^\n]*\n.*?(?=^## )", text, re.S | re.M)
+    if not gate_block or "mar check-review" not in gate_block.group(0) or "mar verify-refs" not in gate_block.group(0):
+        fail(f"{genre}: the Gate section must tell the author to run `mar check-review` and `mar verify-refs`")
+    if genre in {"systematic-review", "meta-analysis", "scoping-review", "mapping-review", "rapid-review",
+                 "umbrella-review", "meta-synthesis", "integrative-review", "realist-review",
+                 "bibliometric-review"} and "dedup" not in text:
+        fail(f"{genre}: the search step must mention deduplication (`mar dedup`)")
+    structure = re.search(r"^## Structure[^\n]*\n+```\n(.*?)```", text, re.S | re.M)
+    if genre != "book-review" and not (structure and re.search(r"^References\b|^\d+\.\s*References\b", structure.group(1), re.M)):
+        fail(f"{genre}: the Structure block must list References (the review gate requires it)")
     if "(recommendation-first)" in text:
         fail(f"{genre}: use the '(JEV)' label instead of '(recommendation-first)'")
 

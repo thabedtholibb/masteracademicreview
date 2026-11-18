@@ -67,6 +67,11 @@ No EQUATOR-registered checklist and no peer-reviewed *method* standard exists fo
 - [ ] A verdict and intended audience are stated.
 - [ ] Bibliographic facts are complete and correct.
 
+**Automated Gate:** run these before you call the review done. Both are offline; `pip install masteracademicreview` provides `mar`.
+
+- [ ] `mar check-review review.md` reports **0 errors**: header fields, the sections this genre needs, citations matched to references, referenced and required artifacts present, no placeholders, and a gate line that matches the checklist. It ranks what to fix first.
+- [ ] `mar verify-refs review.md` finds no unresolved citation or duplicate DOI; add `--online` before submission to check every reference against Crossref.
+
 ## Guardrails
 
 - Do not write the review without the book's thesis: if the author hasn't provided it, ask first; do not fabricate the book's content.
